@@ -4,12 +4,39 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Sistema_Vendas"
-        xmlns:oxy="http://oxyplot.org/wpf" x:Class="Sistema_Vendas.MainWindow"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+        x:Class="Sistema_Vendas.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" MinHeight="720" MinWidth="1080">
     <Grid>
+       
+        <Rectangle Stroke="Black" Fill="#FF00A3FF" Height="94" VerticalAlignment="Top"/>
+        <Image x:Name="imgIcon" HorizontalAlignment="Left" Height="94" VerticalAlignment="Top" Width="102" Source="/Imagens/Vendas_Icon.png"/>
+        <Button x:Name="btnReload" Content="&#xD;&#xA;" Margin="0,25,10,0" VerticalAlignment="Top" Height="44" Foreground="{x:Null}" BorderBrush="{x:Null}" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Right" Width="46">
+            <Button.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="0"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Button.RenderTransform>
+            <Button.Background>
+                <ImageBrush ImageSource="/Imagens/Recarregar_Icon.png"/>
+            </Button.Background>
+        </Button>
+        <Grid Margin="0,94,0,0" Background="#FFE5E5E5">
+            <lvc:PieChart x:Name="VendedoresChartControl" LegendLocation="Right"
+               InnerRadius="50"
+               Foreground="Black"
+               FontSize="14" DockPanel.Dock="Right" Margin="778,10,10,324" Background="White"/>
 
-        <oxy:PlotView  Name="Pizza" HorizontalAlignment="Left" Margin="522,48,0,0" VerticalAlignment="Top" Height="169" Width="268"/>
+            <lvc:CartesianChart x:Name="VendasCharControl" Margin="10,10,371,324" 
+                                Background="White"
+                                Foreground="Black"
+                                FontSize="14"/>
+
+        </Grid>
 
     </Grid>
 </Window>

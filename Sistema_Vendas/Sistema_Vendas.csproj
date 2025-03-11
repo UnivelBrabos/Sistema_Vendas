@@ -9,17 +9,29 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="OxyPlot.Wpf" Version="2.2.0" />
+    <None Remove="Imagens\Recarregar_Icon.png" />
+    <None Remove="Imagens\Vendas_Icon.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Model\" />
+    <Resource Include="Imagens\Recarregar_Icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
+    <PackageReference Include="Supabase" Version="1.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Controller\" />
-    <Folder Include="View\" />
   </ItemGroup>
 
   <ItemGroup>
     <Page Include="App.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Imagens\Vendas_Icon.png" />
   </ItemGroup>
 
 </Project>
