@@ -7,35 +7,105 @@
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         x:Class="Sistema_Vendas.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" MinHeight="720" MinWidth="1080">
+        Title="MainWindow" MinHeight="720" MinWidth="1080" Height="728">
     <Grid>
-       
-        <Rectangle Stroke="Black" Fill="#FF00A3FF" Height="94" VerticalAlignment="Top"/>
-        <Image x:Name="imgIcon" HorizontalAlignment="Left" Height="94" VerticalAlignment="Top" Width="102" Source="/Imagens/Vendas_Icon.png"/>
-        <Button x:Name="btnReload" Content="&#xD;&#xA;" Margin="0,25,10,0" VerticalAlignment="Top" Height="44" Foreground="{x:Null}" BorderBrush="{x:Null}" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Right" Width="46">
-            <Button.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform Angle="0"/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </Button.RenderTransform>
+        <Rectangle x:Name="Ret_Menu" Fill="#FF34B6FF" Height="72" VerticalAlignment="Top"/>
+        <Image x:Name="imgIcon" HorizontalAlignment="Left" Height="72" VerticalAlignment="Top" Width="74" Source="/Imagens/Vendas_Icon.png"/>
+        <Button x:Name="btnReload" Content="&#xD;&#xA;" Margin="0,11,10,0" VerticalAlignment="Top" Height="50" Foreground="{x:Null}" BorderBrush="{x:Null}" HorizontalAlignment="Right" Width="50" Click="btnReload_Click" MinWidth="8" OverridesDefaultStyle="True">
             <Button.Background>
                 <ImageBrush ImageSource="/Imagens/Recarregar_Icon.png"/>
             </Button.Background>
-        </Button>
-        <Grid Margin="0,94,0,0" Background="#FFE5E5E5">
-            <lvc:PieChart x:Name="VendedoresChartControl" LegendLocation="Right"
-               InnerRadius="50"
-               Foreground="Black"
-               FontSize="14" DockPanel.Dock="Right" Margin="778,10,10,324" Background="White"/>
+            <Button.RenderTransform>
+                <RotateTransform x:Name="rotateTransform" Angle="0"/>
+            </Button.RenderTransform>
 
-            <lvc:CartesianChart x:Name="VendasCharControl" Margin="10,10,371,324" 
+            <Button.Style>
+                <Style TargetType="Button">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="RenderTransform">
+                                <Setter.Value>
+                                    <ScaleTransform ScaleX="0.95" ScaleY="0.95"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </Style.Triggers>
+
+                </Style>
+            </Button.Style>
+        </Button>
+
+
+
+
+        <Grid Margin="0,72,0,0" Background="#FFF0F0F0">
+
+            <Rectangle x:Name="RetVendedores" Height="304" Margin="0,10,10,0" RadiusX="20" RadiusY="20" VerticalAlignment="Top" Fill="White" HorizontalAlignment="Right" Width="373"/>
+            <lvc:PieChart x:Name="VendedoresChartControl" 
+                          LegendLocation="Right"
+                          InnerRadius="50"
+                          Foreground="Black"
+                          FontSize="14" 
+                          DockPanel.Dock="Right" 
+                          Margin="0,24,24,0" 
+                          Background="White" 
+                          HorizontalAlignment="Right" 
+                          Width="345" 
+                          Height="276" 
+                          VerticalAlignment="Top"/>
+
+            <Rectangle Height="304" Margin="10,10,404,0" RadiusX="20" RadiusY="20" VerticalAlignment="Top" Fill="White"/>
+            <lvc:CartesianChart x:Name="VendasCharControl" Margin="22,24,415,0" 
                                 Background="White"
                                 Foreground="Black"
-                                FontSize="14"/>
+                                FontSize="14" 
+                                Height="276" 
+                                VerticalAlignment="Top"/>
 
+            <Rectangle x:Name="RetClientes" Margin="0,326,10,10" RadiusX="20" RadiusY="20" Fill="White" HorizontalAlignment="Right" Width="373"/>
+            <lvc:PieChart x:Name="ClientesChartControl" 
+                          LegendLocation="Right"
+                          InnerRadius="50"
+                          Foreground="Black"
+                          FontSize="14" 
+                          DockPanel.Dock="Right" 
+                          Margin="0,340,24,24" 
+                          Background="White" 
+                          HorizontalAlignment="Right" 
+                          Width="345"/>
+
+            <Rectangle Margin="343,326,404,10" RadiusX="20" RadiusY="20" Fill="White"/>
+            <lvc:CartesianChart x:Name="ProdutosCharControl" 
+                                Margin="356,348,415,24" 
+                                Background="White" 
+                                Foreground="Black" 
+                                FontSize="14">
+                <lvc:CartesianChart.AxisX>
+                    <lvc:Axis Title="Ano" LabelFormatter="{Binding Formatter}"/>
+                </lvc:CartesianChart.AxisX>
+                <lvc:CartesianChart.AxisY>
+                    <lvc:Axis Title="Produtos" Labels="{Binding LabelsY}" />
+                </lvc:CartesianChart.AxisY>
+            </lvc:CartesianChart>
+
+
+            <TextBlock x:Name="txtCompradores" Margin="0,325,90,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="16" Height="31" FontFamily="Rockwell" TextAlignment="Center" HorizontalAlignment="Right" Width="213"><Run Language="pt-br" Text="Maiores Compradores"/></TextBlock>
+            <TextBlock x:Name="txtVendedores" Margin="0,9,90,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="16" Height="31" FontFamily="Rockwell" TextAlignment="Center" HorizontalAlignment="Right" Width="213"><Run Language="pt-br" Text="Melhores Vendedores"/></TextBlock>
+            <TextBlock x:Name="txtProdutos" Margin="423,331,481,290" TextWrapping="Wrap" FontSize="16" FontFamily="Rockwell" TextAlignment="Center"><Run Language="pt-br" Text="Produtos mais vendidos"/></TextBlock>
+            <TextBlock x:Name="txtVendasMensais" Margin="237,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="16" Height="31" FontFamily="Rockwell" TextAlignment="Center" HorizontalAlignment="Left" Width="213"><Run Language="pt-br" Text="Vendas mensais"/></TextBlock>
         </Grid>
 
     </Grid>

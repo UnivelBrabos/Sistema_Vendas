@@ -20,10 +20,13 @@ namespace Sistema_Vendas.Model
         public int IdCliente { get; set; }
 
         [Column("data_venda")]
-        public string DataVenda {  get; set; }
+        public DateTime DataVenda {  get; set; }
 
         [Column("total")]
         public decimal TotalVenda { get; set; }
+
+        [Column("desconto")]
+        public int Desconto {  get; set; }
 
         #endregion :: Atributos ::
 
@@ -59,17 +62,3 @@ namespace Sistema_Vendas.Model
         #endregion :: Métodos ::
     }
 }
-
-/*
- create table public.vendas (
-  id serial not null,
-  id_vendedor integer not null,
-  id_cliente integer not null,
-  data_venda timestamp without time zone null default CURRENT_TIMESTAMP,
-  total numeric(10, 2) not null,
-  constraint vendas_pkey primary key (id),
-  constraint vendas_id_cliente_fkey foreign KEY (id_cliente) references clientes (id) on delete CASCADE,
-  constraint vendas_id_vendedor_fkey foreign KEY (id_vendedor) references vendedores (id_vendedor) on delete CASCADE,
-  constraint vendas_total_check check ((total >= (0)::numeric))
-) TABLESPACE pg_default;
- */
