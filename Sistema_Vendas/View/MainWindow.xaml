@@ -89,7 +89,7 @@
 
             <Rectangle Margin="343,326,404,10" RadiusX="20" RadiusY="20" Fill="White"/>
             <lvc:CartesianChart x:Name="ProdutosCharControl" 
-                                Margin="356,348,415,24" 
+                                Margin="356,369,415,24" 
                                 Background="White" 
                                 Foreground="Black" 
                                 FontSize="14">
@@ -106,6 +106,77 @@
             <TextBlock x:Name="txtVendedores" Margin="0,9,90,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="16" Height="31" FontFamily="Rockwell" TextAlignment="Center" HorizontalAlignment="Right" Width="213"><Run Language="pt-br" Text="Melhores Vendedores"/></TextBlock>
             <TextBlock x:Name="txtProdutos" Margin="423,331,481,290" TextWrapping="Wrap" FontSize="16" FontFamily="Rockwell" TextAlignment="Center"><Run Language="pt-br" Text="Produtos mais vendidos"/></TextBlock>
             <TextBlock x:Name="txtVendasMensais" Margin="237,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="16" Height="31" FontFamily="Rockwell" TextAlignment="Center" HorizontalAlignment="Left" Width="213"><Run Language="pt-br" Text="Vendas mensais"/></TextBlock>
+            <Rectangle Margin="10,326,0,10" RadiusX="20" RadiusY="20" Fill="White" HorizontalAlignment="Left" Width="315"/>
+            <TextBlock x:Name="txtFiltros" Margin="80,331,0,290" TextWrapping="Wrap" FontSize="16" FontFamily="Rockwell" TextAlignment="Center" HorizontalAlignment="Left" Width="176"><Run Language="pt-br" Text="Filtros"/><LineBreak/><Run Language="pt-br"/></TextBlock>
+            <DatePicker x:Name="dtpInicial" HorizontalAlignment="Left" Margin="16,369,0,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="#FF333333" BorderBrush="{x:Null}" FontFamily="Rockwell" Width="122"/>
+            <TextBlock HorizontalAlignment="Left" Margin="158,374,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontFamily="Rockwell" Width="19" Height="20"><Run Language="pt-br" Text="Até"/><LineBreak/><Run Language="pt-br"/></TextBlock>
+            <DatePicker x:Name="dtpFinal" HorizontalAlignment="Left" Margin="197,369,0,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="#FF333333" BorderBrush="{x:Null}" FontFamily="Rockwell" Width="122"/>
+            <Rectangle HorizontalAlignment="Left" Height="2" Margin="18,393,0,0" Stroke="Black" VerticalAlignment="Top" Width="298" RenderTransformOrigin="0.5,0.5">
+                <Rectangle.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform AngleX="-0.286"/>
+                        <RotateTransform/>
+                        <TranslateTransform X="-0.008"/>
+                    </TransformGroup>
+                </Rectangle.RenderTransform>
+            </Rectangle>
+            <Button x:Name="btnFiltrar" Content="Filtrar" HorizontalAlignment="Left" Margin="34,602,0,0" VerticalAlignment="Top" Width="59" Height="19" Background="#FF8DED88" BorderBrush="{x:Null}" FontFamily="Rockwell" Click="btnFiltrar_Click">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                        <Setter Property="Cursor" Value="Hand"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}" CornerRadius="2" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="0.95" ScaleY="0.95"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            <Button x:Name="btnLimpar" Content="Limpar" HorizontalAlignment="Left" Margin="237,602,0,0" VerticalAlignment="Top" Width="59" Height="19" Background="#FFED8888" BorderBrush="{x:Null}" FontFamily="Rockwell">
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                        <Setter Property="Cursor" Value="Hand"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border Background="{TemplateBinding Background}" CornerRadius="2" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="0.95" ScaleY="0.95"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
         </Grid>
 
     </Grid>

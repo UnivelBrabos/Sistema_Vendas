@@ -48,28 +48,28 @@ namespace Sistema_Vendas
         }
 
         #region :: Carregamento dos gráficos ::
-        public void CarregaGrafico()
+        public void CarregaGrafico(bool filtrar = false)
         {
             string strRetorno;
 
             try
             {
-                if (!GraficoPartLucro(out strRetorno))
+                if (!GraficoPartLucro(out strRetorno, filtrar))
                 {
                     throw new Exception(strRetorno);
                 }
 
-                if (!GraficoVendasMes(out strRetorno))
+                if (!GraficoVendasMes(out strRetorno, filtrar))
                 {
                     throw new Exception(strRetorno);
                 }
 
-                if (!GraficoClientes(out strRetorno))
+                if (!GraficoClientes(out strRetorno, filtrar))
                 {
                     throw new Exception(strRetorno);
                 }
 
-                if(!GraficoProdVendas(out strRetorno))
+                if(!GraficoProdVendas(out strRetorno, filtrar))
                 {
                     throw new Exception(strRetorno);
                 }
@@ -80,7 +80,7 @@ namespace Sistema_Vendas
             }
         }
 
-        public bool GraficoProdVendas(out string pMensagem)
+        public bool GraficoProdVendas(out string pMensagem, bool filtrar)
         {
             try
             {
@@ -131,8 +131,7 @@ namespace Sistema_Vendas
             return true;
         }
 
-
-        public bool GraficoPartLucro(out string pMensagem)
+        public bool GraficoPartLucro(out string pMensagem, bool filtrar)
         {
             try
             {
@@ -163,7 +162,7 @@ namespace Sistema_Vendas
             return true;
         }
 
-        public bool GraficoVendasMes(out string pMensagem)
+        public bool GraficoVendasMes(out string pMensagem, bool filtrar)
         {
             try
             {
@@ -229,7 +228,7 @@ namespace Sistema_Vendas
             return true;
         }
 
-        public bool GraficoClientes(out string pMensagem)
+        public bool GraficoClientes(out string pMensagem, bool filtrar)
         {
             try
             {
@@ -289,5 +288,10 @@ namespace Sistema_Vendas
         }
 
         #endregion :: Eventos ::
+
+        private void btnFiltrar_Click(object sender, RoutedEventArgs e)
+        {
+            CarregaGrafico(true);
+        }
     }
 }

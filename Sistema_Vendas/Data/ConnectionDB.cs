@@ -7,7 +7,7 @@ namespace Sistema_Vendas.Data
         private Supabase.Client _client;
 
         string supabaseUrl = "https://zwxauvbgkpnaaqjjvmqm.supabase.co";
-        string supabaseKey = " eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp3eGF1dmJna3BuYWFxamp2bXFtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEzMDUyNjgsImV4cCI6MjA1Njg4MTI2OH0.oI2jW3NWcjBHzmrFoMWCm1LU5RVKyQ0D-3dEbzihPLA";
+        string supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp3eGF1dmJna3BuYWFxamp2bXFtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEzMDUyNjgsImV4cCI6MjA1Njg4MTI2OH0.oI2jW3NWcjBHzmrFoMWCm1LU5RVKyQ0D-3dEbzihPLA";
 
         public ConnectionDB()
         {
