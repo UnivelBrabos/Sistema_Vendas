@@ -11,42 +11,6 @@
     <Grid>
         <Rectangle x:Name="Ret_Menu" Fill="#FF34B6FF" Height="72" VerticalAlignment="Top"/>
         <Image x:Name="imgIcon" HorizontalAlignment="Left" Height="72" VerticalAlignment="Top" Width="74" Source="/Imagens/Vendas_Icon.png"/>
-        <Button x:Name="btnReload" Content="&#xD;&#xA;" Margin="0,11,10,0" VerticalAlignment="Top" Height="50" Foreground="{x:Null}" BorderBrush="{x:Null}" HorizontalAlignment="Right" Width="50" Click="btnReload_Click" MinWidth="8" OverridesDefaultStyle="True">
-            <Button.Background>
-                <ImageBrush ImageSource="/Imagens/Recarregar_Icon.png"/>
-            </Button.Background>
-            <Button.RenderTransform>
-                <RotateTransform x:Name="rotateTransform" Angle="0"/>
-            </Button.RenderTransform>
-
-            <Button.Style>
-                <Style TargetType="Button">
-                    <Setter Property="Background" Value="Transparent"/>
-                    <Setter Property="BorderThickness" Value="0"/>
-                    <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
-                    <Setter Property="Cursor" Value="Hand"/>
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="Button">
-                                <Border Background="{TemplateBinding Background}">
-                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                </Border>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                    <Style.Triggers>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter Property="RenderTransform">
-                                <Setter.Value>
-                                    <ScaleTransform ScaleX="0.95" ScaleY="0.95"/>
-                                </Setter.Value>
-                            </Setter>
-                        </Trigger>
-                    </Style.Triggers>
-
-                </Style>
-            </Button.Style>
-        </Button>
 
 
 
@@ -104,11 +68,11 @@
 
             <TextBlock x:Name="txtCompradores" Margin="0,325,90,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="16" Height="31" FontFamily="Rockwell" TextAlignment="Center" HorizontalAlignment="Right" Width="213"><Run Language="pt-br" Text="Maiores Compradores"/></TextBlock>
             <TextBlock x:Name="txtVendedores" Margin="0,9,90,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="16" Height="31" FontFamily="Rockwell" TextAlignment="Center" HorizontalAlignment="Right" Width="213"><Run Language="pt-br" Text="Melhores Vendedores"/></TextBlock>
-            <TextBlock x:Name="txtProdutos" Margin="423,331,481,290" TextWrapping="Wrap" FontSize="16" FontFamily="Rockwell" TextAlignment="Center"><Run Language="pt-br" Text="Produtos mais vendidos"/></TextBlock>
-            <TextBlock x:Name="txtVendasMensais" Margin="237,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="16" Height="31" FontFamily="Rockwell" TextAlignment="Center" HorizontalAlignment="Left" Width="213"><Run Language="pt-br" Text="Vendas mensais"/></TextBlock>
+            <TextBlock x:Name="txtProdutos" Margin="418,331,480,0" TextWrapping="Wrap" FontSize="16" FontFamily="Rockwell" TextAlignment="Center" Height="25" VerticalAlignment="Top"><Run Language="pt-br" Text="Produtos mais vendidos"/></TextBlock>
+            <TextBlock x:Name="txtVendasMensais" Margin="237,10,630,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="16" Height="31" FontFamily="Rockwell" TextAlignment="Center"><Run Language="pt-br" Text="Vendas mensais"/></TextBlock>
             <Rectangle Margin="10,326,0,10" RadiusX="20" RadiusY="20" Fill="White" HorizontalAlignment="Left" Width="315"/>
-            <TextBlock x:Name="txtFiltros" Margin="80,331,0,290" TextWrapping="Wrap" FontSize="16" FontFamily="Rockwell" TextAlignment="Center" HorizontalAlignment="Left" Width="176"><Run Language="pt-br" Text="Filtros"/><LineBreak/><Run Language="pt-br"/></TextBlock>
-            <DatePicker x:Name="dtpInicial" HorizontalAlignment="Left" Margin="16,369,0,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="#FF333333" BorderBrush="{x:Null}" FontFamily="Rockwell" Width="122"/>
+            <TextBlock x:Name="txtFiltros" Margin="80,331,0,0" TextWrapping="Wrap" FontSize="16" FontFamily="Rockwell" TextAlignment="Center" HorizontalAlignment="Left" Width="176" Height="19" VerticalAlignment="Top"><Run Language="pt-br" Text="Filtros"/><LineBreak/><Run Language="pt-br"/></TextBlock>
+            <DatePicker x:Name="dtpInicial" HorizontalAlignment="Left" Margin="16,369,0,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="#FF333333" BorderBrush="{x:Null}" FontFamily="Rockwell" Width="122" SelectedDateChanged="dtpInicial_SelectedDateChanged"/>
             <TextBlock HorizontalAlignment="Left" Margin="158,374,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontFamily="Rockwell" Width="19" Height="20"><Run Language="pt-br" Text="Até"/><LineBreak/><Run Language="pt-br"/></TextBlock>
             <DatePicker x:Name="dtpFinal" HorizontalAlignment="Left" Margin="197,369,0,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="#FF333333" BorderBrush="{x:Null}" FontFamily="Rockwell" Width="122"/>
             <Rectangle HorizontalAlignment="Left" Height="2" Margin="18,393,0,0" Stroke="Black" VerticalAlignment="Top" Width="298" RenderTransformOrigin="0.5,0.5">
@@ -121,7 +85,7 @@
                     </TransformGroup>
                 </Rectangle.RenderTransform>
             </Rectangle>
-            <Button x:Name="btnFiltrar" Content="Filtrar" HorizontalAlignment="Left" Margin="34,602,0,0" VerticalAlignment="Top" Width="59" Height="19" Background="#FF8DED88" BorderBrush="{x:Null}" FontFamily="Rockwell" Click="btnFiltrar_Click">
+            <Button x:Name="btnFiltrar" Content="Filtrar" HorizontalAlignment="Left" Margin="34,0,0,19" Width="59" Background="#FF8DED88" BorderBrush="{x:Null}" FontFamily="Rockwell" Click="btnFiltrar_Click" Height="19" VerticalAlignment="Bottom">
                 <Button.Style>
                     <Style TargetType="Button">
                         <Setter Property="Background" Value="Transparent"/>
@@ -149,7 +113,7 @@
                     </Style>
                 </Button.Style>
             </Button>
-            <Button x:Name="btnLimpar" Content="Limpar" HorizontalAlignment="Left" Margin="237,602,0,0" VerticalAlignment="Top" Width="59" Height="19" Background="#FFED8888" BorderBrush="{x:Null}" FontFamily="Rockwell">
+            <Button x:Name="btnLimpar" Content="Limpar" HorizontalAlignment="Left" Margin="237,0,0,19" Width="59" Background="#FFED8888" BorderBrush="{x:Null}" FontFamily="Rockwell" Height="19" VerticalAlignment="Bottom" Click="btnLimpar_Click">
                 <Button.Style>
                     <Style TargetType="{x:Type Button}">
                         <Setter Property="Background" Value="Transparent"/>

@@ -5,8 +5,6 @@ using Sistema_Vendas.Model;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
 
 
 namespace Sistema_Vendas
@@ -30,6 +28,9 @@ namespace Sistema_Vendas
             objConnect = new ConnectionDB(); // Inicializa a conexão junto ao sistema
 
             CarregaDados();
+
+            dtpFinal.DisplayDateEnd = DateTime.Today;
+            dtpInicial.DisplayDateEnd = DateTime.Today;
         }
 
         public async void CarregaDados()
@@ -69,7 +70,7 @@ namespace Sistema_Vendas
                     throw new Exception(strRetorno);
                 }
 
-                if(!GraficoProdVendas(out strRetorno, filtrar))
+                if (!GraficoProdVendas(out strRetorno, filtrar))
                 {
                     throw new Exception(strRetorno);
                 }
@@ -90,7 +91,7 @@ namespace Sistema_Vendas
                     Values = new ChartValues<double>()
                 };
 
-                string[] labelsY = new string[5]; 
+                string[] labelsY = new string[5];
                 int i = 0;
 
                 // Filtragem e cálculo dos produtos mais vendidos
@@ -101,13 +102,56 @@ namespace Sistema_Vendas
                                     (p, v) => new
                                     {
                                         Produto = p.Nome,
-                                        TotalVendido = v.Sum(t => (t.QuantidadeLote * p.Lote))
+                                        TotalVendido = v.Sum(t => (t.QuantidadeLote * p.Lote)),
+                                        IdentificadorVenda = v.Select(t => t.IdVenda)
                                     })
-                                    .OrderByDescending(item => item.TotalVendido)
-                                    .Take(5)
-                                    .ToList();
+                                    .OrderByDescending(item => item.TotalVendido);
+                if (filtrar)
+                {
+                    #region :: Por Data ::
 
-                foreach (var produto in lstFiltrada)
+                    if (!string.IsNullOrEmpty(dtpInicial.Text) && !string.IsNullOrEmpty(dtpFinal.Text))
+                    {
+                        DateTime dataInicial = DateTime.Parse(dtpInicial.Text);
+                        DateTime dataFinal = DateTime.Parse(dtpFinal.Text).AddDays(1).AddTicks(-1); // Final do dia
+
+                        lstFiltrada = lstProdutos.Select(p => new
+                        {
+                            Produto = p.Nome,
+                            TotalVendido = lstItensVenda
+                                .Where(t => t.IdProduto == p.IdProduto &&
+                                            lstVendas.Any(v => v.IdVenda == t.IdVenda &&
+                                                               v.DataVenda >= dataInicial &&
+                                                               v.DataVenda <= dataFinal))
+                                .Sum(t => t.QuantidadeLote * p.Lote),
+                            IdentificadorVenda = lstItensVenda
+                                .Where(t => t.IdProduto == p.IdProduto &&
+                                            lstVendas.Any(v => v.IdVenda == t.IdVenda &&
+                                                               v.DataVenda >= dataInicial &&
+                                                               v.DataVenda <= dataFinal))
+                                .Select(t => t.IdVenda)
+                        })
+                        .Where(p => p.IdentificadorVenda.Any()) // Remove produtos sem vendas no período
+                        .OrderByDescending(p => p.TotalVendido);
+                    }
+                    else if (!string.IsNullOrEmpty(dtpInicial.Text))
+                    {
+
+                    }
+                    else if (!string.IsNullOrEmpty(dtpFinal.Text))
+                    {
+
+                    }
+
+                    #endregion :: Por Data ::
+                }
+
+                var lstMaisVendidos = lstFiltrada.OrderByDescending(p => p.TotalVendido)
+                                           .Take(5)
+                                           .ToList();
+
+
+                foreach (var produto in lstMaisVendidos)
                 {
                     rowSeries.Values.Add(Convert.ToDouble(produto.TotalVendido));
                     labelsY[i] = produto.Produto;
@@ -119,7 +163,7 @@ namespace Sistema_Vendas
                     rowSeries
                 };
 
-                ProdutosCharControl.AxisY[0].Labels = labelsY; 
+                ProdutosCharControl.AxisY[0].Labels = labelsY;
             }
             catch (Exception ex)
             {
@@ -141,13 +185,35 @@ namespace Sistema_Vendas
                 {
                     PieSeries pieSeries = new()
                     {
-                        Title = lstVendedores[i].Nome,
-                        Values = new ChartValues<double>
-                    {
-                        Convert.ToDouble(lstVendas.Where(p => p.IdVendedor == lstVendedores[i].IdVendedor)
-                                 .Sum(p => p.TotalVenda))
-                    }
+                        Title = lstVendedores[i].Nome
                     };
+
+                    if (filtrar)
+                    {
+                        #region :: Por Data ::
+
+                        if (!string.IsNullOrEmpty(dtpInicial.Text) && !string.IsNullOrEmpty(dtpFinal.Text))
+                        {
+                            DateTime dttInicial = Convert.ToDateTime(dtpInicial.Text);
+                            DateTime dttFinal = Convert.ToDateTime(dtpFinal.Text);
+
+                            pieSeries.Values = new ChartValues<double>
+                            {
+                                Convert.ToDouble(lstVendas.Where(p => p.IdVendedor == lstVendedores[i].IdVendedor && p.DataVenda >= dttInicial && p.DataVenda <= dttFinal)
+                                                            .Sum(p => p.TotalVenda))
+                            };
+                        }
+
+                        #endregion :: Por Data ::
+                    }
+                    else
+                    {
+                        pieSeries.Values = new ChartValues<double>
+                        {
+                            Convert.ToDouble(lstVendas.Where(p => p.IdVendedor == lstVendedores[i].IdVendedor)
+                                     .Sum(p => p.TotalVenda))
+                        };
+                    }
 
                     VendedoresChartControl.Series.Add(pieSeries);
                 }
@@ -194,24 +260,49 @@ namespace Sistema_Vendas
                 });
 
 
-                var lstVendasOrg = lstVendas
-                    .GroupBy(p => new { p.DataVenda.Year, p.DataVenda.Month })
-                    .Select(g => new
-                    {
-                        Ano = g.Key.Year,
-                        MesNumero = g.Key.Month,
-                        MesNome = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(g.Key.Month),
-                        Total = (double)g.Sum(v => v.TotalVenda)
-                    })
-                    .OrderBy(g => g.Ano)
-                    .ThenBy(g => g.MesNumero)
-                    .ToList();
-
-                // Preenchendo os valores no gráfico
-                foreach (var venda in lstVendasOrg)
+                if (!filtrar)
                 {
-                    columnSeries.Values.Add(venda.Total);
-                    EixoX.Labels.Add(venda.MesNome);
+                    var lstVendasOrg = lstVendas
+                        .GroupBy(p => new { p.DataVenda.Year, p.DataVenda.Month })
+                        .Select(g => new
+                        {
+                            Ano = g.Key.Year,
+                            MesNumero = g.Key.Month,
+                            MesNome = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(g.Key.Month),
+                            Total = (double)g.Sum(v => v.TotalVenda)
+                        })
+                        .OrderBy(g => g.Ano)
+                        .ThenBy(g => g.MesNumero)
+                        .ToList();
+
+                    // Preenchendo os valores no gráfico
+                    foreach (var venda in lstVendasOrg)
+                    {
+                        columnSeries.Values.Add(venda.Total);
+                        EixoX.Labels.Add(venda.MesNome);
+                    }
+                }
+                else
+                {
+                    var lstVendasOrg = lstVendas
+                        .Where(d => (d.DataVenda >= Convert.ToDateTime(dtpInicial.Text) && (d.DataVenda <= Convert.ToDateTime(dtpFinal.Text))))
+                        .GroupBy(p => new { p.DataVenda.Year, p.DataVenda.Month })
+                        .Select(g => new
+                        {
+                            Ano = g.Key.Year,
+                            MesNumero = g.Key.Month,
+                            MesNome = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(g.Key.Month),
+                            Total = (double)g.Sum(v => v.TotalVenda)
+                        })
+                        .OrderBy(g => g.Ano)
+                        .ThenBy(g => g.MesNumero)
+                        .ToList();
+
+                    foreach (var venda in lstVendasOrg)
+                    {
+                        columnSeries.Values.Add(venda.Total);
+                        EixoX.Labels.Add(venda.MesNome);
+                    }
                 }
 
                 // Adiciona os eixos e séries ao gráfico
@@ -235,28 +326,57 @@ namespace Sistema_Vendas
                 ClientesChartControl.Series = new SeriesCollection();
 
                 // Essa lista é um Inner join de Vendas com Cliente. Para pegar o total que cada cliente comprou
-                var lstFiltrada = lstClientes.GroupJoin(
-                                        lstVendas,
-                                        c => c.IdCliente,
-                                        v => v.IdCliente,
-                                        (c, v) => new
-                                        {
-                                            Nome = c.Nome,
-                                            Total = v.Sum(t => t.TotalVenda)
-                                        });
-
-                foreach (var item in lstFiltrada)
+                if (!filtrar)
                 {
-                    PieSeries pieSeries = new()
+                    var lstFiltrada = lstClientes.GroupJoin(
+                                            lstVendas,
+                                            c => c.IdCliente,
+                                            v => v.IdCliente,
+                                            (c, v) => new
+                                            {
+                                                Nome = c.Nome,
+                                                Total = v.Sum(t => t.TotalVenda)
+                                            });
+
+                    foreach (var item in lstFiltrada)
                     {
-                        Title = item.Nome,
-                        Values = new ChartValues<double>
+                        PieSeries pieSeries = new()
+                        {
+                            Title = item.Nome,
+                            Values = new ChartValues<double>
                         {
                             Convert.ToDouble(item.Total)
                         }
-                    };
+                        };
 
-                    ClientesChartControl.Series.Add(pieSeries);
+                        ClientesChartControl.Series.Add(pieSeries);
+                    }
+                }
+                else
+                {
+                    var lstFiltrada = lstClientes.GroupJoin(
+                                            lstVendas.Where(d => (d.DataVenda >= Convert.ToDateTime(dtpInicial.Text) && (d.DataVenda <= Convert.ToDateTime(dtpFinal.Text)))),
+                                            c => c.IdCliente,
+                                            v => v.IdCliente,
+                                            (c, v) => new
+                                            {
+                                                Nome = c.Nome,
+                                                Total = v.Sum(t => t.TotalVenda)
+                                            });
+
+                    foreach (var item in lstFiltrada)
+                    {
+                        PieSeries pieSeries = new()
+                        {
+                            Title = item.Nome,
+                            Values = new ChartValues<double>
+                        {
+                            Convert.ToDouble(item.Total)
+                        }
+                        };
+
+                        ClientesChartControl.Series.Add(pieSeries);
+                    }
                 }
             }
             catch (Exception ex)
@@ -272,26 +392,34 @@ namespace Sistema_Vendas
         #endregion :: Carregamento dos gráficos ::
 
         #region :: Eventos ::
-        private void btnReload_Click(object sender, RoutedEventArgs e)
-        {
-            // Criando a animação de rotação de 360 graus
-            var rotateAnimation = new DoubleAnimation
-            {
-                From = 0,
-                To = 360,
-                Duration = new Duration(TimeSpan.FromSeconds(0.5))
-            };
-
-            // Aplicando a animação ao RotateTransform do botão
-            rotateTransform.BeginAnimation(RotateTransform.AngleProperty, rotateAnimation);
-
-        }
-
-        #endregion :: Eventos ::
 
         private void btnFiltrar_Click(object sender, RoutedEventArgs e)
         {
             CarregaGrafico(true);
         }
+
+        private void btnLimpar_Click(object sender, RoutedEventArgs e)
+        {
+            CarregaGrafico();
+            dtpInicial.Text = "";
+            dtpFinal.Text = "";
+        }
+
+        private void dtpInicial_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(dtpInicial.Text))
+            {
+                dtpFinal.DisplayDateStart = Convert.ToDateTime(dtpInicial.Text);
+
+                DateTime dttFinal = string.IsNullOrEmpty(dtpFinal.Text) ? DateTime.Today : Convert.ToDateTime(dtpFinal.Text);
+                DateTime dttInicial = Convert.ToDateTime(dtpInicial.Text);
+
+                if (dttFinal < dttInicial)
+                {
+                    dtpFinal.Text = dtpInicial.Text;
+                }
+            }
+        }
+        #endregion :: Eventos ::
     }
 }
