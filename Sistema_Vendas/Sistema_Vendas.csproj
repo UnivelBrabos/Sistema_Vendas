@@ -9,12 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Imagens\Recarregar_Icon.png" />
     <None Remove="Imagens\Vendas_Icon.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Imagens\Recarregar_Icon.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,7 +22,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Imagens\Vendas_Icon.png" />
+    <Resource Include="Imagens\Vendas_Icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>

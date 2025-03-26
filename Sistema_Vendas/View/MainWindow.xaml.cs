@@ -1,7 +1,9 @@
 ﻿using LiveCharts;
 using LiveCharts.Wpf;
+using Sistema_Vendas.Controller;
 using Sistema_Vendas.Data;
 using Sistema_Vendas.Model;
+using Sistema_Vendas.Model.FilteredModel;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,18 +11,17 @@ using System.Windows.Controls;
 
 namespace Sistema_Vendas
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         private readonly ConnectionDB objConnect;
 
-        private List<Vendedor> lstVendedores;
-        private List<Vendas> lstVendas;
-        private List<Produto> lstProdutos;
-        private List<Cliente> lstClientes;
-        private List<ItensVenda> lstItensVenda;
+        private GraficosController GraficosController;
+
+        public List<ItensVenda> lstItensVenda;
+        public List<Vendedor> lstVendedores;
+        public List<Produto> lstProdutos;
+        public List<Cliente> lstClientes;
+        public List<Vendas> lstVendas;
 
         public MainWindow()
         {
@@ -29,8 +30,10 @@ namespace Sistema_Vendas
 
             CarregaDados();
 
-            dtpFinal.DisplayDateEnd = DateTime.Today;
-            dtpInicial.DisplayDateEnd = DateTime.Today;
+            dtpFinal.Text = DateTime.Now.ToString("dd/MM/yyyy");
+            dtpInicial.Text = "01/01/2025";
+
+            GraficosController = new(this);
         }
 
         public async void CarregaDados()
@@ -46,189 +49,44 @@ namespace Sistema_Vendas
             lstItensVenda = await ItensVenda.GetItensVenda(objConnect);
 
             CarregaGrafico();
+
+            CarregaVendedoresComboBox();
         }
 
         #region :: Carregamento dos gráficos ::
-        public void CarregaGrafico(bool filtrar = false)
+        public void CarregaGrafico(bool filtrar = false, Filtros pFiltros = null)
         {
-            string strRetorno;
+            List<int> lstVendedoresId = lstVendedores.Select(p => p.IdVendedor).ToList();
+            List<int> lstClientesId = lstClientes.Select(p => p.IdCliente).ToList();
 
-            try
+            pFiltros = new(Convert.ToDateTime(dtpInicial.Text), Convert.ToDateTime(dtpFinal.Text), lstVendedoresId, lstClientesId);
+
+            GraficoPartLucro(filtrar, pFiltros);
+
+            GraficoVendasMes(filtrar, pFiltros);
+
+            GraficoClientes(filtrar, pFiltros);
+
+            GraficoProdVendas(filtrar, pFiltros);
+        }
+
+        public void GraficoProdVendas(bool pFiltrar, Filtros pFiltros)
+        {
+            if(!GraficosController.MaisVendidos(ref ProdutosCharControl, pFiltrar, pFiltros, out string strRetorno))
             {
-                if (!GraficoPartLucro(out strRetorno, filtrar))
-                {
-                    throw new Exception(strRetorno);
-                }
-
-                if (!GraficoVendasMes(out strRetorno, filtrar))
-                {
-                    throw new Exception(strRetorno);
-                }
-
-                if (!GraficoClientes(out strRetorno, filtrar))
-                {
-                    throw new Exception(strRetorno);
-                }
-
-                if (!GraficoProdVendas(out strRetorno, filtrar))
-                {
-                    throw new Exception(strRetorno);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(strRetorno);
             }
         }
 
-        public bool GraficoProdVendas(out string pMensagem, bool filtrar)
+        public void GraficoPartLucro(bool pFiltrar, Filtros pFiltros)
         {
-            try
+            if(!GraficosController.ParticipacaoLucros(ref VendedoresChartControl, pFiltrar, pFiltros, out string strMensagem))
             {
-                RowSeries rowSeries = new RowSeries
-                {
-                    Title = "",
-                    Values = new ChartValues<double>()
-                };
-
-                string[] labelsY = new string[5];
-                int i = 0;
-
-                // Filtragem e cálculo dos produtos mais vendidos
-                var lstFiltrada = lstProdutos.GroupJoin(
-                                    lstItensVenda,
-                                    p => p.IdProduto,
-                                    v => v.IdProduto,
-                                    (p, v) => new
-                                    {
-                                        Produto = p.Nome,
-                                        TotalVendido = v.Sum(t => (t.QuantidadeLote * p.Lote)),
-                                        IdentificadorVenda = v.Select(t => t.IdVenda)
-                                    })
-                                    .OrderByDescending(item => item.TotalVendido);
-                if (filtrar)
-                {
-                    #region :: Por Data ::
-
-                    if (!string.IsNullOrEmpty(dtpInicial.Text) && !string.IsNullOrEmpty(dtpFinal.Text))
-                    {
-                        DateTime dataInicial = DateTime.Parse(dtpInicial.Text);
-                        DateTime dataFinal = DateTime.Parse(dtpFinal.Text).AddDays(1).AddTicks(-1); // Final do dia
-
-                        lstFiltrada = lstProdutos.Select(p => new
-                        {
-                            Produto = p.Nome,
-                            TotalVendido = lstItensVenda
-                                .Where(t => t.IdProduto == p.IdProduto &&
-                                            lstVendas.Any(v => v.IdVenda == t.IdVenda &&
-                                                               v.DataVenda >= dataInicial &&
-                                                               v.DataVenda <= dataFinal))
-                                .Sum(t => t.QuantidadeLote * p.Lote),
-                            IdentificadorVenda = lstItensVenda
-                                .Where(t => t.IdProduto == p.IdProduto &&
-                                            lstVendas.Any(v => v.IdVenda == t.IdVenda &&
-                                                               v.DataVenda >= dataInicial &&
-                                                               v.DataVenda <= dataFinal))
-                                .Select(t => t.IdVenda)
-                        })
-                        .Where(p => p.IdentificadorVenda.Any()) // Remove produtos sem vendas no período
-                        .OrderByDescending(p => p.TotalVendido);
-                    }
-                    else if (!string.IsNullOrEmpty(dtpInicial.Text))
-                    {
-
-                    }
-                    else if (!string.IsNullOrEmpty(dtpFinal.Text))
-                    {
-
-                    }
-
-                    #endregion :: Por Data ::
-                }
-
-                var lstMaisVendidos = lstFiltrada.OrderByDescending(p => p.TotalVendido)
-                                           .Take(5)
-                                           .ToList();
-
-
-                foreach (var produto in lstMaisVendidos)
-                {
-                    rowSeries.Values.Add(Convert.ToDouble(produto.TotalVendido));
-                    labelsY[i] = produto.Produto;
-                    i++;
-                }
-
-                ProdutosCharControl.Series = new SeriesCollection
-                {
-                    rowSeries
-                };
-
-                ProdutosCharControl.AxisY[0].Labels = labelsY;
+                MessageBox.Show(strMensagem);
             }
-            catch (Exception ex)
-            {
-                pMensagem = $"Erro ao carregar produtos mais vendidos: {ex.Message}";
-                return false;
-            }
-
-            pMensagem = "Sucesso";
-            return true;
         }
 
-        public bool GraficoPartLucro(out string pMensagem, bool filtrar)
-        {
-            try
-            {
-                VendedoresChartControl.Series = new SeriesCollection();
-
-                for (int i = 0; i < lstVendedores.Count; i++)
-                {
-                    PieSeries pieSeries = new()
-                    {
-                        Title = lstVendedores[i].Nome
-                    };
-
-                    if (filtrar)
-                    {
-                        #region :: Por Data ::
-
-                        if (!string.IsNullOrEmpty(dtpInicial.Text) && !string.IsNullOrEmpty(dtpFinal.Text))
-                        {
-                            DateTime dttInicial = Convert.ToDateTime(dtpInicial.Text);
-                            DateTime dttFinal = Convert.ToDateTime(dtpFinal.Text);
-
-                            pieSeries.Values = new ChartValues<double>
-                            {
-                                Convert.ToDouble(lstVendas.Where(p => p.IdVendedor == lstVendedores[i].IdVendedor && p.DataVenda >= dttInicial && p.DataVenda <= dttFinal)
-                                                            .Sum(p => p.TotalVenda))
-                            };
-                        }
-
-                        #endregion :: Por Data ::
-                    }
-                    else
-                    {
-                        pieSeries.Values = new ChartValues<double>
-                        {
-                            Convert.ToDouble(lstVendas.Where(p => p.IdVendedor == lstVendedores[i].IdVendedor)
-                                     .Sum(p => p.TotalVenda))
-                        };
-                    }
-
-                    VendedoresChartControl.Series.Add(pieSeries);
-                }
-            }
-            catch (Exception ex)
-            {
-                pMensagem = $"Erro durante calculo de participação de lucros: {ex.Message}";
-                return false;
-            }
-
-            pMensagem = "Sucesso";
-            return true;
-        }
-
-        public bool GraficoVendasMes(out string pMensagem, bool filtrar)
+        public void GraficoVendasMes(bool filtrar, Filtros pFiltros)
         {
             try
             {
@@ -264,7 +122,7 @@ namespace Sistema_Vendas
                 {
                     var lstVendasOrg = lstVendas
                         .GroupBy(p => new { p.DataVenda.Year, p.DataVenda.Month })
-                        .Select(g => new
+                        .Select(g => new VendasMensais
                         {
                             Ano = g.Key.Year,
                             MesNumero = g.Key.Month,
@@ -287,7 +145,7 @@ namespace Sistema_Vendas
                     var lstVendasOrg = lstVendas
                         .Where(d => (d.DataVenda >= Convert.ToDateTime(dtpInicial.Text) && (d.DataVenda <= Convert.ToDateTime(dtpFinal.Text))))
                         .GroupBy(p => new { p.DataVenda.Year, p.DataVenda.Month })
-                        .Select(g => new
+                        .Select(g => new VendasMensais
                         {
                             Ano = g.Key.Year,
                             MesNumero = g.Key.Month,
@@ -311,15 +169,11 @@ namespace Sistema_Vendas
             }
             catch (Exception ex)
             {
-                pMensagem = $"Erro durante cálculo das vendas por mês: {ex.Message}";
-                return false;
+                MessageBox.Show($"Erro durante cálculo das vendas por mês: {ex.Message}");
             }
-
-            pMensagem = "Sucesso";
-            return true;
         }
 
-        public bool GraficoClientes(out string pMensagem, bool filtrar)
+        public void GraficoClientes(bool filtrar, Filtros pFiltros)
         {
             try
             {
@@ -381,12 +235,8 @@ namespace Sistema_Vendas
             }
             catch (Exception ex)
             {
-                pMensagem = $"Erro durante calculo de participação de lucros: {ex.Message}";
-                return false;
+                MessageBox.Show($"Erro durante calculo de participação de lucros: {ex.Message}");
             }
-
-            pMensagem = "Sucesso";
-            return true;
         }
 
         #endregion :: Carregamento dos gráficos ::
@@ -401,25 +251,32 @@ namespace Sistema_Vendas
         private void btnLimpar_Click(object sender, RoutedEventArgs e)
         {
             CarregaGrafico();
-            dtpInicial.Text = "";
-            dtpFinal.Text = "";
+            dtpInicial.Text = "01/01/2025";
+            dtpFinal.Text = DateTime.Now.ToString("dd/MM/yyyy");
         }
 
         private void dtpInicial_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (!string.IsNullOrEmpty(dtpInicial.Text))
+            dtpFinal.DisplayDateStart = Convert.ToDateTime(dtpInicial.Text);
+
+            if (Convert.ToDateTime(dtpInicial.Text) > Convert.ToDateTime(dtpFinal.Text))
             {
-                dtpFinal.DisplayDateStart = Convert.ToDateTime(dtpInicial.Text);
-
-                DateTime dttFinal = string.IsNullOrEmpty(dtpFinal.Text) ? DateTime.Today : Convert.ToDateTime(dtpFinal.Text);
-                DateTime dttInicial = Convert.ToDateTime(dtpInicial.Text);
-
-                if (dttFinal < dttInicial)
-                {
-                    dtpFinal.Text = dtpInicial.Text;
-                }
+                dtpFinal.Text = dtpInicial.Text;
             }
         }
+
         #endregion :: Eventos ::
+
+        #region :: Métodos ::
+        private void CarregaVendedoresComboBox()
+        {
+            for(int i = 0; i < lstVendedores.Count; i++)
+            {
+                cmbVendedores.Items.Add(lstVendedores[i].Nome);
+            }
+        }
+
+        #endregion :: Métodos ::
+
     }
 }

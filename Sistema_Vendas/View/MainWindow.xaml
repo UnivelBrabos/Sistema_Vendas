@@ -9,13 +9,10 @@
         mc:Ignorable="d"
         Title="MainWindow" MinHeight="720" MinWidth="1080" Height="728">
     <Grid>
-        <Rectangle x:Name="Ret_Menu" Fill="#FF34B6FF" Height="72" VerticalAlignment="Top"/>
-        <Image x:Name="imgIcon" HorizontalAlignment="Left" Height="72" VerticalAlignment="Top" Width="74" Source="/Imagens/Vendas_Icon.png"/>
+        <Rectangle x:Name="Ret_Menu" Fill="#FF81B6DF" Height="72" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+        <Image x:Name="imgIcon" HorizontalAlignment="Left" Height="72" VerticalAlignment="Top" Width="162" Source="/Imagens/Vendas_Icon.png" RenderTransformOrigin="0.498,0.476"/>
 
-
-
-
-        <Grid Margin="0,72,0,0" Background="#FFF0F0F0">
+        <Grid Margin="0,72,0,0" Background="#FFF0F0F0" Grid.ColumnSpan="2">
 
             <Rectangle x:Name="RetVendedores" Height="304" Margin="0,10,10,0" RadiusX="20" RadiusY="20" VerticalAlignment="Top" Fill="White" HorizontalAlignment="Right" Width="373"/>
             <lvc:PieChart x:Name="VendedoresChartControl" 
@@ -141,7 +138,17 @@
                     </Style>
                 </Button.Style>
             </Button>
+            <ComboBox x:Name="cmbVendedores" HorizontalAlignment="Left" Margin="108,431,0,0" VerticalAlignment="Top" Width="120" Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Rockwell"/>
+            <Rectangle HorizontalAlignment="Left" Height="2" Margin="18,456,0,0" Stroke="Black" VerticalAlignment="Top" Width="298" RenderTransformOrigin="0.5,0.5">
+                <Rectangle.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform AngleX="-0.286"/>
+                        <RotateTransform/>
+                        <TranslateTransform X="-0.008"/>
+                    </TransformGroup>
+                </Rectangle.RenderTransform>
+            </Rectangle>
         </Grid>
-
     </Grid>
 </Window>
