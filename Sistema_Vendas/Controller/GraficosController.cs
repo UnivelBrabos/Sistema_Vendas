@@ -2,6 +2,8 @@
 using LiveCharts.Wpf;
 using Sistema_Vendas.Model;
 using Sistema_Vendas.Model.FilteredModel;
+using System.Globalization;
+using System.Windows;
 
 namespace Sistema_Vendas.Controller
 {
@@ -32,7 +34,7 @@ namespace Sistema_Vendas.Controller
                 {
                     #region :: Por Data ::
 
-                    lstFiltrada = FiltrarVendidosPorData(lstFiltrada, pFiltros.Inicial, pFiltros.Final);
+                    lstFiltrada = FiltrarVendidosPorData(lstFiltrada, pFiltros);
 
                     #endregion :: Por Data ::
                 }
@@ -42,7 +44,7 @@ namespace Sistema_Vendas.Controller
                                       .ToList();
 
 
-                for(int i = 0; i <  lstMaisVendidos.Count; i++) 
+                for (int i = 0; i < lstMaisVendidos.Count; i++)
                 {
                     rowSeries.Values.Add(Convert.ToDouble(lstMaisVendidos[i].TotalVendido));
                     labelsY[i] = lstMaisVendidos[i].Produto;
@@ -71,44 +73,35 @@ namespace Sistema_Vendas.Controller
             {
                 objGrafico.Series = new SeriesCollection();
 
+                List<Vendas> lstAuxiliar = new();
+
                 if (pFiltrar)
                 {
-                    List<Vendedor> lstVendedoresfiltrada = _Main.lstVendedores.Where(p => pFiltros.IdVendedores.Contains(p.IdVendedor)).ToList();
-
-                    for (int i = 0; i < lstVendedoresfiltrada.Count; i++)
-                    {
-                        PieSeries pieSeries = new()
-                        {
-                            Title = _Main.lstVendedores[i].Nome
-                        };
-
-                        pieSeries.Values = new ChartValues<double>
-                        {
-                            Convert.ToDouble(_Main.lstVendas.Where(p => p.IdVendedor == lstVendedoresfiltrada[i].IdVendedor && p.DataVenda >= pFiltros.Inicial && p.DataVenda <= pFiltros.Final)
-                                                            .Sum(p => p.TotalVenda))
-                        };
-
-                        objGrafico.Series.Add(pieSeries);
-                    }
+                    lstAuxiliar = _Main.lstVendas.Where(p => (p.DataVenda >= pFiltros.Inicial &&
+                                                              p.DataVenda <= pFiltros.Final) &&
+                                                              pFiltros.IdVendedores.Contains(p.IdVendedor)).ToList();
                 }
                 else
                 {
-                    for (int i = 0; i < _Main.lstVendedores.Count; i++)
-                    {
-                        PieSeries pieSeries = new()
-                        {
-                            Title = _Main.lstVendedores[i].Nome
-                        };
+                    lstAuxiliar = _Main.lstVendas;
+                }
 
-                        pieSeries.Values = new ChartValues<double>
+                for (int i = 0; i < _Main.lstVendedores.Count; i++)
+                {
+                    PieSeries pieSeries = new()
+                    {
+                        Title = _Main.lstVendedores[i].Nome
+                    };
+
+                    pieSeries.Values = new ChartValues<double>
                         {
-                            Convert.ToDouble(_Main.lstVendas.Where(p => p.IdVendedor == _Main.lstVendedores[i].IdVendedor)
+                            Convert.ToDouble(lstAuxiliar.Where(p => p.IdVendedor == _Main.lstVendedores[i].IdVendedor)
                                      .Sum(p => p.TotalVenda))
                         };
 
-                        objGrafico.Series.Add(pieSeries);
-                    }
+                    objGrafico.Series.Add(pieSeries);
                 }
+
             }
             catch (Exception ex)
             {
@@ -119,6 +112,143 @@ namespace Sistema_Vendas.Controller
             pRetorno = "Sucesso";
             return true;
         }
+
+        public bool VendasMensais(ref CartesianChart objGrafico, bool pFiltrar, Filtros pFiltros, out string pRetorno)
+        {
+            List<Vendas> lstAuxiliar = new();
+
+            try
+            {
+                // Limpa os dados anteriores do gráfico
+                objGrafico.Series.Clear();
+                objGrafico.AxisX.Clear();
+                objGrafico.AxisY.Clear();
+
+                // Cria a série de colunas
+                ColumnSeries columnSeries = new ColumnSeries()
+                {
+                    Title = "Total Vendas por mês",
+                    Values = new ChartValues<double>() // Usa double em vez de decimal
+                };
+
+                // Cria o eixo X dinamicamente
+                Axis EixoX = new Axis()
+                {
+                    Title = "Meses",
+                    Labels = new List<string>(), // Correção do tipo correto
+                    VerticalAlignment = VerticalAlignment.Center
+                };
+
+                // Define o eixo Y
+                objGrafico.AxisY.Add(new Axis
+                {
+                    Title = "Vendas",
+                    LabelFormatter = value => value.ToString("N")
+                });
+
+
+                if (pFiltrar)
+                {
+                    lstAuxiliar = _Main.lstVendas
+                                        .Where(d => ((d.DataVenda >= Convert.ToDateTime(pFiltros.Inicial) &&
+                                                    (d.DataVenda <= Convert.ToDateTime(pFiltros.Final)))) &&
+                                                    pFiltros.IdVendedores.Contains(d.IdVendedor)).ToList();
+                }
+                else
+                {
+                    lstAuxiliar = _Main.lstVendas;
+                }
+
+                var lstVendasOrg = lstAuxiliar
+                    .GroupBy(p => new { p.DataVenda.Year, p.DataVenda.Month })
+                    .Select(g => new VendasMensais
+                    {
+                        Ano = g.Key.Year,
+                        MesNumero = g.Key.Month,
+                        MesNome = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(g.Key.Month),
+                        Total = (double)g.Sum(v => v.TotalVenda)
+                    })
+                    .OrderBy(g => g.Ano)
+                    .ThenBy(g => g.MesNumero)
+                    .ToList();
+
+                // Preenchendo os valores no gráfico
+                foreach (var venda in lstVendasOrg)
+                {
+                    columnSeries.Values.Add(venda.Total);
+                    EixoX.Labels.Add(venda.MesNome);
+                }
+
+                // Adiciona os eixos e séries ao gráfico
+                objGrafico.AxisX.Add(EixoX);
+                objGrafico.Series.Add(columnSeries);
+            }
+            catch (Exception ex)
+            {
+                pRetorno = $"Erro durante cálculo das vendas por mês: {ex.Message}";
+
+                return false;
+            }
+
+            pRetorno = "Sucesso";
+            return true;
+        }
+
+        public bool MelhoresClientes(ref PieChart objGrafico, bool pFiltrar, Filtros pFiltros, out string pRetorno)
+        {
+            try
+            {
+                objGrafico.Series = new SeriesCollection();
+
+                List<Vendas> lstAuxiliar = new();
+
+
+                if (pFiltrar)
+                {
+                    lstAuxiliar = _Main.lstVendas.Where(d => (d.DataVenda >= Convert.ToDateTime(pFiltros.Inicial) &&
+                                                             (d.DataVenda <= Convert.ToDateTime(pFiltros.Final))) &&
+                                                             pFiltros.IdVendedores.Contains(d.IdVendedor)).ToList();
+                }
+                else
+                {
+                    lstAuxiliar = _Main.lstVendas;
+                }
+
+                var lstFiltrada = _Main.lstClientes.GroupJoin(
+                                        lstAuxiliar,
+                                        c => c.IdCliente,
+                                        v => v.IdCliente,
+                                        (c, v) => new
+                                        {
+                                            Nome = c.Nome,
+                                            Total = v.Sum(t => t.TotalVenda)
+                                        });
+
+                foreach (var item in lstFiltrada)
+                {
+                    PieSeries pieSeries = new()
+                    {
+                        Title = item.Nome,
+                        Values = new ChartValues<double>
+                        {
+                            Convert.ToDouble(item.Total)
+                        }
+                    };
+
+                    objGrafico.Series.Add(pieSeries);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                pRetorno = $"Erro durante calculo de participação de lucros: {ex.Message}";
+                return false;
+            }
+
+            pRetorno = "Sucesso";
+            return true;
+        }
+
 
         #region :: Sem filtragem ::
 
@@ -140,7 +270,7 @@ namespace Sistema_Vendas.Controller
         #endregion :: Sem filtragem ::
 
         #region :: Filtros por Data ::
-        public IOrderedEnumerable<MaisVendidos> FiltrarVendidosPorData(IEnumerable<dynamic> pListaFiltrada, DateTime pInicial, DateTime pFinal)
+        public IOrderedEnumerable<MaisVendidos> FiltrarVendidosPorData(IEnumerable<dynamic> pListaFiltrada, Filtros pFiltros)
         {
             return _Main.lstProdutos.Select(p => new MaisVendidos
             {
@@ -148,14 +278,15 @@ namespace Sistema_Vendas.Controller
                 TotalVendido = _Main.lstItensVenda
                                        .Where(t => t.IdProduto == p.IdProduto &&
                                               _Main.lstVendas.Any(v => v.IdVenda == t.IdVenda &&
-                                                                  v.DataVenda >= pInicial &&
-                                                                  v.DataVenda <= pFinal))
+                                                                  v.DataVenda >= pFiltros.Inicial &&
+                                                                  v.DataVenda <= pFiltros.Final &&
+                                                                  pFiltros.IdVendedores.Contains(v.IdVendedor)))
                                        .Sum(t => t.QuantidadeLote * p.Lote),
                 IdentificadorVenda = _Main.lstItensVenda
                                        .Where(t => t.IdProduto == p.IdProduto &&
                                                    _Main.lstVendas.Any(v => v.IdVenda == t.IdVenda &&
-                                                                   v.DataVenda >= pInicial &&
-                                                                   v.DataVenda <= pFinal))
+                                                                   v.DataVenda >= pFiltros.Inicial &&
+                                                                   v.DataVenda <= pFiltros.Final))
                                        .Select(t => t.IdVenda)
             })
             .Where(p => p.IdentificadorVenda.Any())

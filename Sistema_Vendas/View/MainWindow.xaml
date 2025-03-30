@@ -10,7 +10,6 @@
         Title="MainWindow" MinHeight="720" MinWidth="1080" Height="728">
     <Grid>
         <Rectangle x:Name="Ret_Menu" Fill="#FF81B6DF" Height="72" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
-        <Image x:Name="imgIcon" HorizontalAlignment="Left" Height="72" VerticalAlignment="Top" Width="162" Source="/Imagens/Vendas_Icon.png" RenderTransformOrigin="0.498,0.476"/>
 
         <Grid Margin="0,72,0,0" Background="#FFF0F0F0" Grid.ColumnSpan="2">
 
@@ -138,8 +137,22 @@
                     </Style>
                 </Button.Style>
             </Button>
-            <ComboBox x:Name="cmbVendedores" HorizontalAlignment="Left" Margin="108,431,0,0" VerticalAlignment="Top" Width="120" Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Rockwell"/>
-            <Rectangle HorizontalAlignment="Left" Height="2" Margin="18,456,0,0" Stroke="Black" VerticalAlignment="Top" Width="298" RenderTransformOrigin="0.5,0.5">
+            <ComboBox x:Name="cmbVendedores"
+                      HorizontalAlignment="Left"
+                      Margin="111,444,0,0"
+                      VerticalAlignment="Top"
+                      Width="200"
+                      ItemsSource="{Binding ItemscCheckBox}"
+                      FontFamily="Rockwell" Background="{x:Null}" BorderBrush="{x:Null}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox IsChecked="{Binding IsSelected}" Content="{Binding Name}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <Rectangle HorizontalAlignment="Left" Height="2" Margin="18,480,0,0" Stroke="Black" VerticalAlignment="Top" Width="298" RenderTransformOrigin="0.5,0.5">
                 <Rectangle.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform/>
@@ -149,6 +162,8 @@
                     </TransformGroup>
                 </Rectangle.RenderTransform>
             </Rectangle>
+            <TextBlock x:Name="txtFiltros_Copiar" Margin="22,447,0,0" TextWrapping="Wrap" FontFamily="Rockwell" TextAlignment="Center" HorizontalAlignment="Left" Width="73" Height="19" VerticalAlignment="Top"><Run Language="pt-br" Text="Vendedores"/></TextBlock>
         </Grid>
+        <Image Source="/Imagens/Vendas_Icon.png" Stretch="Fill" Height="72" VerticalAlignment="Top" HorizontalAlignment="Left" Width="136"/>
     </Grid>
 </Window>

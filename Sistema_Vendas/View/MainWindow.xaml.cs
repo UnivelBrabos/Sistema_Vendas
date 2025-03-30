@@ -4,6 +4,8 @@ using Sistema_Vendas.Controller;
 using Sistema_Vendas.Data;
 using Sistema_Vendas.Model;
 using Sistema_Vendas.Model.FilteredModel;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,11 +13,29 @@ using System.Windows.Controls;
 
 namespace Sistema_Vendas
 {
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        private ObservableCollection<CheckBoxOptions> _itemscCheckBox;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         private readonly ConnectionDB objConnect;
 
         private GraficosController GraficosController;
+
+        public ObservableCollection<CheckBoxOptions> ItemscCheckBox
+        {
+            get { return _itemscCheckBox; }
+            set
+            {
+                _itemscCheckBox = value;
+                OnPropertyChanged(nameof(ItemscCheckBox));
+            }
+        }
 
         public List<ItensVenda> lstItensVenda;
         public List<Vendedor> lstVendedores;
@@ -26,6 +46,7 @@ namespace Sistema_Vendas
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = this;
             objConnect = new ConnectionDB(); // Inicializa a conexão junto ao sistema
 
             CarregaDados();
@@ -34,6 +55,28 @@ namespace Sistema_Vendas
             dtpInicial.Text = "01/01/2025";
 
             GraficosController = new(this);
+
+        }
+
+        public void CarregaCheckBox()
+        {
+            if (lstVendedores == null || lstVendedores.Count == 0)
+            {
+                MessageBox.Show("Nenhum vendedor encontrado.");
+                return;
+            }
+
+            if (ItemscCheckBox == null) // Inicializa apenas se for nula
+                ItemscCheckBox = new ObservableCollection<CheckBoxOptions>();
+
+            ItemscCheckBox.Clear(); // Limpa os itens antes de adicionar novos
+
+            foreach (var vendedor in lstVendedores)
+            {
+                ItemscCheckBox.Add(new CheckBoxOptions { Name = vendedor.Nome, Id = vendedor.IdVendedor, IsSelected = true });
+            }
+
+            OnPropertyChanged(nameof(ItemscCheckBox));
         }
 
         public async void CarregaDados()
@@ -50,192 +93,51 @@ namespace Sistema_Vendas
 
             CarregaGrafico();
 
-            CarregaVendedoresComboBox();
+            CarregaCheckBox();
         }
 
         #region :: Carregamento dos gráficos ::
-        public void CarregaGrafico(bool filtrar = false, Filtros pFiltros = null)
+        public void CarregaGrafico(bool filtrar = false)
         {
-            List<int> lstVendedoresId = lstVendedores.Select(p => p.IdVendedor).ToList();
+            List<int> lstVendedoresId = new();
+            
+            if(ItemscCheckBox != null)
+            {
+                lstVendedoresId = ItemscCheckBox
+                    .Where(v => v.IsSelected)
+                    .Select(v => v.Id)
+                    .ToList();
+            }
+
             List<int> lstClientesId = lstClientes.Select(p => p.IdCliente).ToList();
 
-            pFiltros = new(Convert.ToDateTime(dtpInicial.Text), Convert.ToDateTime(dtpFinal.Text), lstVendedoresId, lstClientesId);
+            Filtros objFiltros = new(Convert.ToDateTime(dtpInicial.Text), Convert.ToDateTime(dtpFinal.Text), lstVendedoresId, lstClientesId);
 
-            GraficoPartLucro(filtrar, pFiltros);
-
-            GraficoVendasMes(filtrar, pFiltros);
-
-            GraficoClientes(filtrar, pFiltros);
-
-            GraficoProdVendas(filtrar, pFiltros);
+            Graficos(filtrar, objFiltros);
         }
 
-        public void GraficoProdVendas(bool pFiltrar, Filtros pFiltros)
+        public void Graficos(bool pFiltrar, Filtros pFiltros)
         {
-            if(!GraficosController.MaisVendidos(ref ProdutosCharControl, pFiltrar, pFiltros, out string strRetorno))
-            {
-                MessageBox.Show(strRetorno);
-            }
-        }
+            string strMensagem;
 
-        public void GraficoPartLucro(bool pFiltrar, Filtros pFiltros)
-        {
-            if(!GraficosController.ParticipacaoLucros(ref VendedoresChartControl, pFiltrar, pFiltros, out string strMensagem))
+            if(!GraficosController.MaisVendidos(ref ProdutosCharControl, pFiltrar, pFiltros, out strMensagem))
             {
                 MessageBox.Show(strMensagem);
             }
-        }
 
-        public void GraficoVendasMes(bool filtrar, Filtros pFiltros)
-        {
-            try
+            if (!GraficosController.ParticipacaoLucros(ref VendedoresChartControl, pFiltrar, pFiltros, out strMensagem))
             {
-                // Limpa os dados anteriores do gráfico
-                VendasCharControl.Series.Clear();
-                VendasCharControl.AxisX.Clear();
-                VendasCharControl.AxisY.Clear();
-
-                // Cria a série de colunas
-                ColumnSeries columnSeries = new ColumnSeries()
-                {
-                    Title = "Total Vendas por mês",
-                    Values = new ChartValues<double>() // Usa double em vez de decimal
-                };
-
-                // Cria o eixo X dinamicamente
-                Axis EixoX = new Axis()
-                {
-                    Title = "Meses",
-                    Labels = new List<string>(), // Correção do tipo correto
-                    VerticalAlignment = VerticalAlignment.Center
-                };
-
-                // Define o eixo Y
-                VendasCharControl.AxisY.Add(new Axis
-                {
-                    Title = "Vendas",
-                    LabelFormatter = value => value.ToString("N")
-                });
-
-
-                if (!filtrar)
-                {
-                    var lstVendasOrg = lstVendas
-                        .GroupBy(p => new { p.DataVenda.Year, p.DataVenda.Month })
-                        .Select(g => new VendasMensais
-                        {
-                            Ano = g.Key.Year,
-                            MesNumero = g.Key.Month,
-                            MesNome = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(g.Key.Month),
-                            Total = (double)g.Sum(v => v.TotalVenda)
-                        })
-                        .OrderBy(g => g.Ano)
-                        .ThenBy(g => g.MesNumero)
-                        .ToList();
-
-                    // Preenchendo os valores no gráfico
-                    foreach (var venda in lstVendasOrg)
-                    {
-                        columnSeries.Values.Add(venda.Total);
-                        EixoX.Labels.Add(venda.MesNome);
-                    }
-                }
-                else
-                {
-                    var lstVendasOrg = lstVendas
-                        .Where(d => (d.DataVenda >= Convert.ToDateTime(dtpInicial.Text) && (d.DataVenda <= Convert.ToDateTime(dtpFinal.Text))))
-                        .GroupBy(p => new { p.DataVenda.Year, p.DataVenda.Month })
-                        .Select(g => new VendasMensais
-                        {
-                            Ano = g.Key.Year,
-                            MesNumero = g.Key.Month,
-                            MesNome = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(g.Key.Month),
-                            Total = (double)g.Sum(v => v.TotalVenda)
-                        })
-                        .OrderBy(g => g.Ano)
-                        .ThenBy(g => g.MesNumero)
-                        .ToList();
-
-                    foreach (var venda in lstVendasOrg)
-                    {
-                        columnSeries.Values.Add(venda.Total);
-                        EixoX.Labels.Add(venda.MesNome);
-                    }
-                }
-
-                // Adiciona os eixos e séries ao gráfico
-                VendasCharControl.AxisX.Add(EixoX);
-                VendasCharControl.Series.Add(columnSeries);
+                MessageBox.Show(strMensagem);
             }
-            catch (Exception ex)
+
+            if (!GraficosController.VendasMensais(ref VendasCharControl, pFiltrar, pFiltros, out strMensagem))
             {
-                MessageBox.Show($"Erro durante cálculo das vendas por mês: {ex.Message}");
+                MessageBox.Show(strMensagem);
             }
-        }
 
-        public void GraficoClientes(bool filtrar, Filtros pFiltros)
-        {
-            try
+            if (!GraficosController.MelhoresClientes(ref ClientesChartControl, pFiltrar, pFiltros, out strMensagem))
             {
-                ClientesChartControl.Series = new SeriesCollection();
-
-                // Essa lista é um Inner join de Vendas com Cliente. Para pegar o total que cada cliente comprou
-                if (!filtrar)
-                {
-                    var lstFiltrada = lstClientes.GroupJoin(
-                                            lstVendas,
-                                            c => c.IdCliente,
-                                            v => v.IdCliente,
-                                            (c, v) => new
-                                            {
-                                                Nome = c.Nome,
-                                                Total = v.Sum(t => t.TotalVenda)
-                                            });
-
-                    foreach (var item in lstFiltrada)
-                    {
-                        PieSeries pieSeries = new()
-                        {
-                            Title = item.Nome,
-                            Values = new ChartValues<double>
-                        {
-                            Convert.ToDouble(item.Total)
-                        }
-                        };
-
-                        ClientesChartControl.Series.Add(pieSeries);
-                    }
-                }
-                else
-                {
-                    var lstFiltrada = lstClientes.GroupJoin(
-                                            lstVendas.Where(d => (d.DataVenda >= Convert.ToDateTime(dtpInicial.Text) && (d.DataVenda <= Convert.ToDateTime(dtpFinal.Text)))),
-                                            c => c.IdCliente,
-                                            v => v.IdCliente,
-                                            (c, v) => new
-                                            {
-                                                Nome = c.Nome,
-                                                Total = v.Sum(t => t.TotalVenda)
-                                            });
-
-                    foreach (var item in lstFiltrada)
-                    {
-                        PieSeries pieSeries = new()
-                        {
-                            Title = item.Nome,
-                            Values = new ChartValues<double>
-                        {
-                            Convert.ToDouble(item.Total)
-                        }
-                        };
-
-                        ClientesChartControl.Series.Add(pieSeries);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Erro durante calculo de participação de lucros: {ex.Message}");
+                MessageBox.Show(strMensagem);
             }
         }
 
