@@ -155,6 +155,7 @@ namespace Sistema_Vendas
             CarregaGrafico();
             dtpInicial.Text = "01/01/2025";
             dtpFinal.Text = DateTime.Now.ToString("dd/MM/yyyy");
+            CarregaCheckBox();
         }
 
         private void dtpInicial_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
@@ -168,17 +169,5 @@ namespace Sistema_Vendas
         }
 
         #endregion :: Eventos ::
-
-        #region :: Métodos ::
-        private void CarregaVendedoresComboBox()
-        {
-            for(int i = 0; i < lstVendedores.Count; i++)
-            {
-                cmbVendedores.Items.Add(lstVendedores[i].Nome);
-            }
-        }
-
-        #endregion :: Métodos ::
-
     }
 }

@@ -199,9 +199,7 @@ namespace Sistema_Vendas.Controller
             try
             {
                 objGrafico.Series = new SeriesCollection();
-
                 List<Vendas> lstAuxiliar = new();
-
 
                 if (pFiltrar)
                 {
@@ -214,41 +212,50 @@ namespace Sistema_Vendas.Controller
                     lstAuxiliar = _Main.lstVendas;
                 }
 
-                var lstFiltrada = _Main.lstClientes.GroupJoin(
-                                        lstAuxiliar,
-                                        c => c.IdCliente,
-                                        v => v.IdCliente,
-                                        (c, v) => new
-                                        {
-                                            Nome = c.Nome,
-                                            Total = v.Sum(t => t.TotalVenda)
-                                        });
+                var lstFiltrada = _Main.lstClientes
+                    .GroupJoin(lstAuxiliar,
+                               c => c.IdCliente,
+                               v => v.IdCliente,
+                               (c, v) => new
+                               {
+                                   Nome = c.Nome,
+                                   Total = v.Sum(t => t.TotalVenda)
+                               })
+                    .OrderByDescending(c => c.Total)
+                    .ToList();
 
-                foreach (var item in lstFiltrada)
+                
+                var topClientes = lstFiltrada.Take(5).ToList();
+                
+                decimal outrosTotal = lstFiltrada.Skip(5).Sum(c => c.Total);
+
+                foreach (var item in topClientes)
                 {
-                    PieSeries pieSeries = new()
+                    objGrafico.Series.Add(new PieSeries
                     {
                         Title = item.Nome,
-                        Values = new ChartValues<double>
-                        {
-                            Convert.ToDouble(item.Total)
-                        }
-                    };
-
-                    objGrafico.Series.Add(pieSeries);
+                        Values = new ChartValues<double> { Convert.ToDouble(item.Total) }
+                    });
                 }
 
+                if (lstFiltrada.Count > 5)
+                {
+                    objGrafico.Series.Add(new PieSeries
+                    {
+                        Title = "Outros",
+                        Values = new ChartValues<double> { Convert.ToDouble(outrosTotal) }
+                    });
+                }
             }
             catch (Exception ex)
             {
-                pRetorno = $"Erro durante calculo de participação de lucros: {ex.Message}";
+                pRetorno = $"Erro durante cálculo de participação de lucros: {ex.Message}";
                 return false;
             }
 
             pRetorno = "Sucesso";
             return true;
         }
-
 
         #region :: Sem filtragem ::
 
