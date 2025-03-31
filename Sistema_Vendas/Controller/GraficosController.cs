@@ -74,28 +74,33 @@ namespace Sistema_Vendas.Controller
                 objGrafico.Series = new SeriesCollection();
 
                 List<Vendas> lstAuxiliar = new();
+                List<Vendedor> lstVendedoresAuxiliar = new();
 
                 if (pFiltrar)
                 {
                     lstAuxiliar = _Main.lstVendas.Where(p => (p.DataVenda >= pFiltros.Inicial &&
                                                               p.DataVenda <= pFiltros.Final) &&
-                                                              pFiltros.IdVendedores.Contains(p.IdVendedor)).ToList();
+                                                              pFiltros.IdVendedores.Contains(p.IdVendedor) &&
+                                                              pFiltros.IdClientes.Contains(p.IdCliente)).ToList();
+
+                    lstVendedoresAuxiliar = _Main.lstVendedores.Where(p => pFiltros.IdVendedores.Contains(p.IdVendedor)).ToList();
                 }
                 else
                 {
                     lstAuxiliar = _Main.lstVendas;
+                    lstVendedoresAuxiliar = _Main.lstVendedores;
                 }
 
-                for (int i = 0; i < _Main.lstVendedores.Count; i++)
+                for (int i = 0; i < lstVendedoresAuxiliar.Count; i++)
                 {
                     PieSeries pieSeries = new()
                     {
-                        Title = _Main.lstVendedores[i].Nome
+                        Title = lstVendedoresAuxiliar[i].Nome
                     };
 
                     pieSeries.Values = new ChartValues<double>
                         {
-                            Convert.ToDouble(lstAuxiliar.Where(p => p.IdVendedor == _Main.lstVendedores[i].IdVendedor)
+                            Convert.ToDouble(lstAuxiliar.Where(p => p.IdVendedor == lstVendedoresAuxiliar[i].IdVendedor)
                                      .Sum(p => p.TotalVenda))
                         };
 
@@ -152,7 +157,8 @@ namespace Sistema_Vendas.Controller
                     lstAuxiliar = _Main.lstVendas
                                         .Where(d => ((d.DataVenda >= Convert.ToDateTime(pFiltros.Inicial) &&
                                                     (d.DataVenda <= Convert.ToDateTime(pFiltros.Final)))) &&
-                                                    pFiltros.IdVendedores.Contains(d.IdVendedor)).ToList();
+                                                     pFiltros.IdVendedores.Contains(d.IdVendedor) &&
+                                                     pFiltros.IdClientes.Contains(d.IdCliente)).ToList();
                 }
                 else
                 {
@@ -200,19 +206,24 @@ namespace Sistema_Vendas.Controller
             {
                 objGrafico.Series = new SeriesCollection();
                 List<Vendas> lstAuxiliar = new();
+                List<Cliente> lstClientesAuxiliar = new();
 
                 if (pFiltrar)
                 {
                     lstAuxiliar = _Main.lstVendas.Where(d => (d.DataVenda >= Convert.ToDateTime(pFiltros.Inicial) &&
-                                                             (d.DataVenda <= Convert.ToDateTime(pFiltros.Final))) &&
-                                                             pFiltros.IdVendedores.Contains(d.IdVendedor)).ToList();
+                                                              d.DataVenda <= Convert.ToDateTime(pFiltros.Final)) &&
+                                                              pFiltros.IdVendedores.Contains(d.IdVendedor) &&
+                                                              pFiltros.IdClientes.Contains(d.IdCliente)).ToList();
+
+                    lstClientesAuxiliar = _Main.lstClientes.Where(p => pFiltros.IdClientes.Contains(p.IdCliente)).ToList();
                 }
                 else
                 {
                     lstAuxiliar = _Main.lstVendas;
+                    lstClientesAuxiliar = _Main.lstClientes;
                 }
 
-                var lstFiltrada = _Main.lstClientes
+                var lstFiltrada = lstClientesAuxiliar
                     .GroupJoin(lstAuxiliar,
                                c => c.IdCliente,
                                v => v.IdCliente,
@@ -287,13 +298,16 @@ namespace Sistema_Vendas.Controller
                                               _Main.lstVendas.Any(v => v.IdVenda == t.IdVenda &&
                                                                   v.DataVenda >= pFiltros.Inicial &&
                                                                   v.DataVenda <= pFiltros.Final &&
-                                                                  pFiltros.IdVendedores.Contains(v.IdVendedor)))
+                                                                  pFiltros.IdVendedores.Contains(v.IdVendedor) &&
+                                                                  pFiltros.IdClientes.Contains(v.IdCliente)))
                                        .Sum(t => t.QuantidadeLote * p.Lote),
                 IdentificadorVenda = _Main.lstItensVenda
                                        .Where(t => t.IdProduto == p.IdProduto &&
                                                    _Main.lstVendas.Any(v => v.IdVenda == t.IdVenda &&
                                                                    v.DataVenda >= pFiltros.Inicial &&
-                                                                   v.DataVenda <= pFiltros.Final))
+                                                                   v.DataVenda <= pFiltros.Final &&
+                                                                   pFiltros.IdVendedores.Contains(v.IdVendedor) &&
+                                                                   pFiltros.IdClientes.Contains(v.IdCliente)))
                                        .Select(t => t.IdVenda)
             })
             .Where(p => p.IdentificadorVenda.Any())

@@ -16,6 +16,7 @@ namespace Sistema_Vendas
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
         private ObservableCollection<CheckBoxOptions> _itemscCheckBox;
+        private ObservableCollection<CheckBoxOptions> _itemsClientesCheckBox;
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
@@ -34,6 +35,16 @@ namespace Sistema_Vendas
             {
                 _itemscCheckBox = value;
                 OnPropertyChanged(nameof(ItemscCheckBox));
+            }
+        }
+
+        public ObservableCollection<CheckBoxOptions> ItemsClientesCheckBox
+        {
+            get { return _itemsClientesCheckBox; }
+            set
+            {
+                _itemsClientesCheckBox = value;
+                OnPropertyChanged(nameof(ItemsClientesCheckBox));
             }
         }
 
@@ -58,9 +69,10 @@ namespace Sistema_Vendas
 
         }
 
+        #region :: BI ::
         public void CarregaCheckBox()
         {
-            if (lstVendedores == null || lstVendedores.Count == 0)
+            if (lstVendedores == null || lstVendedores.Count == 0 || lstClientes == null || lstClientes.Count == 0)
             {
                 MessageBox.Show("Nenhum vendedor encontrado.");
                 return;
@@ -69,14 +81,25 @@ namespace Sistema_Vendas
             if (ItemscCheckBox == null) // Inicializa apenas se for nula
                 ItemscCheckBox = new ObservableCollection<CheckBoxOptions>();
 
-            ItemscCheckBox.Clear(); // Limpa os itens antes de adicionar novos
+            if (ItemsClientesCheckBox == null)
+                ItemsClientesCheckBox = new ObservableCollection<CheckBoxOptions>();
+
+            ItemscCheckBox.Clear();
+            ItemsClientesCheckBox.Clear();
 
             foreach (var vendedor in lstVendedores)
             {
                 ItemscCheckBox.Add(new CheckBoxOptions { Name = vendedor.Nome, Id = vendedor.IdVendedor, IsSelected = true });
             }
 
+            foreach (var cliente in lstClientes)
+            {
+                ItemsClientesCheckBox.Add(new CheckBoxOptions { Name = cliente.Nome, Id = cliente.IdCliente, IsSelected = true });
+            }
+
             OnPropertyChanged(nameof(ItemscCheckBox));
+            OnPropertyChanged(nameof(ItemsClientesCheckBox));
+
         }
 
         public async void CarregaDados()
@@ -100,6 +123,7 @@ namespace Sistema_Vendas
         public void CarregaGrafico(bool filtrar = false)
         {
             List<int> lstVendedoresId = new();
+            List<int> lstClientesId = new();
             
             if(ItemscCheckBox != null)
             {
@@ -109,7 +133,14 @@ namespace Sistema_Vendas
                     .ToList();
             }
 
-            List<int> lstClientesId = lstClientes.Select(p => p.IdCliente).ToList();
+            if (ItemsClientesCheckBox != null)
+            {
+                lstClientesId = ItemsClientesCheckBox
+                    .Where(v => v.IsSelected)
+                    .Select(v => v.Id)
+                    .ToList();
+            }
+
 
             Filtros objFiltros = new(Convert.ToDateTime(dtpInicial.Text), Convert.ToDateTime(dtpFinal.Text), lstVendedoresId, lstClientesId);
 
@@ -143,6 +174,29 @@ namespace Sistema_Vendas
 
         #endregion :: Carregamento dos gráficos ::
 
+        #endregion :: BI ::
+
+        #region :: Auditoria ::
+
+        public void CarregaTabela()
+        {
+            dtgVendas.ItemsSource = lstVendas
+                                    .GroupJoin(lstVendedores,
+                                    v => v.IdVendedor,
+                                    s => s.IdVendedor,
+                                    (v, s) => new
+                                    {
+                                        IdVenda = v.IdVenda,
+                                        Vendedor = s.Select(x => x.Nome).FirstOrDefault(),
+                                        DataDaVenda = v.DataVenda,
+                                        Desconto = v.Desconto,
+                                        Total = v.TotalVenda
+                                    }).OrderBy(c => c.DataDaVenda)
+                                    .ToList();
+        }
+
+        #endregion :: Auditoria ::
+
         #region :: Eventos ::
 
         private void btnFiltrar_Click(object sender, RoutedEventArgs e)
@@ -166,6 +220,22 @@ namespace Sistema_Vendas
             {
                 dtpFinal.Text = dtpInicial.Text;
             }
+        }
+
+        private void btnGraficos_Click(object sender, RoutedEventArgs e)
+        {
+            CarregaGrafico();
+
+            grdAuditoria.Visibility = Visibility.Hidden;
+            grdGraficos.Visibility = Visibility.Visible;
+        }
+
+        private void btnAuditoria_Click(object sender, RoutedEventArgs e)
+        {
+            CarregaTabela();
+
+            grdAuditoria.Visibility = Visibility.Visible;
+            grdGraficos.Visibility = Visibility.Hidden;
         }
 
         #endregion :: Eventos ::
