@@ -1,0 +1,346 @@
+﻿<Window xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        x:Name="grdPrincipal" x:Class="Sistema_Vendas.View.MenuPrincipal"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Sistema_Vendas.View"
+        WindowStartupLocation="CenterScreen"
+        HorizontalAlignment="Left"
+        VerticalAlignment="Top"
+        Title="Menu Principal"
+        mc:Ignorable="d"
+        MinHeight="720"
+        MinWidth="1240" HorizontalContentAlignment="Center"
+        >
+
+    <Grid Margin="0,0,0,0">
+
+        <Grid Name="grdMenuLateral" Background="#FF73B8DA" HorizontalAlignment="Left" Width="194">
+            <Image Source="/Imagens/Vendas_Icon.png" Stretch="Fill" HorizontalAlignment="Center" VerticalAlignment="Top" Height="69" Width="122"/>
+
+            <Grid Name="grdDashboard">
+                <Image x:Name="imgDashboard" Margin="16,143,0,0" Source="/Imagens/Dashboard_Icon.png" Stretch="Fill" HorizontalAlignment="Left" VerticalAlignment="Top" Height="35" Width="35"/>
+                <Label x:Name="lblDashboard" Content="Dashboard" HorizontalAlignment="Left" Margin="59,148,0,0" VerticalAlignment="Top" Width="119" FontFamily="Rockwell" FontSize="14"/>
+
+                <Grid Name="grdVisibilityDashboard" Visibility="Visible">
+                    <Rectangle x:Name="retDashboard" Visibility="Hidden" HorizontalAlignment="Left" Height="36" Margin="0,143,0,0" Stroke="Black" VerticalAlignment="Top" Width="3" Fill="Black"/>
+                    <Button x:Name="btnDashboard" HorizontalAlignment="Left" Margin="3,143,0,0" VerticalAlignment="Top" Width="191" Height="36" Background="Black" BorderBrush="{x:Null}" Opacity="0.0" Click="btnDashboard_Click" Cursor="Hand">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                                <Setter Property="Cursor" Value="Hand"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}" CornerRadius="2" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsPressed" Value="True">
+                                        <Setter Property="RenderTransform">
+                                            <Setter.Value>
+                                                <ScaleTransform ScaleX="0.95" ScaleY="0.95"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </Grid>
+            </Grid>
+
+            <Grid Name="grdAuditoria">
+                <Image Margin="16,233,0,0" Source="/Imagens/Auditoria_Icon.png" Stretch="Fill" HorizontalAlignment="Left" VerticalAlignment="Top" Height="35" Width="35"/>
+                <Label x:Name="lblAudiotoria" Content="Auditoria" HorizontalAlignment="Left" Margin="59,238,0,0" VerticalAlignment="Top" Width="119" FontFamily="Rockwell" FontSize="14"/>
+
+                <Grid Name="grdVisibilityAuditoria" Visibility="Visible">
+                    <Rectangle x:Name="retAuditoria" Visibility="Hidden" HorizontalAlignment="Left" Height="36" Margin="0,233,0,0" Stroke="Black" VerticalAlignment="Top" Width="3" Fill="Black"/>
+                    <Button x:Name="btnAuditoria" HorizontalAlignment="Left" Margin="3,233,0,0" VerticalAlignment="Top" Width="191" Height="36" Background="Black" BorderBrush="Black"  Opacity="0.0" Click="btnAuditoria_Click" Cursor="Hand">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                                <Setter Property="Cursor" Value="Hand"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}" CornerRadius="2" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsPressed" Value="True">
+                                        <Setter Property="RenderTransform">
+                                            <Setter.Value>
+                                                <ScaleTransform ScaleX="0.95" ScaleY="0.95"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </Grid>
+            </Grid>
+
+            <Grid Name="grdFuncionarios">
+                <Image Margin="16,324,0,0" Source="/Imagens/Funcionarios_Icon.png" Stretch="Fill" HorizontalAlignment="Left" VerticalAlignment="Top" Height="35" Width="35"/>
+                <Label x:Name="lblFuncionarios" Content="Funcionários" HorizontalAlignment="Left" Margin="60,327.3,0,0" VerticalAlignment="Top" Width="118" FontFamily="Rockwell" FontSize="14"/>
+
+                <Grid Name="grdVisibilityFuncionarios" Visibility="Visible">
+                    <Rectangle x:Name="retFuncionarios" Visibility="Hidden" HorizontalAlignment="Left" Height="36" Margin="0,324,0,0" Stroke="Black" VerticalAlignment="Top" Width="3" Fill="Black"/>
+                    <Button x:Name="btnFuncionarios" Background="Black" BorderBrush="Black" Opacity="0.0" HorizontalAlignment="Left" Margin="3,324,0,0" VerticalAlignment="Top" Width="191" Height="36" Click="btnFuncionarios_Click" Cursor="Hand">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                                <Setter Property="Cursor" Value="Hand"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}" CornerRadius="2" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsPressed" Value="True">
+                                        <Setter Property="RenderTransform">
+                                            <Setter.Value>
+                                                <ScaleTransform ScaleX="0.95" ScaleY="0.95"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </Grid>
+            </Grid>
+
+            <Grid Name="grdEstoque">
+                <Image Margin="16,415,0,0" Source="/Imagens/Estoque_Icon.png" Stretch="Fill" HorizontalAlignment="Left" VerticalAlignment="Top" Height="35" Width="35"/>
+                <Label x:Name="lblEstoque" Content="Estoque" HorizontalAlignment="Left" Margin="56,419,0,0" VerticalAlignment="Top" Width="118" FontFamily="Rockwell" FontSize="14"/>
+
+                <Grid Name="grdVisibilityEstoque" Visibility="Visible">
+                    <Rectangle x:Name="retEstoque" Visibility="Hidden" HorizontalAlignment="Left" Height="36" Margin="0,415,0,0" Stroke="Black" VerticalAlignment="Top" Width="3" Fill="Black"/>
+                    <Button x:Name="btnEstoque" HorizontalAlignment="Left" Margin="3,415,0,0" VerticalAlignment="Top" Width="191" Height="36" Background="Black" BorderBrush="Black" Opacity="0.0" Click="btnEstoque_Click" Cursor="Hand">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                                <Setter Property="Cursor" Value="Hand"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}" CornerRadius="2" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsPressed" Value="True">
+                                        <Setter Property="RenderTransform">
+                                            <Setter.Value>
+                                                <ScaleTransform ScaleX="0.95" ScaleY="0.95"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </Grid>
+            </Grid>
+
+            <Grid>
+                <Image Margin="16,0,0,10" Source="/Imagens/Settings_Icon.png" Stretch="Fill" HorizontalAlignment="Left" Width="35" Height="35" VerticalAlignment="Bottom"/>
+                <Grid Name="grdVisibilityConfiguracoes">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="682*"/>
+                        <RowDefinition Height="23*"/>
+                    </Grid.RowDefinitions>
+                    <Button     x:Name="btnConfiguracoes"
+                                HorizontalAlignment="Right"
+                                Margin="0,0,142,10"
+                                Width="35"
+                                Background="Black"
+                                BorderBrush="Black"
+                                Opacity="0.0" Click="btnConfiguracoes_Click" Grid.RowSpan="2" Height="35" VerticalAlignment="Bottom" Cursor="Hand">
+
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="1"
+                                        CornerRadius="4">
+
+                                    <ContentPresenter   HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center" />
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                                <Setter Property="Cursor" Value="Hand"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}" CornerRadius="2" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsPressed" Value="True">
+                                        <Setter Property="RenderTransform">
+                                            <Setter.Value>
+                                                <ScaleTransform ScaleX="0.95" ScaleY="0.95"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </Grid>
+            </Grid>
+        </Grid>
+
+        <Grid Name="grdConteudo" Margin="194,68,0,0" Grid.ColumnSpan="2">
+            <Grid Name="grdContDashboard" Background="#FFF0F0F0">
+                <Grid Name="grdDadosSimples" Margin="10,0,0,554" Background="#FFA18282" HorizontalAlignment="Left" Width="634" Height="72" VerticalAlignment="Bottom">
+                    <Grid Name="grdTotalVendas" Margin="0,0,472,0"/>
+
+                    <Grid Name="grdTotalRecebido" Margin="200,0,149,0"/>
+
+                    <Grid Name="grdMelhorCliente"/>
+                </Grid>
+
+                <Grid Name="grdVendedores">
+                    <Rectangle x:Name="RetVendedores" Height="309" Margin="0,10,10,0" RadiusX="20" RadiusY="20" VerticalAlignment="Top" Fill="White" HorizontalAlignment="Right" Width="373"/>
+                    <lvc:PieChart x:Name="VendedoresChartControl" 
+                              LegendLocation="Right"
+                              InnerRadius="50"
+                              Foreground="Black"
+                              FontSize="14" 
+                              DockPanel.Dock="Right" 
+                              Margin="0,24,24,0" 
+                              Background="White" 
+                              HorizontalAlignment="Right" 
+                              Width="345" 
+                              Height="281" 
+                              VerticalAlignment="Top"/>
+                </Grid>
+
+                <Grid Name ="grdVendaMensal">
+                    <Rectangle Height="234" Margin="10,84,404,0" RadiusX="20" RadiusY="20" VerticalAlignment="Top" Fill="White"/>
+                    <lvc:CartesianChart x:Name="VendasCharControl" Margin="22,95,415,0" 
+                                Background="White"
+                                Foreground="Black"
+                                FontSize="14" 
+                                Height="212" 
+                                VerticalAlignment="Top"/>
+                </Grid>
+            </Grid>
+        </Grid>
+
+        <Rectangle Name="retDivisor" Margin="199,62,10,0" Stroke="Black" Height="1" VerticalAlignment="Top"/>
+
+        <Grid Name="MenuHorizontal" VerticalAlignment="Top" Height="68" Margin="194,0,0,0" Background="#FFF0F0F0">
+            <Image x:Name="imgUsuario" Margin="0,10,10,0" Source="/Imagens/User_Icon.png" Stretch="Fill" HorizontalAlignment="Right" VerticalAlignment="Top" Width="45" Height="45"/>
+            <Image x:Name="imgFiltros" Margin="10,10,0,0" Source="/Imagens/Filtro_Icon.png" Stretch="Fill" Height="45" VerticalAlignment="Top" HorizontalAlignment="Left" Width="45"/>
+            <Button x:Name="btnUsuario" Margin="0,10,10,0" Background="Black" BorderBrush="Black" Opacity="0.0" Cursor="Hand" Height="45" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Click="btnUsuario_Click" HorizontalAlignment="Right" Width="45">
+                <Button.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="-1"/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Button.RenderTransform>
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                        <Setter Property="Cursor" Value="Hand"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border Background="{TemplateBinding Background}" CornerRadius="2" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="0.95" ScaleY="0.95"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            <Label Content="João da Silva" Margin="706,0,60,0" VerticalAlignment="Center" FontFamily="Rockwell" FontSize="14" HorizontalContentAlignment="Right"/>
+            <Button x:Name="btnFiltrar" Margin="10,10,0,0" Background="Black" BorderBrush="Black" Opacity="0.0" Cursor="Hand" RenderTransformOrigin="0.5,0.5" Click="btnFiltrar_Click" Height="45" VerticalAlignment="Top" HorizontalAlignment="Left" Width="45">
+                <Button.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="1"/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Button.RenderTransform>
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                        <Setter Property="Cursor" Value="Hand"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border Background="{TemplateBinding Background}" CornerRadius="2" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="0.95" ScaleY="0.95"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </Grid>
+    </Grid>
+</Window>

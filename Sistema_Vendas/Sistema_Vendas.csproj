@@ -9,7 +9,38 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Imagens\Auditoria_Icon.png" />
+    <None Remove="Imagens\Cliente_Icon.png" />
+    <None Remove="Imagens\Dashboard_Icon.png" />
+    <None Remove="Imagens\Dinheiro_Icon.png" />
+    <None Remove="Imagens\Estoque_Icon.png" />
+    <None Remove="Imagens\Filtro_Icon.png" />
+    <None Remove="Imagens\Funcionarios_Icon.png" />
+    <None Remove="Imagens\Settings_Icon.png" />
+    <None Remove="Imagens\User_Icon.png" />
     <None Remove="Imagens\Vendas_Icon.png" />
+    <None Remove="Imagens\Venda_Icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Imagens\Auditoria_Icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Imagens\Cliente_Icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Imagens\Dinheiro_Icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Imagens\Estoque_Icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Imagens\Filtro_Icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Imagens\Funcionarios_Icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>
@@ -22,7 +53,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Imagens\Dashboard_Icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Imagens\Settings_Icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Imagens\User_Icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Imagens\Vendas_Icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Imagens\Venda_Icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

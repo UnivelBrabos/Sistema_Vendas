@@ -4,6 +4,7 @@ using Sistema_Vendas.Controller;
 using Sistema_Vendas.Data;
 using Sistema_Vendas.Model;
 using Sistema_Vendas.Model.FilteredModel;
+using Sistema_Vendas.View;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
@@ -65,7 +66,7 @@ namespace Sistema_Vendas
             dtpFinal.Text = DateTime.Now.ToString("dd/MM/yyyy");
             dtpInicial.Text = "01/01/2025";
 
-            GraficosController = new(this);
+            //GraficosController = new(MenuPrincipal);
 
         }
 
@@ -141,7 +142,6 @@ namespace Sistema_Vendas
                     .ToList();
             }
 
-
             Filtros objFiltros = new(Convert.ToDateTime(dtpInicial.Text), Convert.ToDateTime(dtpFinal.Text), lstVendedoresId, lstClientesId);
 
             Graficos(filtrar, objFiltros);
@@ -156,10 +156,10 @@ namespace Sistema_Vendas
                 MessageBox.Show(strMensagem);
             }
 
-            if (!GraficosController.ParticipacaoLucros(ref VendedoresChartControl, pFiltrar, pFiltros, out strMensagem))
+            /*if (!GraficosController.ParticipacaoLucros(ref VendedoresChartControl, pFiltrar, pFiltros, out strMensagem))
             {
                 MessageBox.Show(strMensagem);
-            }
+            }*/
 
             if (!GraficosController.VendasMensais(ref VendasCharControl, pFiltrar, pFiltros, out strMensagem))
             {

@@ -2,6 +2,7 @@
 using LiveCharts.Wpf;
 using Sistema_Vendas.Model;
 using Sistema_Vendas.Model.FilteredModel;
+using Sistema_Vendas.View;
 using System.Globalization;
 using System.Windows;
 
@@ -9,9 +10,10 @@ namespace Sistema_Vendas.Controller
 {
     class GraficosController
     {
-        private MainWindow _Main { get; set; }
+        private MainWindow _MainDefasada { get; set; }
+        private MenuPrincipal _Main { get; set; }
 
-        public GraficosController(MainWindow main)
+        public GraficosController(MenuPrincipal main)
         {
             _Main = main;
         }
@@ -269,6 +271,7 @@ namespace Sistema_Vendas.Controller
         }
 
         #region :: Sem filtragem ::
+
 
         public IOrderedEnumerable<MaisVendidos> GraficoMainVendidos()
         {

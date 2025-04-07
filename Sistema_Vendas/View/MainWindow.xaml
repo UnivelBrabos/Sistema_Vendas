@@ -15,20 +15,8 @@
         </Grid.ColumnDefinitions>
         <Rectangle x:Name="Ret_Menu" Fill="#FF81B6DF" Height="72" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
 
-        <Grid x:Name="grdGraficos" Margin="0,72,0,0" Background="#FFF0F0F0" Grid.ColumnSpan="2" Visibility="Hidden">
-            <Rectangle x:Name="RetVendedores" Height="304" Margin="0,10,10,0" RadiusX="20" RadiusY="20" VerticalAlignment="Top" Fill="White" HorizontalAlignment="Right" Width="373"/>
-            <lvc:PieChart x:Name="VendedoresChartControl" 
-                          LegendLocation="Right"
-                          InnerRadius="50"
-                          Foreground="Black"
-                          FontSize="14" 
-                          DockPanel.Dock="Right" 
-                          Margin="0,24,24,0" 
-                          Background="White" 
-                          HorizontalAlignment="Right" 
-                          Width="345" 
-                          Height="276" 
-                          VerticalAlignment="Top"/>
+        <Grid x:Name="grdGraficos" Margin="31,72,0,0" Background="#FFF0F0F0" Grid.ColumnSpan="2">
+
 
             <Rectangle Height="304" Margin="10,10,404,0" RadiusX="20" RadiusY="20" VerticalAlignment="Top" Fill="White"/>
             <lvc:CartesianChart x:Name="VendasCharControl" Margin="22,24,415,0" 
@@ -194,7 +182,7 @@
             </Rectangle>
         </Grid>
 
-        <Grid x:Name="grdAuditoria" Margin="0,72,0,0" Background="#FFF0F0F0" Grid.ColumnSpan="2">
+        <Grid x:Name="grdAuditoria" Margin="0,72,0,0" Background="#FFF0F0F0" Grid.ColumnSpan="2" Visibility="Hidden">
             <DataGrid x:Name="dtgVendas" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="540,10,10,10" Background="#FFFDFDFD" FontFamily="Rockwell" FontSize="16" Cursor="Arrow" MaxColumnWidth="999" HorizontalGridLinesBrush="Black" HeadersVisibility="Column" SelectionUnit="Cell"/>
         </Grid>
 
