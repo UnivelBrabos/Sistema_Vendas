@@ -69,7 +69,6 @@ class _HomePageState extends State<HomePage> {
                       final quantity = await showQuantityDialog(context, nome, estoque);
                       if (quantity != null) {
                         print('Produto: $nome, Quantidade: $quantity');
-                        // Adiciona ao carrinho 
                         final cartStore = Modular.get<CartStore>();
                         cartStore.addItem(produto, quantity);
                         Modular.to.navigate('/cart');

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:trabalho_vendas_univel/widgets/dialogs/quantitiy_dialog.dart';
+import 'package:trabalho_vendas_univel/models/cliente_model.dart';
+import 'package:trabalho_vendas_univel/repository/cliente_repository.dart';
+import 'package:trabalho_vendas_univel/widgets/dialogs/product_selection_dialog.dart';
 import '../../store/produto_store.dart';
 import '../../store/cart_store.dart';
-
-
 
 class CatalogPage extends StatefulWidget {
   const CatalogPage({Key? key}) : super(key: key);
@@ -68,12 +68,23 @@ class _CatalogPageState extends State<CatalogPage> {
                   trailing: IconButton(
                     icon: const Icon(Icons.add_shopping_cart),
                     onPressed: () async {
-                      final quantity =
-                          await showQuantityDialog(context, nome, estoque);
-                      if (quantity != null) {
-                        print('Produto: $nome, Quantidade: $quantity');
+                      final ClienteRepository clienteRepo = ClienteRepository();
+                      final List<ClienteModel> clientes = await clienteRepo.getAllClients();
+
+                      final ProductSelectionResult? result = await showDialog<ProductSelectionResult>(
+                        context: context,
+                        builder: (context) => ProductSelectionDialog(
+                          productName: nome,
+                          clientes: clientes,
+                        ),
+                      );
+
+                      if (result != null) {
+                        print('Produto: $nome, Quantidade: ${result.quantidade}');
+                        print('Clientes selecionados: ${result.clientesSelecionados.map((c) => c.nome).toList()}');
                         final cartStore = Modular.get<CartStore>();
-                        cartStore.addItem(produto, quantity);
+                        produto['clientesSelecionados'] = result.clientesSelecionados.map((c) => c.toJson()).toList();
+                        cartStore.addItem(produto, result.quantidade);
                         Modular.to.navigate('/cart');
                       }
                     },

@@ -27,6 +27,6 @@ class MyApp extends StatelessWidget {
       routeInformationParser: Modular.routeInformationParser,
       routerDelegate: Modular.routerDelegate,
       debugShowCheckedModeBanner: false,
-    );
-  }
+);
+}
 }

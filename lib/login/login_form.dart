@@ -1,5 +1,4 @@
-// ignore_for_file: unused_label
-
+// lib/login/login_form.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:trabalho_vendas_univel/modules/auth/auth_controller.dart';
@@ -49,6 +48,7 @@ class _LoginFormState extends State<LoginForm> {
   </g>
  </g>
 </svg>''';
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -110,7 +110,7 @@ class _LoginFormState extends State<LoginForm> {
               ),
               GestureDetector(
                 onTap: () {
-                  // Ação p "Forgot password?"
+                  // Ação para "Forgot password?" pode ser implementada aqui
                 },
                 child: const Text(
                   'Forgot password?',
@@ -130,7 +130,11 @@ class _LoginFormState extends State<LoginForm> {
             child: ElevatedButton(
               onPressed: () {
                 final authController = Modular.get<AuthController>();
-                authController.login(emailController.text, passwordController.text);
+                authController.login(
+                  emailController.text, 
+                  passwordController.text, 
+                  context,
+                );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF151717),
@@ -162,12 +166,7 @@ class _LoginFormState extends State<LoginForm> {
                 const SizedBox(height: 5),
                 GestureDetector(
                   onTap: () {
-                    onPressed:
-                    () {
-                      final authController = Modular.get<AuthController>();
-                      authController.login(
-                          emailController.text, passwordController.text);
-                    };
+                    // Se necessário, implementar ação de Sign Up
                   },
                   child: const Text(
                     'Sign Up',
@@ -199,7 +198,7 @@ class _LoginFormState extends State<LoginForm> {
                   svgCode: googleSvg,
                   label: 'Google',
                   onPressed: () {
-                    // login com Google
+                    // Implementar login com Google, se necessário
                   },
                 ),
               ),
@@ -209,7 +208,7 @@ class _LoginFormState extends State<LoginForm> {
                   svgCode: appleSvg,
                   label: 'Apple',
                   onPressed: () {
-                    // login com Apple
+                    // Implementar login com Apple, se necessário
                   },
                 ),
               ),
