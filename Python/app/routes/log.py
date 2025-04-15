@@ -1,19 +1,11 @@
 from app.connection_db import supabase
+from app.schemas.logs import LogsCreate
 from fastapi import APIRouter, Depends
-from pydantic import BaseModel
-from datetime import datetime
-
-class Log(BaseModel):
-    ocorrencia: str
-    tipo_evento: str
-    descricao: str
-    alteracao: str
-    data_hora: datetime
 
 router = APIRouter()
 
 @router.post('/')
-def insert_log(log: Log):
+def insert_log(log: LogsCreate):
     data = supabase.table("Log").insert(
         log.model_dump()
     ).execute()

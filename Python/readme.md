@@ -7,31 +7,3 @@ Se a main não rodar, vai no terminal e escreve isso `pip install -r requirement
 A documentação pode ser acessada em localhost:8000/docs ou localhost:8000/redoc
 obviamente depois que baixarem (requirements.txt) e executarem o main.py
 
-#### Get 
-- Cliente ---> [OK]   
-- Produto ---> [OK]
-- Vendedores ---> [OK]
-- Vendas ---> [OK]
-- ItensVendas ---> [OK]
-
-#### Insert
-- Cliente ---> [OK]
-- Produto ---> [OK]
-- Vendedores ---> [OK]
-- Vendas 
-- ItensVendas 
-
-#### Put
-- Cliente ---> [OK]
-- Produto ---> [OK]
-- Vendedores ---> [OK]
-- Vendas
-- ItensVendas
-
-#### Delete 
-- Cliente ---> [OK]
-- Produto ---> [OK]
-- Vendedores ---> [OK]
-- Vendas
-- ItensVendas
-

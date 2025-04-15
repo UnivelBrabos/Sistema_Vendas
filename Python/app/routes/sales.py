@@ -1,29 +1,11 @@
 from app.connection_db import supabase
+from app.schemas.vendas import VendasCreate
 from fastapi import APIRouter, Depends
-from pydantic import BaseModel
-from datetime import date
-from typing import Optional
 
-class Sales(BaseModel):
-    id_venda: Optional[int] = None
-    id_vendedor: int
-    id_cliente: int
-    data_venda: date
-    total: float
-    desconto: int
-
-class SalesCreate(BaseModel):
-    id_venda: Optional[int] = None
-    id_vendedor: int
-    id_cliente: int
-    data_venda: date
-    total: float
-    desconto: int
-    
 router = APIRouter()
 
 @router.post('/sales/post')
-def insert_sales(sale: SalesCreate):
+def insert_sales(sale: VendasCreate):
     data = supabase.table("vendas").insert(
         sale.model_dump(exclude_none=True)
     ).execute()
@@ -35,7 +17,7 @@ def get_sales():
     return {"Vendas": data}
 
 @router.put('/sales/put/{id_venda}')
-def update_sales(id: int, update: SalesCreate):
+def update_sales(id: int, update: VendasCreate):
     data = supabase.table("vendas").update(
         update.model_dump(exclude_none=True)
         ).eq("id_venda", id).execute()
