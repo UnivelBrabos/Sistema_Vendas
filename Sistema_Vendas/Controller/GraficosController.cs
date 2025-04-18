@@ -318,5 +318,26 @@ namespace Sistema_Vendas.Controller
         }
 
         #endregion :: Filtros por Data :;
+
+        #region :: Cards ::
+
+        public bool CarregaCards(bool pFiltrar, Filtros pFiltros, out string pRetorno)
+        {
+            try
+            {
+                _Main.lblTotalVendas.Content = _Main.lstVendas.Count.ToString();
+                _Main.lblTotalRecebido.Content = _Main.lstVendas.Sum(p => p.TotalVenda).ToString();
+            }
+            catch(Exception ex)
+            {
+                pRetorno = $"Falha ao carregar cards: {ex.Message}";
+                return false;
+            }
+
+            pRetorno = "Sucesso";
+            return true;
+        }
+
+        #endregion :: Cards :: 
     }
 }

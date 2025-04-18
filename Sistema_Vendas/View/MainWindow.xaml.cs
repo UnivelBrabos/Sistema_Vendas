@@ -55,7 +55,7 @@ namespace Sistema_Vendas
         public List<Cliente> lstClientes;
         public List<Vendas> lstVendas;
 
-        public MainWindow()
+        public MainWindow(Usuarios pUsuarioLogado)
         {
             InitializeComponent();
             DataContext = this;

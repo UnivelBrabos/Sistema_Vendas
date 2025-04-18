@@ -15,6 +15,8 @@ namespace Sistema_Vendas.View
     {
         #region << Atributos >>
 
+        public Usuarios UsuarioLogado;
+
         public List<ItensVenda> lstItensVenda;
         public List<Vendedor> lstVendedores;
         public List<Produto> lstProdutos;
@@ -27,9 +29,11 @@ namespace Sistema_Vendas.View
 
         #endregion << Atributos >>
 
-        public MenuPrincipal()
+        public MenuPrincipal(Usuarios pUsuario)
         {
             InitializeComponent();
+
+            UsuarioLogado = pUsuario;
 
             // Banco de dados
             DataContext = this;
@@ -72,6 +76,18 @@ namespace Sistema_Vendas.View
             botaoSelecionado.Opacity = 0.1;
         }
 
+        private void ExibeGrid(Grid gridAMostrar)
+        {
+            Grid[] Grids = { grdContDashboard };
+
+            for (int i = 0; i < Grids.Length; i++)
+            {
+                Grids[i].Visibility = Visibility.Hidden;
+            }
+
+            gridAMostrar.Visibility = Visibility.Visible;
+        }
+
         public async void CarregaDados()
         {
             lstVendedores = await Vendedor.GetVendedores(objConnection);
@@ -83,8 +99,6 @@ namespace Sistema_Vendas.View
             lstClientes = await Cliente.GetClientes(objConnection);
 
             lstItensVenda = await ItensVenda.GetItensVenda(objConnection);
-
-            CarregaGrafico();
 
             //CarregaCheckBox();
         }
@@ -119,10 +133,10 @@ namespace Sistema_Vendas.View
         {
             string strMensagem;
 
-            /*if (!GraficosController.MaisVendidos(ref ProdutosCharControl, pFiltrar, pFiltros, out strMensagem))
+            if (!GraficosController.MaisVendidos(ref ProdutosCharControl, pFiltrar, pFiltros, out strMensagem))
             {
                 MessageBox.Show(strMensagem);
-            }*/
+            }
 
             if (!GraficosController.ParticipacaoLucros(ref VendedoresChartControl, pFiltrar, pFiltros, out strMensagem))
             {
@@ -134,10 +148,50 @@ namespace Sistema_Vendas.View
                 MessageBox.Show(strMensagem);
             }
 
-            /*if (!GraficosController.MelhoresClientes(ref ClientesChartControl, pFiltrar, pFiltros, out strMensagem))
+            if (!GraficosController.MelhoresClientes(ref ClientesChartControl, pFiltrar, pFiltros, out strMensagem))
             {
                 MessageBox.Show(strMensagem);
-            }*/
+            }
+
+            if (!GraficosController.CarregaCards(pFiltrar, pFiltros, out strMensagem))
+            {
+                MessageBox.Show(strMensagem);
+            }
+        }
+
+        public void CarregaDataVendas()
+        {
+            dgvDadosVendas.ItemsSource = lstVendas
+                                        .GroupJoin(
+                                            lstVendedores,
+                                            v => v.IdVendedor,
+                                            ven => ven.IdVendedor,
+                                            (venda, vendedorGrupo) => new { venda, vendedorGrupo }
+                                        )
+                                        .SelectMany(
+                                            temp => temp.vendedorGrupo.DefaultIfEmpty(),
+                                            (temp, vendedor) => new { temp.venda, vendedor }
+                                        )
+                                        .GroupJoin(
+                                            lstClientes,
+                                            temp => temp.venda.IdCliente,
+                                            cli => cli.IdCliente,
+                                            (temp, clienteGrupo) => new { temp.venda, temp.vendedor, clienteGrupo }
+                                        )
+                                        .SelectMany(
+                                            temp => temp.clienteGrupo.DefaultIfEmpty(),
+                                            (temp, cliente) => new
+                                            {
+                                                IdVenda = temp.venda.IdVenda,
+                                                Vendedor = temp.vendedor?.Nome,
+                                                Cliente = cliente?.Nome,
+                                                DataDaVenda = temp.venda.DataVenda,
+                                                Desconto = temp.venda.Desconto,
+                                                Total = temp.venda.TotalVenda
+                                            }
+                                        )
+                                        .OrderBy(r => r.DataDaVenda)
+                                        .ToList();
         }
 
         #endregion << Métodos >>
@@ -145,12 +199,22 @@ namespace Sistema_Vendas.View
         #region << Eventos >>
         private void btnDashboard_Click(object sender, RoutedEventArgs e)
         {
-            DestacarBotao(btnDashboard, retDashboard);
+            if (grdContDashboard.Visibility == Visibility.Hidden)
+            {
+                DestacarBotao(btnDashboard, retDashboard);
+                ExibeGrid(grdContDashboard);
+                CarregaGrafico();
+            }
         }
 
         private void btnAuditoria_Click(object sender, RoutedEventArgs e)
         {
-            DestacarBotao(btnAuditoria, retAuditoria);
+            if (grdContAuditoria.Visibility == Visibility.Hidden)
+            {
+                DestacarBotao(btnAuditoria, retAuditoria);
+                ExibeGrid(grdContAuditoria);
+                CarregaDataVendas();
+            }
         }
 
         private void btnFuncionarios_Click(object sender, RoutedEventArgs e)
