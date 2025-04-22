@@ -4,6 +4,7 @@ using Sistema_Vendas.Model;
 using Sistema_Vendas.Model.FilteredModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Shapes;
 
 namespace Sistema_Vendas.View
@@ -25,7 +26,7 @@ namespace Sistema_Vendas.View
 
         ConnectionDB objConnection;
 
-        GraficosController GraficosController;
+        DashboardController GraficosController;
 
         #endregion << Atributos >>
 
@@ -46,6 +47,7 @@ namespace Sistema_Vendas.View
         }
 
         #region << Métodos >>
+
         /// <summary>
         /// Usado para alterar dinâmicamente um botão, e os demais, quando ele é clicado
         /// </summary>
@@ -90,6 +92,8 @@ namespace Sistema_Vendas.View
 
         public async void CarregaDados()
         {
+            lblNomeUsuario.Content = UsuarioLogado.NomeUsuario; 
+
             lstVendedores = await Vendedor.GetVendedores(objConnection);
 
             lstVendas = await Vendas.GetVendas(objConnection);
@@ -161,37 +165,20 @@ namespace Sistema_Vendas.View
 
         public void CarregaDataVendas()
         {
-            dgvDadosVendas.ItemsSource = lstVendas
-                                        .GroupJoin(
-                                            lstVendedores,
-                                            v => v.IdVendedor,
-                                            ven => ven.IdVendedor,
-                                            (venda, vendedorGrupo) => new { venda, vendedorGrupo }
-                                        )
-                                        .SelectMany(
-                                            temp => temp.vendedorGrupo.DefaultIfEmpty(),
-                                            (temp, vendedor) => new { temp.venda, vendedor }
-                                        )
-                                        .GroupJoin(
-                                            lstClientes,
-                                            temp => temp.venda.IdCliente,
-                                            cli => cli.IdCliente,
-                                            (temp, clienteGrupo) => new { temp.venda, temp.vendedor, clienteGrupo }
-                                        )
-                                        .SelectMany(
-                                            temp => temp.clienteGrupo.DefaultIfEmpty(),
-                                            (temp, cliente) => new
-                                            {
-                                                IdVenda = temp.venda.IdVenda,
-                                                Vendedor = temp.vendedor?.Nome,
-                                                Cliente = cliente?.Nome,
-                                                DataDaVenda = temp.venda.DataVenda,
-                                                Desconto = temp.venda.Desconto,
-                                                Total = temp.venda.TotalVenda
-                                            }
-                                        )
-                                        .OrderBy(r => r.DataDaVenda)
-                                        .ToList();
+            dgvAuxiliar.ItemsSource = lstVendas;
+            lblAuxiliar.Content = "Vendas"; 
+            AdicionaColunaAuxiliar("Vendas");
+        }
+
+        public void AdicionaColunaAuxiliar(string pDgvAtivo)
+        {
+            DataGridTextColumn colAuxiliar = new();
+
+            colAuxiliar.Header = "DataGridAtivo";
+
+            dgvAuxiliar.Columns.Add(colAuxiliar);
+
+            dgvAuxiliar.Columns[-1].
         }
 
         #endregion << Métodos >>
@@ -243,5 +230,17 @@ namespace Sistema_Vendas.View
         }
 
         #endregion << Eventos >>
+
+        private void dgvDadosVendas_Selected(object sender, RoutedEventArgs e)
+        {
+            /*Vendas objVendaSelecionada = (Vendas)dgvDadosVendas.SelectedItem[0];
+
+            lblVenda.Content = $"Venda #{dgvDadosVendas.SelectedItem}";*/
+        }
+
+        private void txtIdVenda_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            e.Handled = !int.TryParse(e.Text, out _);
+        }
     }
 }

@@ -27,7 +27,7 @@ namespace Sistema_Vendas
 
         private readonly ConnectionDB objConnect;
 
-        private GraficosController GraficosController;
+        private DashboardController GraficosController;
 
         public ObservableCollection<CheckBoxOptions> ItemscCheckBox
         {

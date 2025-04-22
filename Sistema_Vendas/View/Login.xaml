@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Sistema_Vendas.View"
         mc:Ignorable="d"
         Title="Login" MinHeight="450" MinWidth="800" MaxHeight="450" MaxWidth="800">
-    <Grid x:Name="grdPrincipal" Background="#FF73B8DA">
+    <Grid x:Name="grdPrincipal" Background="#FF73B8DA" KeyDown="grdPrincipal_KeyDown">
         <Grid x:Name="grdLogin" HorizontalAlignment="Center" VerticalAlignment="Center" Width="434">
             <Rectangle x:Name="retLogin"
                HorizontalAlignment="Center"
@@ -25,7 +25,7 @@
                 </Rectangle.Effect>
             </Rectangle>
 
-            <Image x:Name="imgLogo" Margin="144,10,144,347" Source="/Imagens/Vendas_Icon.png" Stretch="Fill" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            <Image x:Name="imgLogo" Source="/Imagens/Vendas_Icon.png" Stretch="Fill" HorizontalAlignment="Center" VerticalAlignment="Top" Width="166" Height="95"/>
 
             <TextBox x:Name="txtUsuarioEmail"
                      HorizontalAlignment="Center"

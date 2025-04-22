@@ -8,12 +8,12 @@ using System.Windows;
 
 namespace Sistema_Vendas.Controller
 {
-    class GraficosController
+    class DashboardController
     {
         private MainWindow _MainDefasada { get; set; }
         private MenuPrincipal _Main { get; set; }
 
-        public GraficosController(MenuPrincipal main)
+        public DashboardController(MenuPrincipal main)
         {
             _Main = main;
         }
