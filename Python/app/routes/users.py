@@ -1,15 +1,29 @@
 from app.connection_db import supabase
-from app.schemas.usuarios import UsuariosCreate
+from app.schemas.usuarios import UsuariosCreate, Usuarios
 from fastapi import APIRouter, Depends
 
 router = APIRouter()
 
-@router.post('/users/post')
+
+@router.post('/users/post', response_model=Usuarios)
 def insert_users(users: UsuariosCreate):
     data = supabase.table("usuarios").insert(
         users.model_dump(exclude_none=True)
     ).execute()
     return {"Usuários inserido": data}
+
+"""
+@router.post('/users/post')
+def insert_users(users: UsuariosCreate):
+    user_data = users.model_dump(exclude_none=True)
+    user_data['criado_em'] = users.criado_em.isoformat() # Formata para ISO 8601
+    data = supabase.table("usuarios").insert(
+        user_data
+    ).execute()
+    return {"Usuários inserido": data}
+"""
+
+
 
 @router.get('/users/get')
 def get_users():

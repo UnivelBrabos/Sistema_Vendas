@@ -2,6 +2,7 @@ from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
 
+
 class Pagamentos(BaseModel):
   id_pagamentos: Optional[int] = None
   id_venda: int

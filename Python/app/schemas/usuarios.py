@@ -1,18 +1,19 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr, Field
 from typing import Optional
+
 from datetime import datetime
 
 class Usuarios(BaseModel):
     id_usuario: Optional[int] = None
     nome: str
-    email: str
-    senha_hash: str #Lembro de alguma função para isso
+    email: EmailStr
+    senha_hash: str 
     cargo: str
     criado_em: datetime
 
 class UsuariosCreate(BaseModel):
     nome: str
-    email: str
+    email: EmailStr
     senha_hash: str
     cargo: str
-    criado_em: datetime
+    criado_em: datetime = Field(default_factory=datetime.now)

@@ -1,14 +1,22 @@
 from app.connection_db import supabase
-from app.schemas.vendas import VendasCreate
+from app.schemas.vendas import VendasCreate, Vendas
 from fastapi import APIRouter, Depends
 
 router = APIRouter()
 
-@router.post('/sales/post')
+@router.post('/sales/post', response_model=Vendas)
 def insert_sales(sale: VendasCreate):
+
+    serielized_data = sale.model_dump(exclude_none=True)
+    serielized_data["data_venda"] = sale.data_venda.isoformat()
+
+    data = supabase.table("vendas").insert(serielized_data).execute()
+   
+    """
     data = supabase.table("vendas").insert(
         sale.model_dump(exclude_none=True)
     ).execute()
+    """
     return {"Venda inserida": data}
 
 @router.get('/sales/get')
