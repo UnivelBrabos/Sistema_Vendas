@@ -16,3 +16,5 @@ class VendedoresCreate(BaseModel):
     telefone: str
     data_contratacao: date
     salario: float
+
+
