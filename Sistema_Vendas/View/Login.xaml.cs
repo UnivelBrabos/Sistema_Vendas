@@ -1,25 +1,19 @@
-﻿using System.Data.Common;
-using System.Windows;
-using Sistema_Vendas.Data;
+﻿using System.Windows;
 using Sistema_Vendas.Model;
+using Sistema_Vendas.Controller;
 
 namespace Sistema_Vendas.View
 {
     public partial class Login : Window
     {
-        ConnectionDB objConnection;
-
-        private List<Usuarios> lstUsuarios;
+        private List<Usuarios> Usuarios;
+        private DataController dataController;
 
         public Login()
         {
             InitializeComponent();
-
-            // Banco de dados
-            DataContext = this;
-            objConnection = new ConnectionDB();
-
-            CarregaUsuarios();
+            dataController = new();
+            Usuarios = dataController.GetUsuarios.Result;
         }
 
         private void txtUsuarioEmail_GotFocus(object sender, RoutedEventArgs e)
@@ -38,42 +32,26 @@ namespace Sistema_Vendas.View
             }
         }
 
-        private async void CarregaUsuarios()
-        {
-            lstUsuarios = await Usuarios.GetUsuarios(objConnection);
-        }
-
-        private void LogarUsuario()
-        {
-            try
-            {
-                Usuarios objUsuario = lstUsuarios.Where(p => (p.NomeUsuario == txtUsuarioEmail.Text || p.Email == txtUsuarioEmail.Text) && p.SenhaUsuario == txtSenha.Text).First();
-
-                if (objUsuario != null)
-                {
-                    MenuPrincipal objMenuPrincipal = new(objUsuario);
-
-                    objMenuPrincipal.Show();
-
-                    Close();
-                }
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Usuario/Email ou senha incorretos!");
-            }
-        }
-
         private void btnLogar_Click(object sender, RoutedEventArgs e)
         {
-            LogarUsuario();
+            /*if(dataController.LogarUsuario(Usuarios, txtUsuarioEmail.Text, txtSenha.Text))
+            {
+                Close();
+            }*/
+
+            MenuPrincipal objMenuPrincipal = new (new Usuarios { IdUsuario = 0, NomeUsuario = "Testes"});
+
+            objMenuPrincipal.Show();
         }
 
         private void grdPrincipal_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if (e.Key == System.Windows.Input.Key.Enter)
             {
-                LogarUsuario();
+                if(dataController.LogarUsuario(Usuarios, txtUsuarioEmail.Text, txtSenha.Text))
+                {
+                    Close();
+                }
             }
         }
     }

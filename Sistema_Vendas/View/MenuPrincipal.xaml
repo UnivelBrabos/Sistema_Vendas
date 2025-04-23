@@ -11,7 +11,7 @@
         Title="Menu Principal"
         mc:Ignorable="d"
         MinHeight="720"
-        MinWidth="1240" HorizontalContentAlignment="Center"
+        MinWidth="1240" HorizontalContentAlignment="Center" Loaded="grdPrincipal_Loaded"
         >
 
     <Grid Margin="0,0,0,0">
@@ -434,7 +434,7 @@
         <Grid Name="MenuHorizontal" VerticalAlignment="Top" Height="68" Margin="194,0,0,0" Background="#FFF0F0F0" Grid.ColumnSpan="2">
             <Image x:Name="imgUsuario" Margin="0,10,10,0" Source="/Imagens/User_Icon.png" Stretch="Fill" HorizontalAlignment="Right" VerticalAlignment="Top" Width="45" Height="45"/>
             <Image x:Name="imgFiltros" Margin="10,10,0,0" Source="/Imagens/Filtro_Icon.png" Stretch="Fill" Height="45" VerticalAlignment="Top" HorizontalAlignment="Left" Width="45"/>
-            <Button x:Name="btnUsuario" Margin="0,10,10,0" Background="Black" BorderBrush="Black" Opacity="0.0" Cursor="Hand" Height="45" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Click="btnUsuario_Click" HorizontalAlignment="Right" Width="45">
+            <Button x:Name="btnUsuario" Margin="0,10,10,0" Background="Black" BorderBrush="Black" Opacity="0.0" Cursor="Hand" Height="45" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Click="btnUsuario_Click"  HorizontalAlignment="Right" Width="45">
                 <Button.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform ScaleX="-1"/>

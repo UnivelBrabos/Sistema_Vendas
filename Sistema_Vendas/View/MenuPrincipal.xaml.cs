@@ -2,6 +2,7 @@
 using Sistema_Vendas.Data;
 using Sistema_Vendas.Model;
 using Sistema_Vendas.Model.FilteredModel;
+using System.Data.Common;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -24,10 +25,9 @@ namespace Sistema_Vendas.View
         public List<Cliente> lstClientes;
         public List<Vendas> lstVendas;
 
-        ConnectionDB objConnection;
-
+        DataController dataController;
         DashboardController GraficosController;
-
+        
         #endregion << Atributos >>
 
         public MenuPrincipal(Usuarios pUsuario)
@@ -36,23 +36,9 @@ namespace Sistema_Vendas.View
 
             UsuarioLogado = pUsuario;
 
-            // Banco de dados
-            DataContext = this;
-            objConnection = new ConnectionDB();
-
             GraficosController = new(this);
-
-            // Miscellaneous
-            CarregaDados();
         }
 
-        #region << Métodos >>
-
-        /// <summary>
-        /// Usado para alterar dinâmicamente um botão, e os demais, quando ele é clicado
-        /// </summary>
-        /// <param name="botaoSelecionado">Botão que vai ser alterado</param>
-        /// <param name="retanguloSelecionado">Retangulo que vai ser alterado</param>
         private void DestacarBotao(Button botaoSelecionado, Rectangle retanguloSelecionado = null)
         {
             Button[] botoes = { btnDashboard, btnAuditoria, btnFuncionarios, btnEstoque, btnConfiguracoes, btnUsuario, btnFiltrar };
@@ -80,7 +66,7 @@ namespace Sistema_Vendas.View
 
         private void ExibeGrid(Grid gridAMostrar)
         {
-            Grid[] Grids = { grdContDashboard };
+            Grid[] Grids = { grdContDashboard, grdAuditoria };
 
             for (int i = 0; i < Grids.Length; i++)
             {
@@ -88,23 +74,6 @@ namespace Sistema_Vendas.View
             }
 
             gridAMostrar.Visibility = Visibility.Visible;
-        }
-
-        public async void CarregaDados()
-        {
-            lblNomeUsuario.Content = UsuarioLogado.NomeUsuario; 
-
-            lstVendedores = await Vendedor.GetVendedores(objConnection);
-
-            lstVendas = await Vendas.GetVendas(objConnection);
-
-            lstProdutos = await Produto.GetProdutos(objConnection);
-
-            lstClientes = await Cliente.GetClientes(objConnection);
-
-            lstItensVenda = await ItensVenda.GetItensVenda(objConnection);
-
-            //CarregaCheckBox();
         }
 
         public void CarregaGrafico(bool filtrar = false)
@@ -178,12 +147,47 @@ namespace Sistema_Vendas.View
 
             dgvAuxiliar.Columns.Add(colAuxiliar);
 
-            dgvAuxiliar.Columns[-1].
+            //dgvAuxiliar.Columns[-1].
         }
 
-        #endregion << Métodos >>
+        private void MenuLateral_Click(object sender, RoutedEventArgs e)
+        {
+            Button btnAuxiliar = sender as Button;
 
-        #region << Eventos >>
+            switch (btnAuxiliar.Content)
+            {
+                case 1:
+                    if (grdContDashboard.Visibility == Visibility.Hidden)
+                    {
+                        DestacarBotao(btnDashboard, retDashboard);
+                        ExibeGrid(grdContDashboard);
+                        CarregaGrafico();
+                    }
+                    break;
+                case 2:
+                    if (grdContAuditoria.Visibility == Visibility.Hidden)
+                    {
+                        DestacarBotao(btnAuditoria, retAuditoria);
+                        ExibeGrid(grdContAuditoria);
+                        CarregaDataVendas();
+                    }
+                    break;
+                case 3:
+                    DestacarBotao(btnFuncionarios, retFuncionarios);
+                    break;
+                case 4:
+                    DestacarBotao(btnEstoque, retEstoque);
+                    break;
+                case 5:
+                    DestacarBotao(btnConfiguracoes);
+                    break;
+                case 6:
+                    DestacarBotao(btnUsuario);
+                    break;
+
+            }
+        }
+
         private void btnDashboard_Click(object sender, RoutedEventArgs e)
         {
             if (grdContDashboard.Visibility == Visibility.Hidden)
@@ -229,8 +233,6 @@ namespace Sistema_Vendas.View
             DestacarBotao(btnFiltrar);
         }
 
-        #endregion << Eventos >>
-
         private void dgvDadosVendas_Selected(object sender, RoutedEventArgs e)
         {
             /*Vendas objVendaSelecionada = (Vendas)dgvDadosVendas.SelectedItem[0];
@@ -241,6 +243,21 @@ namespace Sistema_Vendas.View
         private void txtIdVenda_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
             e.Handled = !int.TryParse(e.Text, out _);
+        }
+
+        private void grdPrincipal_Loaded(object sender, RoutedEventArgs e)
+        {
+            lblNomeUsuario.Content = UsuarioLogado.NomeUsuario;
+
+            lstVendedores = dataController.GetVendedores.Result;
+
+            lstVendas = dataController.GetVendas.Result;
+
+            lstProdutos = dataController.GetProdutos.Result;
+
+            lstClientes = dataController.GetClientes.Result;
+
+            lstItensVenda = dataController.GetItensVenda.Result;
         }
     }
 }
