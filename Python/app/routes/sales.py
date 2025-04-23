@@ -8,7 +8,10 @@ router = APIRouter()
 def insert_sales(sale: VendasCreate):
     serielized_data = sale.model_dump(exclude_none=True)
     serielized_data["data_venda"] = sale.data_venda.isoformat()
-    data = supabase.table("vendas").insert(serielized_data).execute()
+    
+    data = supabase.table("vendas").insert(
+        serielized_data
+        ).execute()
     return {"Vendas": data}
 
 @router.get('/sales/get')

@@ -1,13 +1,16 @@
 from app.connection_db import supabase
-from app.schemas.pagamentos import PagamentosCreate
+from app.schemas.pagamentos import PagamentosCreate, PagamentosUpdate
 from fastapi import APIRouter
 
 router = APIRouter()
 
 @router.post('/payments/post')
 def insert_payments(payments: PagamentosCreate):
+    serielized_data = payments.model_dump(exclude_none=True)
+    serielized_data["data_pagamento"] = payments.data_pagamento.isoformat()
+
     data = supabase.table("pagamentos").insert(
-        payments.model_dump(exclude_none=True)
+        serielized_data
     ).execute()
     return {"Pagamentos inserido": data}
 
@@ -17,7 +20,7 @@ def get_payments():
     return {"Pagamentos": data}
 
 @router.put('/payments/put/{id_pagamento}')
-def put_payments(id: int, update: PagamentosCreate):
+def put_payments(id: int, update: PagamentosUpdate):
     data = supabase.table("pagamentos").update(
         update.model_dump(exclude_none=True)
     ).eq("id_pagamentos", id)

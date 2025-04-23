@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends
 
 router = APIRouter()
 
-
+"""
 @router.post('/users/post', response_model=Usuarios)
 def insert_users(users: UsuariosCreate):
     data = supabase.table("usuarios").insert(
@@ -12,7 +12,7 @@ def insert_users(users: UsuariosCreate):
     ).execute()
     return {"Usuários inserido": data}
 
-"""
+
 @router.post('/users/post')
 def insert_users(users: UsuariosCreate):
     user_data = users.model_dump(exclude_none=True)
