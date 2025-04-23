@@ -20,4 +20,8 @@ async def root():
     return {"Seguinte, pra vcs verem a documentação é : http://localhost:8000/redoc ou http://localhost:8000/docs"}
 
 if __name__ == "__main__":
-    uvicorn.run(app,host="localhost", port=8000)
+    # Modo correto de rodar
+    #uvicorn.run(app,host="localhost", port=8000)
+
+    # Modo Dev, é só pra eu poder alterar em tempo real e testar
+    uvicorn.run("main:app",host="localhost", port=8000, reload=True)
