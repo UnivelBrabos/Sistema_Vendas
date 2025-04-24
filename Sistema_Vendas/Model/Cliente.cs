@@ -60,16 +60,3 @@ namespace Sistema_Vendas.Model
         #endregion :: Metodos ::
     }
 }
-
-/*
- create table public.clientes (
-  id serial not null,
-  nome character varying(100) not null,
-  "CNPJ" character varying(100) null,
-  telefone character varying(15) null,
-  endereco text null,
-  constraint clientes_pkey primary key (id),
-  constraint clientes_email_key unique ("CNPJ")
-) TABLESPACE pg_default;
- 
- */

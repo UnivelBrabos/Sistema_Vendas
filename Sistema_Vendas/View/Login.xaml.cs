@@ -6,14 +6,12 @@ namespace Sistema_Vendas.View
 {
     public partial class Login : Window
     {
-        private List<Usuarios> Usuarios;
         private DataController dataController;
 
         public Login()
         {
             InitializeComponent();
             dataController = new();
-            Usuarios = dataController.GetUsuarios.Result;
         }
 
         private void txtUsuarioEmail_GotFocus(object sender, RoutedEventArgs e)
@@ -34,21 +32,17 @@ namespace Sistema_Vendas.View
 
         private void btnLogar_Click(object sender, RoutedEventArgs e)
         {
-            /*if(dataController.LogarUsuario(Usuarios, txtUsuarioEmail.Text, txtSenha.Text))
+            if(dataController.LogarUsuario(txtUsuarioEmail.Text, txtSenha.Text))
             {
                 Close();
-            }*/
-
-            MenuPrincipal objMenuPrincipal = new (new Usuarios { IdUsuario = 0, NomeUsuario = "Testes"});
-
-            objMenuPrincipal.Show();
+            }
         }
 
         private void grdPrincipal_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if (e.Key == System.Windows.Input.Key.Enter)
             {
-                if(dataController.LogarUsuario(Usuarios, txtUsuarioEmail.Text, txtSenha.Text))
+                if(dataController.LogarUsuario(txtUsuarioEmail.Text, txtSenha.Text))
                 {
                     Close();
                 }

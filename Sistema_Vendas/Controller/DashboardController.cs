@@ -2,6 +2,7 @@
 using LiveCharts.Wpf;
 using Sistema_Vendas.Model;
 using Sistema_Vendas.Model.FilteredModel;
+using Sistema_Vendas.Service;
 using Sistema_Vendas.View;
 using System.Globalization;
 using System.Windows;
@@ -10,8 +11,7 @@ namespace Sistema_Vendas.Controller
 {
     class DashboardController
     {
-        private MainWindow _MainDefasada { get; set; }
-        private MenuPrincipal _Main { get; set; }
+        MenuPrincipal _Main {  get; set; }
 
         public DashboardController(MenuPrincipal main)
         {
@@ -80,17 +80,17 @@ namespace Sistema_Vendas.Controller
 
                 if (pFiltrar)
                 {
-                    lstAuxiliar = _Main.lstVendas.Where(p => (p.DataVenda >= pFiltros.Inicial &&
+                    lstAuxiliar = PersistDataService.Instance.lstVendas.Where(p => (p.DataVenda >= pFiltros.Inicial &&
                                                               p.DataVenda <= pFiltros.Final) &&
                                                               pFiltros.IdVendedores.Contains(p.IdVendedor) &&
                                                               pFiltros.IdClientes.Contains(p.IdCliente)).ToList();
 
-                    lstVendedoresAuxiliar = _Main.lstVendedores.Where(p => pFiltros.IdVendedores.Contains(p.IdVendedor)).ToList();
+                    lstVendedoresAuxiliar = PersistDataService.Instance.lstVendedores.Where(p => pFiltros.IdVendedores.Contains(p.IdVendedor)).ToList();
                 }
                 else
                 {
-                    lstAuxiliar = _Main.lstVendas;
-                    lstVendedoresAuxiliar = _Main.lstVendedores;
+                    lstAuxiliar = PersistDataService.Instance.lstVendas;
+                    lstVendedoresAuxiliar = PersistDataService.Instance.lstVendedores;
                 }
 
                 for (int i = 0; i < lstVendedoresAuxiliar.Count; i++)
@@ -156,7 +156,7 @@ namespace Sistema_Vendas.Controller
 
                 if (pFiltrar)
                 {
-                    lstAuxiliar = _Main.lstVendas
+                    lstAuxiliar = PersistDataService.Instance.lstVendas
                                         .Where(d => ((d.DataVenda >= Convert.ToDateTime(pFiltros.Inicial) &&
                                                     (d.DataVenda <= Convert.ToDateTime(pFiltros.Final)))) &&
                                                      pFiltros.IdVendedores.Contains(d.IdVendedor) &&
@@ -164,7 +164,7 @@ namespace Sistema_Vendas.Controller
                 }
                 else
                 {
-                    lstAuxiliar = _Main.lstVendas;
+                    lstAuxiliar = PersistDataService.Instance.lstVendas;
                 }
 
                 var lstVendasOrg = lstAuxiliar
@@ -212,17 +212,17 @@ namespace Sistema_Vendas.Controller
 
                 if (pFiltrar)
                 {
-                    lstAuxiliar = _Main.lstVendas.Where(d => (d.DataVenda >= Convert.ToDateTime(pFiltros.Inicial) &&
+                    lstAuxiliar = PersistDataService.Instance.lstVendas.Where(d => (d.DataVenda >= Convert.ToDateTime(pFiltros.Inicial) &&
                                                               d.DataVenda <= Convert.ToDateTime(pFiltros.Final)) &&
                                                               pFiltros.IdVendedores.Contains(d.IdVendedor) &&
                                                               pFiltros.IdClientes.Contains(d.IdCliente)).ToList();
 
-                    lstClientesAuxiliar = _Main.lstClientes.Where(p => pFiltros.IdClientes.Contains(p.IdCliente)).ToList();
+                    lstClientesAuxiliar = PersistDataService.Instance.lstClientes.Where(p => pFiltros.IdClientes.Contains(p.IdCliente)).ToList();
                 }
                 else
                 {
-                    lstAuxiliar = _Main.lstVendas;
-                    lstClientesAuxiliar = _Main.lstClientes;
+                    lstAuxiliar = PersistDataService.Instance.lstVendas;
+                    lstClientesAuxiliar = PersistDataService.Instance.lstClientes;
                 }
 
                 var lstFiltrada = lstClientesAuxiliar
@@ -275,8 +275,8 @@ namespace Sistema_Vendas.Controller
 
         public IOrderedEnumerable<MaisVendidos> GraficoMainVendidos()
         {
-            return _Main.lstProdutos.GroupJoin(
-                                    _Main.lstItensVenda,
+            return PersistDataService.Instance.lstProdutos.GroupJoin(
+                                    PersistDataService.Instance.lstItensVenda,
                                     p => p.IdProduto,
                                     v => v.IdProduto,
                                     (p, v) => new MaisVendidos
@@ -293,20 +293,20 @@ namespace Sistema_Vendas.Controller
         #region :: Filtros por Data ::
         public IOrderedEnumerable<MaisVendidos> FiltrarVendidosPorData(IEnumerable<dynamic> pListaFiltrada, Filtros pFiltros)
         {
-            return _Main.lstProdutos.Select(p => new MaisVendidos
+            return PersistDataService.Instance.lstProdutos.Select(p => new MaisVendidos
             {
                 Produto = p.Nome,
-                TotalVendido = _Main.lstItensVenda
+                TotalVendido = PersistDataService.Instance.lstItensVenda
                                        .Where(t => t.IdProduto == p.IdProduto &&
-                                              _Main.lstVendas.Any(v => v.IdVenda == t.IdVenda &&
+                                              PersistDataService.Instance.lstVendas.Any(v => v.IdVenda == t.IdVenda &&
                                                                   v.DataVenda >= pFiltros.Inicial &&
                                                                   v.DataVenda <= pFiltros.Final &&
                                                                   pFiltros.IdVendedores.Contains(v.IdVendedor) &&
                                                                   pFiltros.IdClientes.Contains(v.IdCliente)))
                                        .Sum(t => t.QuantidadeLote * p.Lote),
-                IdentificadorVenda = _Main.lstItensVenda
+                IdentificadorVenda = PersistDataService.Instance.lstItensVenda
                                        .Where(t => t.IdProduto == p.IdProduto &&
-                                                   _Main.lstVendas.Any(v => v.IdVenda == t.IdVenda &&
+                                                   PersistDataService.Instance.lstVendas.Any(v => v.IdVenda == t.IdVenda &&
                                                                    v.DataVenda >= pFiltros.Inicial &&
                                                                    v.DataVenda <= pFiltros.Final &&
                                                                    pFiltros.IdVendedores.Contains(v.IdVendedor) &&
@@ -325,8 +325,8 @@ namespace Sistema_Vendas.Controller
         {
             try
             {
-                _Main.lblTotalVendas.Content = _Main.lstVendas.Count.ToString();
-                _Main.lblTotalRecebido.Content = _Main.lstVendas.Sum(p => p.TotalVenda).ToString();
+                _Main.lblTotalVendas.Content = PersistDataService.Instance.lstVendas.Count.ToString();
+                _Main.lblTotalRecebido.Content = PersistDataService.Instance.lstVendas.Sum(p => p.TotalVenda).ToString();
             }
             catch(Exception ex)
             {

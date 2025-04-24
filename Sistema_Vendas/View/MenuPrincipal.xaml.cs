@@ -17,26 +17,17 @@ namespace Sistema_Vendas.View
     {
         #region << Atributos >>
 
-        public Usuarios UsuarioLogado;
-
-        public List<ItensVenda> lstItensVenda;
-        public List<Vendedor> lstVendedores;
-        public List<Produto> lstProdutos;
-        public List<Cliente> lstClientes;
-        public List<Vendas> lstVendas;
-
         DataController dataController;
         DashboardController GraficosController;
         
         #endregion << Atributos >>
 
-        public MenuPrincipal(Usuarios pUsuario)
+        public MenuPrincipal()
         {
             InitializeComponent();
 
-            UsuarioLogado = pUsuario;
-
             GraficosController = new(this);
+            dataController = new();
         }
 
         private void DestacarBotao(Button botaoSelecionado, Rectangle retanguloSelecionado = null)
@@ -66,7 +57,7 @@ namespace Sistema_Vendas.View
 
         private void ExibeGrid(Grid gridAMostrar)
         {
-            Grid[] Grids = { grdContDashboard, grdAuditoria };
+            Grid[] Grids = { grdContDashboard, grdContAuditoria };
 
             for (int i = 0; i < Grids.Length; i++)
             {
@@ -130,13 +121,6 @@ namespace Sistema_Vendas.View
             {
                 MessageBox.Show(strMensagem);
             }
-        }
-
-        public void CarregaDataVendas()
-        {
-            dgvAuxiliar.ItemsSource = lstVendas;
-            lblAuxiliar.Content = "Vendas"; 
-            AdicionaColunaAuxiliar("Vendas");
         }
 
         public void AdicionaColunaAuxiliar(string pDgvAtivo)
@@ -243,21 +227,6 @@ namespace Sistema_Vendas.View
         private void txtIdVenda_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
             e.Handled = !int.TryParse(e.Text, out _);
-        }
-
-        private void grdPrincipal_Loaded(object sender, RoutedEventArgs e)
-        {
-            lblNomeUsuario.Content = UsuarioLogado.NomeUsuario;
-
-            lstVendedores = dataController.GetVendedores.Result;
-
-            lstVendas = dataController.GetVendas.Result;
-
-            lstProdutos = dataController.GetProdutos.Result;
-
-            lstClientes = dataController.GetClientes.Result;
-
-            lstItensVenda = dataController.GetItensVenda.Result;
         }
     }
 }
