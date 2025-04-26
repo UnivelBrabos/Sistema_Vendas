@@ -6,8 +6,10 @@ class ItensVendaModel {
   ItensVendaModel({
     required this.idProduto,
     required this.quantidade,
-    required this.subtotal,
+    required this.subtotal, required int quantidadeLote, required int idVenda,
   });
+
+  get quantidadeLote => null;
 
   Map<String, dynamic> toJson() {
     return {

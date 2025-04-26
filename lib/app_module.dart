@@ -1,4 +1,3 @@
-// lib/app_module.dart
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:trabalho_vendas_univel/modules/client/client_module.dart';
 import 'package:trabalho_vendas_univel/modules/welcome/welcome_page.dart';
@@ -8,6 +7,7 @@ import 'modules/home/home_module.dart';
 import 'modules/cart/cart_module.dart';
 import 'catalog/catalog_module.dart';
 import 'store/cart_store.dart';
+import 'modules/venda/venda_module.dart';
 
 class AppModule extends Module {
   @override
@@ -24,5 +24,7 @@ class AppModule extends Module {
         ModuleRoute('/cart', module: CartModule()),
         ChildRoute('/test', child: (_, __) => const TestRoutePage()),
         ModuleRoute('/client', module: ClientModule()),
+        ModuleRoute('/venda', module: VendaModule()),
+
       ];
 }

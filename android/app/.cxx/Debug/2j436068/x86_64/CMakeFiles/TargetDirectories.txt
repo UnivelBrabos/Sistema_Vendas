@@ -1,0 +1,2 @@
+C:/Users/Victus/Desktop/trabaio_vendas/trabalho_vendas_univel/android/app/.cxx/Debug/2j436068/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/Victus/Desktop/trabaio_vendas/trabalho_vendas_univel/android/app/.cxx/Debug/2j436068/x86_64/CMakeFiles/rebuild_cache.dir

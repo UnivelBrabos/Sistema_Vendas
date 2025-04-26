@@ -1,6 +1,6 @@
-import 'cliente_model.dart';
-import 'venda_model.dart';
-import 'itens_venda_model.dart';
+import 'package:trabalho_vendas_univel/models/cliente_model.dart';
+import 'package:trabalho_vendas_univel/models/itens_venda_model.dart';
+import 'package:trabalho_vendas_univel/models/venda_model.dart';
 
 class VendaSerializada {
   final List<ClienteModel> clientes;
