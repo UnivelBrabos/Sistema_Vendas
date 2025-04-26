@@ -1,10 +1,10 @@
 from app.connection_db import supabase
-from app.schemas.segmentos_clientes import SegmentosClienteCreate
+from app.schemas.segmentos_clientes import SegmentosClienteCreate, SegmentosCliente
 from fastapi import APIRouter
 
 router = APIRouter()
 
-@router.post('/customer_segments/post')
+@router.post('/customer_segments/post', response_model=SegmentosCliente)
 def insert_customer_segments(segments: SegmentosClienteCreate):
     data = supabase.table("segmentos_cliente").insert(
         segments.model_dump(exclude_none=True)

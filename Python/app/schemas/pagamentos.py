@@ -15,8 +15,8 @@ class PagamentosCreate(BaseModel):
   forma_pagamento: str
   status: str
   valor_pago: float
-  data_pagamento: datetime = Field(default_factory=datetime.now)
-
+  data_pagamento: datetime
+  
 class PagamentosUpdate(BaseModel):
   id_venda: int
   forma_pagamento: str

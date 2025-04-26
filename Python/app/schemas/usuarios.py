@@ -16,7 +16,7 @@ class UsuariosCreate(BaseModel):
     email: EmailStr
     senha_hash: str
     cargo: str
-    criado_em: datetime = Field(default_factory=datetime.now)
+    criado_em: datetime
 
 class UsuariosUpdate(BaseModel):
     nome: str

@@ -14,7 +14,7 @@ class VendedoresCreate(BaseModel):
     nome: str
     email: EmailStr
     telefone: str
-    data_contratacao: date = Field(default_factory=date.today)
+    data_contratacao: date 
     salario: float
 
 class VendedoresUpdate(BaseModel):

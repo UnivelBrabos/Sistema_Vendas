@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends
 
 router = APIRouter()
 
-@router.post('/sales/post', response_model=Vendas)
+@router.post('/sales/post')
 def insert_sales(sale: VendasCreate):
     serielized_data = sale.model_dump(exclude_none=True)
     serielized_data["data_venda"] = sale.data_venda.isoformat()
