@@ -1,5 +1,0 @@
-*.log
-*.pyc
-/app/__pycache__
-/app/routes/__pycache__
-/app/schemas/__pycache__

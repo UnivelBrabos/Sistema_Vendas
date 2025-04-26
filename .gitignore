@@ -2,3 +2,9 @@ Python/app/routes/__pycache__/sales.cpython-312.pyc
 Python/app/__pycache__/connection_db.cpython-312.pyc
 Python/app/routes/__pycache__/sales.cpython-312.pyc
 Python/app/routes/__pycache__/sales.cpython-312.pyc
+
+*.log
+*.pyc
+/app/__pycache__
+/app/routes/__pycache__
+/app/schemas/__pycache__
