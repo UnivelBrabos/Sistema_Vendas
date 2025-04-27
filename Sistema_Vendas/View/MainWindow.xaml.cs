@@ -61,7 +61,7 @@ namespace Sistema_Vendas
             DataContext = this;
             objConnect = new ConnectionDB(); // Inicializa a conexão junto ao sistema
 
-            CarregaDados();
+            //CarregaDados();
 
             dtpFinal.Text = DateTime.Now.ToString("dd/MM/yyyy");
             dtpInicial.Text = "01/01/2025";
@@ -103,7 +103,7 @@ namespace Sistema_Vendas
 
         }
 
-        public async void CarregaDados()
+        /*public async void CarregaDados()
         {
             lstVendedores = await Vendedor.GetVendedores(objConnect);
 
@@ -118,7 +118,7 @@ namespace Sistema_Vendas
             CarregaGrafico();
 
             CarregaCheckBox();
-        }
+        }*/
 
         #region :: Carregamento dos gráficos ::
         public void CarregaGrafico(bool filtrar = false)

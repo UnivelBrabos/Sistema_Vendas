@@ -1,32 +1,30 @@
-﻿using Sistema_Vendas.Data;
-using Supabase;
-using Supabase.Postgrest.Attributes;
-using Supabase.Postgrest.Models;
+﻿using Sistema_Vendas.Interfaces;
+using Sistema_Vendas.Data;
+using Newtonsoft.Json;
 using System.Windows;
 
 namespace Sistema_Vendas.Model
 {
-    [Table("usuarios")]
-    public class Usuarios : BaseModel
+    public class Usuarios : IModel<Usuarios>
     {
         #region << Atributos >>
 
-        [PrimaryKey("id_usuario")]
+        [JsonProperty("id_usuario")]
         public int IdUsuario { get; set; }
 
-        [Column("nome")]
+        [JsonProperty("nome")]
         public string? NomeUsuario { get; set; }
 
-        [Column("email")]
+        [JsonProperty("email")]
         public string? Email { get; set; }
 
-        [Column("senha_hash")]
+        [JsonProperty("senha_hash")]
         public string? SenhaUsuario { get; set; }
 
-        [Column("cargo")]
+        [JsonProperty("cargo")]
         public string? CargoUsuario { get; set; }
 
-        [Column("criado_em")]
+        [JsonProperty("criado_em")]
         public DateTime CriadoEm { get; set; }
 
         #endregion << Atributos >>
@@ -37,29 +35,24 @@ namespace Sistema_Vendas.Model
 
         #endregion << Construtor >>
 
-        #region << Métodos >>
-
-        public static async Task<List<Usuarios>> GetUsuarios(ConnectionDB pConnection)
+        public static Task<List<Usuarios>> GetModel()
         {
-            List<Usuarios> lstUsuarios = new();
-
-            try
-            {
-                Client client = await pConnection.GetClient();
-
-                var ModelUsuarios = await client.From<Usuarios>().Get();
-
-                lstUsuarios = ModelUsuarios.Models;
-
-                return lstUsuarios;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Erro ao buscar clientes : {ex.Message}");
-                return lstUsuarios;
-            }
+            return App.dataController.GetListGeral<Usuarios>("users", "Usuários");
         }
 
-        #endregion :: Metodos ::
+        public static Task<List<Usuarios>> PostModel()
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Task<List<Usuarios>> DeleteModel()
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Task<List<Usuarios>> UpdateModel()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

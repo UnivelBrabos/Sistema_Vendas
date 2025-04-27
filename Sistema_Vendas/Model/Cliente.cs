@@ -1,29 +1,27 @@
-﻿using Supabase;
-using Supabase.Postgrest.Attributes;
-using Supabase.Postgrest.Models;
-using Sistema_Vendas.Data;
+﻿using Sistema_Vendas.Data;
 using System.Windows;
+using Sistema_Vendas.Interfaces;
+using Newtonsoft.Json;
 
 namespace Sistema_Vendas.Model
 {
-    [Table("clientes")]
-    public class Cliente : BaseModel
+    public class Cliente : IModel<Cliente>
     {
         #region :: Atributos ::
 
-        [PrimaryKey("id_cliente")]
+        [JsonProperty("id_cliente")]
         public int IdCliente { get; set; }
 
-        [Column("nome")]
+        [JsonProperty("nome")]
         public string Nome { get; set; }
 
-        [Column("CNPJ")]
+        [JsonProperty("cnpj")]
         public string CNPJ {  get; set; }
 
-        [Column("telefone")]
+        [JsonProperty("telefone")]
         public string Telefone { get; set; }
 
-        [Column("endereco")]
+        [JsonProperty("endereco")]
         public string Endereco { get; set; }
 
         #endregion :: Atributos ::
@@ -36,25 +34,24 @@ namespace Sistema_Vendas.Model
 
         #region :: Metodos ::
 
-        public static async Task<List<Cliente>> GetClientes(ConnectionDB pConnection)
+        public static async Task<List<Cliente>> GetModel()
         {
-            List<Cliente> lstClientes = new();
+            return await App.dataController.GetListGeral<Cliente>("client", "Clientes");
+        }
 
-            try
-            {
-                Client client = await pConnection.GetClient();
+        public static async Task<List<Cliente>> PostModel()
+        {
+            throw new NotImplementedException();
+        }
 
-                var ModelCliente = await client.From<Cliente>().Get();
+        public static async Task<List<Cliente>> DeleteModel()
+        {
+            throw new NotImplementedException();
+        }
 
-                lstClientes = ModelCliente.Models;
-
-                return lstClientes;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Erro ao buscar clientes : {ex.Message}");
-                return lstClientes;
-            }
+        public static async Task<List<Cliente>> UpdateModel()
+        {
+            throw new NotImplementedException();
         }
 
         #endregion :: Metodos ::

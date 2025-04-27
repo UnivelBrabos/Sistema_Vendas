@@ -1,31 +1,29 @@
-﻿using Supabase;
-using Supabase.Postgrest.Attributes;
-using Supabase.Postgrest.Models;
+﻿using Newtonsoft.Json;
 using Sistema_Vendas.Data;
+using Sistema_Vendas.Interfaces;
 using System.Windows;
 
 namespace Sistema_Vendas.Model
 {
-    [Table("produtos")]
-    public class Produto : BaseModel
+    public class Produto : IModel<Produto>
     {
         #region :: Atributos ::
-        [PrimaryKey("id_produto")]
+        [JsonProperty("id_produto")]
         public int IdProduto { get; set; }
 
-        [Column("nome")]
+        [JsonProperty("nome")]
         public string Nome { get; set; }
 
-        [Column("descricao")]
+        [JsonProperty("descricao")]
         public string Descricao { get; set; }
 
-        [Column("preco")]
+        [JsonProperty("preco")]
         public double Preco { get; set; }
 
-        [Column("estoque")]
+        [JsonProperty("estoque")]
         public int Estoque { get; set; }
 
-        [Column("lote")]
+        [JsonProperty("lote")]
         public int Lote { get; set; }
         #endregion :: Atributos ::
 
@@ -35,29 +33,27 @@ namespace Sistema_Vendas.Model
 
         #endregion :: Construtor ::
 
-        #region :: Métodos ::
-
-        public static async Task<List<Produto>> GetProdutos(ConnectionDB pConnection)
+        public static Task<List<Produto>> GetModel()
         {
-            List<Produto> lstProduto = new();
-
-            try
-            {
-                Client client = await pConnection.GetClient();
-
-                var ModelProdutos = await client.From<Produto>().Get();
-
-                lstProduto = ModelProdutos.Models;
-
-                return lstProduto;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Erro ao buscar produtos: {ex.Message}");
-                return lstProduto;
-            }
+            return App.dataController.GetListGeral<Produto>("product", "produtos");
         }
 
-        #endregion :: Métodos ::
+        public static Task<List<Produto>> PostModel()
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Task<List<Produto>> DeleteModel()
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Task<List<Produto>> UpdateModel()
+        {
+            throw new NotImplementedException();
+        }
+
+
+
     }
 }

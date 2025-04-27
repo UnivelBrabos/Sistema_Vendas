@@ -2,6 +2,7 @@
 using System.Windows;
 using Sistema_Vendas.View;
 using Sistema_Vendas.Controller;
+using Sistema_Vendas.Model;
 
 namespace Sistema_Vendas
 {
@@ -10,18 +11,31 @@ namespace Sistema_Vendas
     /// </summary>
     public partial class App : Application
     {
+        public static Usuarios? Usuario {  get; set; }
+
         public static MenuPrincipal? menuPrincipal { get; set; }
         public static ContentController? contentController { get; set; }
+
+        public static DataController? dataController { get; set; }
 
         protected override async void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
 
             ConnectionService _ = ConnectionService.Instance;
-            await PersistDataService.Instance.InitAsync();
 
             menuPrincipal = new();
             contentController = new(menuPrincipal);
+
+            dataController = new();
+
+            // Manter por último
+            await PersistDataService.Instance.InitAsync();
+        }
+
+        public void SetUsuario(Usuarios pUsuarioLogado)
+        {
+            Usuario = pUsuarioLogado;
         }
     }
 

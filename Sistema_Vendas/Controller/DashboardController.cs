@@ -318,7 +318,7 @@ namespace Sistema_Vendas.Controller
             catch(Exception ex)
             {
                 pRetorno = $"Falha ao carregar cards: {ex.Message}";
-                return false;
+                return false; 
             }
 
             pRetorno = "Sucesso";

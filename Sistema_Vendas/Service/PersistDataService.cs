@@ -28,14 +28,12 @@ namespace Sistema_Vendas.Service
 
         public async Task InitAsync()
         {
-            var conn = ConnectionService.Instance.ConnectionDB;
-            
-            lstProdutos = await Produto.GetProdutos(conn);
-            lstClientes = await Cliente.GetClientes(conn);
-            lstVendas = await Vendas.GetVendas(conn);
-            lstVendedores = await Vendedor.GetVendedores(conn);
-            lstItensVenda = await ItensVenda.GetItensVenda(conn);
-            lstUsuarios = await Usuarios.GetUsuarios(conn);
+            lstProdutos = await Produto.GetModel();
+            lstClientes = await Cliente.GetModel();
+            lstVendas = await Vendas.GetModel();
+            lstVendedores = await Vendedor.GetModel();
+            lstItensVenda = await ItensVenda.GetModel();
+            lstUsuarios = await Usuarios.GetModel();
         }
     }
 

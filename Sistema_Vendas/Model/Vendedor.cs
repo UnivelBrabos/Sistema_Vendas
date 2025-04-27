@@ -1,29 +1,27 @@
-﻿using Supabase;
-using Supabase.Postgrest.Attributes;
-using Supabase.Postgrest.Models;
-using Sistema_Vendas.Data;
+﻿using Sistema_Vendas.Data;
 using System.Windows;
+using Sistema_Vendas.Interfaces;
+using Newtonsoft.Json;
 
 namespace Sistema_Vendas.Model
 {
-    [Table("vendedores")]
-    public class Vendedor : BaseModel
+    public class Vendedor : IModel<Vendedor>
     {
         #region :: Atributos ::
 
-        [PrimaryKey("id_vendedor")] 
+        [JsonProperty("id_vendedor")] 
         public int IdVendedor {get; set;}
 
-        [Column("nome")]
+        [JsonProperty("nome")]
         public string Nome { get; set;}
 
-        [Column("email")]
+        [JsonProperty("email")]
         public string Email { get; set;}
 
-        [Column("telefone")]
+        [JsonProperty("telefone")]
         public string Telefone { get; set;}
 
-        [Column("data_contratacao")]
+        [JsonProperty("data_contratacao")]
         public string DataContratacao {  get; set;}
 
         #endregion :: Atributos ::
@@ -36,26 +34,24 @@ namespace Sistema_Vendas.Model
 
         #region :: Métodos ::
 
-        public static async Task<List<Vendedor>> GetVendedores(ConnectionDB pConnect)
+        public static Task<List<Vendedor>> GetModel()
         {
+            return App.dataController.GetListGeral<Vendedor>("sellers", "Vendedores");
+        }
 
-            List<Vendedor> lstVendedores = new();
+        public static Task<List<Vendedor>> PostModel()
+        {
+            throw new NotImplementedException();
+        }
 
-            try
-            {
-                Client client = await pConnect.GetClient();
-                
-                var ModelVendedores = await client.From<Vendedor>().Get();
+        public static Task<List<Vendedor>> DeleteModel()
+        {
+            throw new NotImplementedException();
+        }
 
-                lstVendedores = ModelVendedores.Models;
-
-                return lstVendedores;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Erro ao buscar vendedores: {ex.Message}");
-                return lstVendedores;
-            }
+        public static Task<List<Vendedor>> UpdateModel()
+        {
+            throw new NotImplementedException();
         }
 
         #endregion :: Métodos ::

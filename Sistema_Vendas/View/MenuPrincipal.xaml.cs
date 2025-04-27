@@ -63,5 +63,10 @@ namespace Sistema_Vendas.View
             grdConteudo.Children.Clear();
             grdConteudo.Children.Add(userControl);
         }
+
+        private void grdPrincipal_Loaded(object sender, RoutedEventArgs e)
+        {
+            lblNomeUsuario.Content = App.Usuario.NomeUsuario;
+        }
     }
 }

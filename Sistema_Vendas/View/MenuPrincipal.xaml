@@ -11,7 +11,7 @@
         Title="Menu Principal"
         mc:Ignorable="d"
         MinHeight="720"
-        MinWidth="1240" HorizontalContentAlignment="Center"
+        MinWidth="1240" HorizontalContentAlignment="Center" Loaded="grdPrincipal_Loaded"
         >
 
     <Grid Margin="0,0,0,0">

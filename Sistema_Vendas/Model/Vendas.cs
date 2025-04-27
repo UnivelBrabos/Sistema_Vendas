@@ -1,31 +1,30 @@
-﻿using Supabase;
-using Supabase.Postgrest.Attributes;
-using Supabase.Postgrest.Models;
+﻿using Sistema_Vendas.Interfaces;
 using Sistema_Vendas.Data;
+using Newtonsoft.Json;
 using System.Windows;
 
 namespace Sistema_Vendas.Model
 {
-    [Table("vendas")]
-    public class Vendas : BaseModel
+    public class Vendas : IModel<Vendas>
     {
         #region :: Atributos ::
-        [PrimaryKey("id_venda")]
+
+        [JsonProperty("id_venda")]
         public int IdVenda {  get; set; }
 
-        [Column("id_Vendedor")]
+        [JsonProperty("id_Vendedor")]
         public int IdVendedor { get; set; }
 
-        [Column("id_cliente")]
+        [JsonProperty("id_cliente")]
         public int IdCliente { get; set; }
 
-        [Column("data_venda")]
+        [JsonProperty("data_venda")]
         public DateTime DataVenda {  get; set; }
 
-        [Column("total")]
+        [JsonProperty("total")]
         public decimal TotalVenda { get; set; }
 
-        [Column("desconto")]
+        [JsonProperty("desconto")]
         public int Desconto {  get; set; }
 
         #endregion :: Atributos ::
@@ -34,31 +33,26 @@ namespace Sistema_Vendas.Model
 
         public Vendas() { }
 
-        #endregion :: Construtor ::
+        #endregion << Construtor >>
 
-        #region :: Métodos ::
-
-        public static async Task<List<Vendas>> GetVendas(ConnectionDB pConnect)
+        public static Task<List<Vendas>> GetModel()
         {
-            List<Vendas> lstVendas = new();
-
-            try
-            {
-                Client client = await pConnect.GetClient();
-
-                var ModelVendas = await client.From<Vendas>().Get();
-
-                lstVendas = ModelVendas.Models;
-
-                return lstVendas;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Erro ao buscar vendas: {ex.Message}");
-                return lstVendas;
-            }
+            return App.dataController.GetListGeral<Vendas>("sales", "Vendas");
         }
 
-        #endregion :: Métodos ::
+        public static Task<List<Vendas>> PostModel()
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Task<List<Vendas>> DeleteModel()
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Task<List<Vendas>> UpdateModel()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
