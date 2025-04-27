@@ -11,11 +11,8 @@ namespace Sistema_Vendas.Controller
 {
     class DashboardController
     {
-        MenuPrincipal _Main {  get; set; }
-
-        public DashboardController(MenuPrincipal main)
+        public DashboardController()
         {
-            _Main = main;
         }
 
         public bool MaisVendidos(ref CartesianChart objGrafico, bool pFiltrar, Filtros pFiltros, out string pRetorno)
@@ -270,9 +267,6 @@ namespace Sistema_Vendas.Controller
             return true;
         }
 
-        #region :: Sem filtragem ::
-
-
         public IOrderedEnumerable<MaisVendidos> GraficoMainVendidos()
         {
             return PersistDataService.Instance.lstProdutos.GroupJoin(
@@ -288,9 +282,6 @@ namespace Sistema_Vendas.Controller
                                     .OrderByDescending(item => item.TotalVendido);
         }
 
-        #endregion :: Sem filtragem ::
-
-        #region :: Filtros por Data ::
         public IOrderedEnumerable<MaisVendidos> FiltrarVendidosPorData(IEnumerable<dynamic> pListaFiltrada, Filtros pFiltros)
         {
             return PersistDataService.Instance.lstProdutos.Select(p => new MaisVendidos
@@ -317,16 +308,12 @@ namespace Sistema_Vendas.Controller
             .OrderByDescending(p => p.TotalVendido);
         }
 
-        #endregion :: Filtros por Data :;
-
-        #region :: Cards ::
-
         public bool CarregaCards(bool pFiltrar, Filtros pFiltros, out string pRetorno)
         {
             try
             {
-                _Main.lblTotalVendas.Content = PersistDataService.Instance.lstVendas.Count.ToString();
-                _Main.lblTotalRecebido.Content = PersistDataService.Instance.lstVendas.Sum(p => p.TotalVenda).ToString();
+                /*lblTotalVendas.Content = PersistDataService.Instance.lstVendas.Count.ToString();
+                lblTotalRecebido.Content = PersistDataService.Instance.lstVendas.Sum(p => p.TotalVenda).ToString();*/
             }
             catch(Exception ex)
             {
@@ -337,7 +324,6 @@ namespace Sistema_Vendas.Controller
             pRetorno = "Sucesso";
             return true;
         }
-
-        #endregion :: Cards :: 
+ 
     }
 }

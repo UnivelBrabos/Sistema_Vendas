@@ -29,7 +29,7 @@
 
                 <Grid Name="grdVisibilityDashboard" Visibility="Visible">
                     <Rectangle x:Name="retDashboard" Visibility="Hidden" HorizontalAlignment="Left" Height="36" Margin="0,143,0,0" Stroke="Black" VerticalAlignment="Top" Width="3" Fill="Black"/>
-                    <Button x:Name="btnDashboard" HorizontalAlignment="Left" Margin="0,143,0,0" VerticalAlignment="Top" Width="191" Height="36" Background="Black" BorderBrush="{x:Null}" Opacity="0.0" Click="btnDashboard_Click" Cursor="Hand">
+                    <Button x:Name="btnDashboard" HorizontalAlignment="Left" Margin="0,143,0,0" VerticalAlignment="Top" Width="191" Height="36" Background="Black" BorderBrush="{x:Null}" Opacity="0.0" Cursor="Hand">
                         <Button.Style>
                             <Style TargetType="Button">
                                 <Setter Property="Background" Value="Transparent"/>
@@ -66,7 +66,7 @@
 
                 <Grid Name="grdVisibilityAuditoria" Visibility="Visible">
                     <Rectangle x:Name="retAuditoria" Visibility="Hidden" HorizontalAlignment="Left" Height="36" Margin="0,233,0,0" Stroke="Black" VerticalAlignment="Top" Width="3" Fill="Black"/>
-                    <Button x:Name="btnAuditoria" HorizontalAlignment="Left" Margin="3,233,0,0" VerticalAlignment="Top" Width="191" Height="36" Background="Black" BorderBrush="Black"  Opacity="0.0" Click="btnAuditoria_Click" Cursor="Hand">
+                    <Button x:Name="btnAuditoria" HorizontalAlignment="Left" Margin="3,233,0,0" VerticalAlignment="Top" Width="191" Height="36" Background="Black" BorderBrush="Black"  Opacity="0.0" Cursor="Hand">
                         <Button.Style>
                             <Style TargetType="Button">
                                 <Setter Property="Background" Value="Transparent"/>
@@ -103,7 +103,7 @@
 
                 <Grid Name="grdVisibilityFuncionarios" Visibility="Visible">
                     <Rectangle x:Name="retFuncionarios" Visibility="Hidden" HorizontalAlignment="Left" Height="36" Margin="0,324,0,0" Stroke="Black" VerticalAlignment="Top" Width="3" Fill="Black"/>
-                    <Button x:Name="btnFuncionarios" Background="Black" BorderBrush="Black" Opacity="0.0" HorizontalAlignment="Left" Margin="3,324,0,0" VerticalAlignment="Top" Width="191" Height="36" Click="btnFuncionarios_Click" Cursor="Hand">
+                    <Button x:Name="btnFuncionarios" Background="Black" BorderBrush="Black" Opacity="0.0" HorizontalAlignment="Left" Margin="3,324,0,0" VerticalAlignment="Top" Width="191" Height="36" Cursor="Hand">
                         <Button.Style>
                             <Style TargetType="Button">
                                 <Setter Property="Background" Value="Transparent"/>
@@ -140,7 +140,7 @@
 
                 <Grid Name="grdVisibilityEstoque" Visibility="Visible">
                     <Rectangle x:Name="retEstoque" Visibility="Hidden" HorizontalAlignment="Left" Height="36" Margin="0,415,0,0" Stroke="Black" VerticalAlignment="Top" Width="3" Fill="Black"/>
-                    <Button x:Name="btnEstoque" HorizontalAlignment="Left" Margin="3,415,0,0" VerticalAlignment="Top" Width="191" Height="36" Background="Black" BorderBrush="Black" Opacity="0.0" Click="btnEstoque_Click" Cursor="Hand">
+                    <Button x:Name="btnEstoque" HorizontalAlignment="Left" Margin="3,415,0,0" VerticalAlignment="Top" Width="191" Height="36" Background="Black" BorderBrush="Black" Opacity="0.0" Cursor="Hand">
                         <Button.Style>
                             <Style TargetType="Button">
                                 <Setter Property="Background" Value="Transparent"/>
@@ -184,7 +184,7 @@
                                 Width="35"
                                 Background="Black"
                                 BorderBrush="Black"
-                                Opacity="0.0" Click="btnConfiguracoes_Click" Grid.RowSpan="2" Height="35" VerticalAlignment="Bottom" Cursor="Hand">
+                                Opacity="0.0" Grid.RowSpan="2" Height="35" VerticalAlignment="Bottom" Cursor="Hand">
 
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
@@ -230,209 +230,13 @@
         </Grid>
 
         <Grid Name="grdConteudo" Margin="194,68,0,0" Grid.ColumnSpan="2">
-            <Grid Name="grdContDashboard" Background="#FFF0F0F0" Visibility="Hidden">
-                <Grid Name="grdDadosSimples" Margin="5,10,405,0" Height="72" VerticalAlignment="Top">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
 
-                    <!-- Elemento da Esquerda -->
-                    <Grid Name="grdTotalVendas" Grid.Column="0" HorizontalAlignment="Left" Width="125">
-                        <Rectangle Name="retTotalVendas" HorizontalAlignment="Left" Height="60" Margin="7,0,0,0" VerticalAlignment="Center" Width="101" Fill="White" RadiusX="10" RadiusY="10"/>
-                        <Label Name="lblTotalVendas" Content="00000.00" Margin="54,30,24,0" VerticalAlignment="Top" FontSize="9" FontFamily="Rockwell" HorizontalContentAlignment="Center"/>
-                        <Label Name="lblValorTotalVendas" Content="Total Vendas" HorizontalAlignment="Left" Margin="42,6,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" Width="71" FontSize="9" FontFamily="Rockwell"/>
-                        <Image Name="imgTotalVendas" Margin="12,0,0,0" Source="/Imagens/Venda_Icon.png" Stretch="Fill" HorizontalAlignment="Left" VerticalAlignment="Center" Width="30" Height="30"/>
-                    </Grid>
-
-                    <!-- Elemento Central -->
-                    <Grid Name="grdTotalRecebido" Grid.Column="1" HorizontalAlignment="Center" Width="129">
-                        <Rectangle Name="retTotalRecebido" HorizontalAlignment="Left" Height="60" Margin="7,0,0,0" VerticalAlignment="Center" Width="101" Fill="White" RadiusX="10" RadiusY="10"/>
-                        <Label Name="lblTotalRecebido" Content="00000.00" HorizontalAlignment="Left" Margin="49,30,0,0" VerticalAlignment="Top" FontSize="9" FontFamily="Rockwell" HorizontalContentAlignment="Center"/>
-                        <Label Name="lblValorTotalRecebido" Content="Total Vendido" HorizontalAlignment="Left" Margin="37,6,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" Width="71" FontSize="9" FontFamily="Rockwell"/>
-                        <Image Name="imgTotalRecebido" Margin="12,0,0,0" Source="/Imagens/Dinheiro_Icon.png" Stretch="Fill" HorizontalAlignment="Left" VerticalAlignment="Center" Width="30" Height="30"/>
-                    </Grid>
-
-                    <!-- Elemento da Direita -->
-                    <Grid Name="grdMelhorCliente" Grid.Column="2" HorizontalAlignment="Right" Width="125">
-                        <Rectangle Name="retMelhorCliente" Height="60" Margin="12,0,10,0" VerticalAlignment="Center" Fill="White" RadiusX="10" RadiusY="10"/>
-                        <Label Name="lblMelhorCliente" Content="Mercado X" HorizontalAlignment="Left" Margin="49,30,0,0" VerticalAlignment="Top" FontSize="9" FontFamily="Rockwell" HorizontalContentAlignment="Center"/>
-                        <Label Name="lblValorMelhorCliente" Content="Melhor Cliente" HorizontalAlignment="Left" Margin="41,6,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" Width="74" FontSize="9" FontFamily="Rockwell"/>
-                        <Image Name="imgMelhorCliente" Margin="12,0,0,0" Source="/Imagens/Cliente_Icon.png" Stretch="Fill" HorizontalAlignment="Left" VerticalAlignment="Center" Width="30" Height="30"/>
-                    </Grid>
-
-                </Grid>
-
-                <Grid Name="grdVendedores">
-                    <Rectangle x:Name="RetVendedores" Height="303" Margin="0,16,10,0" RadiusX="20" RadiusY="20" VerticalAlignment="Top" Fill="White" HorizontalAlignment="Right" Width="387"/>
-                    <lvc:PieChart x:Name="VendedoresChartControl" 
-                              LegendLocation="Right"
-                              InnerRadius="50"
-                              Foreground="Black"
-                              FontSize="14" 
-                              DockPanel.Dock="Right" 
-                              Margin="0,30,24,0" 
-                              Background="White" 
-                              HorizontalAlignment="Right" 
-                              Width="358" 
-                              Height="275" 
-                              VerticalAlignment="Top"/>
-                </Grid>
-
-                <Grid Name ="grdVendaMensal">
-                    <Rectangle Height="234" Margin="10,84,415,0" RadiusX="20" RadiusY="20" VerticalAlignment="Top" Fill="White"/>
-                    <lvc:CartesianChart x:Name="VendasCharControl" Margin="22,95,425,0" 
-                                Background="White"
-                                Foreground="Black"
-                                FontSize="14" 
-                                Height="212" 
-                                VerticalAlignment="Top"/>
-                </Grid>
-
-                <Grid Name="grdProdutosMaisVendidos" Margin="463,341,10,10">
-                    <Rectangle RadiusX="20" RadiusY="20" Fill="White"/>
-                    <lvc:CartesianChart x:Name="ProdutosCharControl" 
-                                        Margin="10,10,10,10" 
-                                        Background="White" 
-                                        Foreground="Black" 
-                                        FontSize="14">
-                        <lvc:CartesianChart.AxisX>
-                            <lvc:Axis Title="Ano" LabelFormatter="{Binding Formatter}"/>
-                        </lvc:CartesianChart.AxisX>
-                        <lvc:CartesianChart.AxisY>
-                            <lvc:Axis Title="Produtos" Labels="{Binding LabelsY}" />
-                        </lvc:CartesianChart.AxisY>
-                    </lvc:CartesianChart>
-                </Grid>
-
-                <Grid Name="grdMelhoresClientes" HorizontalAlignment="Left" Margin="10,341,0,10" Width="433">
-                    <Rectangle x:Name="RetClientes" RadiusX="20" RadiusY="20" Fill="White"/>
-                    <lvc:PieChart x:Name="ClientesChartControl" 
-                                  LegendLocation="Right"
-                                  InnerRadius="50"
-                                  Foreground="Black"
-                                  FontSize="14" 
-                                  Background="White" Height="265" VerticalAlignment="Center" Margin="10,0,10,0"/>
-                </Grid>
-            </Grid>
-
-            <Grid x:Name="grdContAuditoria" Background="#FFF0F0F0" Visibility="Hidden">
-                <Grid Name="grdTabelaVendas" HorizontalAlignment="Left" VerticalAlignment="Center" Width="565" Height="636" Margin="481,0,0,0"/>
-                <Rectangle x:Name="retIdVenda" HorizontalAlignment="Left" Height="61" Margin="140,15,0,0" VerticalAlignment="Top" Width="361" Fill="White" RadiusX="10" RadiusY="10"/>
-                <Label x:Name="lblIdVenda" Content="ID. Venda" HorizontalAlignment="Left" Margin="29,30,0,0" VerticalAlignment="Top" FontSize="18" FontFamily="Rockwell" HorizontalContentAlignment="Center"/>
-                <TextBox x:Name="txtIdVenda" HorizontalAlignment="Left" Margin="153,32,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="334" FontSize="18" FontFamily="Rockwell" Background="{x:Null}" BorderBrush="{x:Null}" Height="27" VerticalContentAlignment="Center" PreviewTextInput="txtIdVenda_PreviewTextInput"/>
-                <Label x:Name="lblVendedor" Content="Vendedor" HorizontalAlignment="Left" Margin="29,130,0,0" VerticalAlignment="Top" FontSize="18" FontFamily="Rockwell" HorizontalContentAlignment="Center" IsEnabled="False"/>
-                <Rectangle x:Name="retVendedor" HorizontalAlignment="Left" Height="61" Margin="141,115,0,0" VerticalAlignment="Top" Width="360" Fill="White" RadiusX="10" RadiusY="10" IsEnabled="False"/>
-                <TextBox x:Name="txtVendedor" HorizontalAlignment="Left" Margin="153,132,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="334" FontSize="18" FontFamily="Rockwell" Background="{x:Null}" BorderBrush="{x:Null}" Height="27" VerticalContentAlignment="Center" PreviewTextInput="txtIdVenda_PreviewTextInput" IsEnabled="False"/>
-                <Label x:Name="lblCliente" Content="Cliente" HorizontalAlignment="Left" Margin="30,231,0,0" VerticalAlignment="Top" FontSize="18" FontFamily="Rockwell" Width="93" HorizontalContentAlignment="Center" IsEnabled="False"/>
-                <Rectangle x:Name="retCliente" HorizontalAlignment="Left" Height="61" Margin="141,216,0,0" VerticalAlignment="Top" Width="360" Fill="White" RadiusX="10" RadiusY="10"/>
-                <TextBox x:Name="txtCliente" HorizontalAlignment="Left" Margin="153,233,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="334" FontSize="18" FontFamily="Rockwell" Background="{x:Null}" BorderBrush="{x:Null}" Height="27" VerticalContentAlignment="Center" PreviewTextInput="txtIdVenda_PreviewTextInput" IsEnabled="False"/>
-                <Label x:Name="lblValorTotal" Content="Valor Total" HorizontalAlignment="Left" Margin="22,333,0,0" VerticalAlignment="Top" FontSize="18" FontFamily="Rockwell" Width="108" HorizontalContentAlignment="Center" IsEnabled="False"/>
-                <Rectangle x:Name="retValorTotal" HorizontalAlignment="Left" Height="61" Margin="142,318,0,0" VerticalAlignment="Top" Width="118" Fill="White" RadiusX="10" RadiusY="10"/>
-                <TextBox x:Name="txtValorTotal" HorizontalAlignment="Left" Margin="154,335,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="94" FontSize="18" FontFamily="Rockwell" Background="{x:Null}" BorderBrush="{x:Null}" Height="27" VerticalContentAlignment="Center" PreviewTextInput="txtIdVenda_PreviewTextInput" IsEnabled="False"/>
-                <Label x:Name="lblDataVenda" Content="Data Venda" HorizontalAlignment="Left" Margin="268,333,0,0" VerticalAlignment="Top" FontSize="18" FontFamily="Rockwell" Width="106" HorizontalContentAlignment="Center" IsEnabled="False"/>
-                <Rectangle x:Name="retDataVenda" HorizontalAlignment="Left" Height="61" Margin="381,320,0,0" VerticalAlignment="Top" Width="120" Fill="White" RadiusX="10" RadiusY="10"/>
-                <TextBox x:Name="txtDataVenda" HorizontalAlignment="Left" Margin="393,337,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="97" FontSize="18" FontFamily="Rockwell" Background="{x:Null}" BorderBrush="{x:Null}" Height="27" VerticalContentAlignment="Center" PreviewTextInput="txtIdVenda_PreviewTextInput" IsEnabled="False"/>
-                <Button x:Name="btnBuscarItensVenda" Content="Buscar Itens" HorizontalAlignment="Left" Margin="22,422,0,0" Width="131" FontFamily="Rockwell" FontSize="18" Background="{x:Null}" Height="44" VerticalAlignment="Top" HorizontalContentAlignment="Center" BorderBrush="#FF73B8DA" IsEnabled="False">
-                    <Button.Style>
-                        <Style TargetType="{x:Type Button}">
-                            <Setter Property="Background" Value="Transparent"/>
-                            <Setter Property="BorderThickness" Value="2"/>
-                            <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
-                            <Setter Property="Cursor" Value="Hand"/>
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="{x:Type Button}">
-                                        <Border Background="{TemplateBinding Background}" CornerRadius="2" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
-                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                            <Style.Triggers>
-                                <Trigger Property="IsPressed" Value="True">
-                                    <Setter Property="RenderTransform">
-                                        <Setter.Value>
-                                            <ScaleTransform ScaleX="0.95" ScaleY="0.95"/>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-                </Button>
-                <Button x:Name="btnSalvar" Content="Salvar" HorizontalAlignment="Left" Margin="28,0,0,10" Width="131" FontFamily="Rockwell" FontSize="18" Background="#FF73DA84" Height="44" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" IsEnabled="False">
-                    <Button.Style>
-                        <Style TargetType="{x:Type Button}">
-                            <Setter Property="Background" Value="Transparent"/>
-                            <Setter Property="BorderThickness" Value="0"/>
-                            <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
-                            <Setter Property="Cursor" Value="Hand"/>
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="{x:Type Button}">
-                                        <Border Background="{TemplateBinding Background}" CornerRadius="2" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
-                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                            <Style.Triggers>
-                                <Trigger Property="IsPressed" Value="True">
-                                    <Setter Property="RenderTransform">
-                                        <Setter.Value>
-                                            <ScaleTransform ScaleX="0.95" ScaleY="0.95"/>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-                </Button>
-                <Button x:Name="btnExcluir" Content="Excluir" HorizontalAlignment="Left" Margin="368,0,0,16" Width="131" FontFamily="Rockwell" FontSize="18" Background="#FFDA7373" Height="44" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" IsEnabled="False">
-                    <Button.Style>
-                        <Style TargetType="{x:Type Button}">
-                            <Setter Property="Background" Value="Transparent"/>
-                            <Setter Property="BorderThickness" Value="0"/>
-                            <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
-                            <Setter Property="Cursor" Value="Hand"/>
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="{x:Type Button}">
-                                        <Border Background="{TemplateBinding Background}" CornerRadius="2" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
-                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                            <Style.Triggers>
-                                <Trigger Property="IsPressed" Value="True">
-                                    <Setter Property="RenderTransform">
-                                        <Setter.Value>
-                                            <ScaleTransform ScaleX="0.95" ScaleY="0.95"/>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-                </Button>
-                <Grid x:Name="grdAuxiliar" Margin="523,0,13,0">
-                    <DataGrid x:Name="dgvAuxiliar" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,42,0,15" Background="White" FontFamily="Rockwell" HeadersVisibility="Column" CanUserDeleteRows="False">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                    <Label x:Name="lblAuxiliar" Content="Label" HorizontalAlignment="Center" Margin="0,4,0,0" VerticalAlignment="Top" FontFamily="Rockwell" FontSize="20"/>
-                </Grid>
-            </Grid>
         </Grid>
         
         <Grid Name="MenuHorizontal" VerticalAlignment="Top" Height="68" Margin="194,0,0,0" Background="#FFF0F0F0" Grid.ColumnSpan="2">
             <Image x:Name="imgUsuario" Margin="0,10,10,0" Source="/Imagens/User_Icon.png" Stretch="Fill" HorizontalAlignment="Right" VerticalAlignment="Top" Width="45" Height="45"/>
             <Image x:Name="imgFiltros" Margin="10,10,0,0" Source="/Imagens/Filtro_Icon.png" Stretch="Fill" Height="45" VerticalAlignment="Top" HorizontalAlignment="Left" Width="45"/>
-            <Button x:Name="btnUsuario" Margin="0,10,10,0" Background="Black" BorderBrush="Black" Opacity="0.0" Cursor="Hand" Height="45" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Click="btnUsuario_Click"  HorizontalAlignment="Right" Width="45">
+            <Button x:Name="btnUsuario" Margin="0,10,10,0" Background="Black" BorderBrush="Black" Opacity="0.0" Cursor="Hand" Height="45" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5"  HorizontalAlignment="Right" Width="45">
                 <Button.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform ScaleX="-1"/>
@@ -469,7 +273,7 @@
                 </Button.Style>
             </Button>
             <Label x:Name="lblNomeUsuario" Content="João da Silva" Margin="706,0,60,0" VerticalAlignment="Center" FontFamily="Rockwell" FontSize="14" HorizontalContentAlignment="Right"/>
-            <Button x:Name="btnFiltrar" Margin="10,10,0,0" Background="Black" BorderBrush="Black" Opacity="0.0" Cursor="Hand" RenderTransformOrigin="0.5,0.5" Click="btnFiltrar_Click" Height="45" VerticalAlignment="Top" HorizontalAlignment="Left" Width="45">
+            <Button x:Name="btnFiltrar" Margin="10,10,0,0" Background="Black" BorderBrush="Black" Opacity="0.0" Cursor="Hand" RenderTransformOrigin="0.5,0.5" Height="45" VerticalAlignment="Top" HorizontalAlignment="Left" Width="45">
                 <Button.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform ScaleX="1"/>

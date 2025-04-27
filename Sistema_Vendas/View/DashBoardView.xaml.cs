@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Sistema_Vendas.Controller;
+using Sistema_Vendas.Model.FilteredModel;
 
 namespace Sistema_Vendas.View
 {
@@ -20,9 +10,45 @@ namespace Sistema_Vendas.View
     /// </summary>
     public partial class DashBoardView : UserControl
     {
+        DashboardController GraficosController;
+
         public DashBoardView()
         {
             InitializeComponent();
+
+            GraficosController = new();
+
+            Graficos(false, null);
+        }
+
+        public void Graficos(bool pFiltrar, Filtros pFiltros)
+        {
+            string strMensagem;
+
+            if (!GraficosController.MaisVendidos(ref ProdutosCharControl, pFiltrar, pFiltros, out strMensagem))
+            {
+                MessageBox.Show(strMensagem);
+            }
+
+            if (!GraficosController.ParticipacaoLucros(ref VendedoresChartControl, pFiltrar, pFiltros, out strMensagem))
+            {
+                MessageBox.Show(strMensagem);
+            }
+
+            if (!GraficosController.VendasMensais(ref VendasCharControl, pFiltrar, pFiltros, out strMensagem))
+            {
+                MessageBox.Show(strMensagem);
+            }
+
+            if (!GraficosController.MelhoresClientes(ref ClientesChartControl, pFiltrar, pFiltros, out strMensagem))
+            {
+                MessageBox.Show(strMensagem);
+            }
+
+            if (!GraficosController.CarregaCards(pFiltrar, pFiltros, out strMensagem))
+            {
+                MessageBox.Show(strMensagem);
+            }
         }
     }
 }

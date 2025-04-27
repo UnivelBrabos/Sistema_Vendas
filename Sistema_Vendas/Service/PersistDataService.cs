@@ -29,7 +29,7 @@ namespace Sistema_Vendas.Service
         public async Task InitAsync()
         {
             var conn = ConnectionService.Instance.ConnectionDB;
-
+            
             lstProdutos = await Produto.GetProdutos(conn);
             lstClientes = await Cliente.GetClientes(conn);
             lstVendas = await Vendas.GetVendas(conn);

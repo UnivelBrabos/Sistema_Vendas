@@ -30,7 +30,7 @@ namespace Sistema_Vendas.Service
 
         private ConnectionService()
         {
-            ConnectionDB = new ConnectionDB();
+            ConnectionDB = new();
         }
     }
 }

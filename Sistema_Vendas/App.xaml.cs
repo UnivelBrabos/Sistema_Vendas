@@ -1,6 +1,7 @@
 ﻿using Sistema_Vendas.Service;
 using System.Windows;
 using Sistema_Vendas.View;
+using Sistema_Vendas.Controller;
 
 namespace Sistema_Vendas
 {
@@ -9,6 +10,9 @@ namespace Sistema_Vendas
     /// </summary>
     public partial class App : Application
     {
+        public static MenuPrincipal? menuPrincipal { get; set; }
+        public static ContentController? contentController { get; set; }
+
         protected override async void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
@@ -16,8 +20,8 @@ namespace Sistema_Vendas
             ConnectionService _ = ConnectionService.Instance;
             await PersistDataService.Instance.InitAsync();
 
-            var janelaPrincipal = new Login();
-            janelaPrincipal.Show();
+            menuPrincipal = new();
+            contentController = new(menuPrincipal);
         }
     }
 
