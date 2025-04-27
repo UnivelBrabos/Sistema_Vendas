@@ -10,8 +10,8 @@ namespace Sistema_Vendas.Interfaces
         event EventHandler eventFuncionarios;
         event EventHandler eventEstoque;
 
-        void ShowContent(UserControl userControl);
+        void ShowContent(UserControl userControl, int pIndex);
 
-        void DestacarBotao(Button botaoSelecionado, Rectangle retanguloSelecionado );
+        void DestacarBotao(int pIndex);
     }
 }

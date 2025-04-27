@@ -3,13 +3,12 @@ using LiveCharts.Wpf;
 using Sistema_Vendas.Model;
 using Sistema_Vendas.Model.FilteredModel;
 using Sistema_Vendas.Service;
-using Sistema_Vendas.View;
 using System.Globalization;
 using System.Windows;
 
 namespace Sistema_Vendas.Controller
 {
-    class DashboardController
+    public class DashboardController
     {
         public DashboardController()
         {
@@ -323,6 +322,36 @@ namespace Sistema_Vendas.Controller
 
             pRetorno = "Sucesso";
             return true;
+        }
+
+        public string RetornaTotalVendas()
+        {
+            return PersistDataService.Instance.lstVendas.Count.ToString();
+        }
+
+        public string RetornaTotalRecebido()
+        {
+            return PersistDataService.Instance.lstVendas.Sum(p => p.TotalVenda).ToString();
+        }
+
+        public string RetornaMelhorCliente()
+        {
+            List<Cliente> lstClientes = PersistDataService.Instance.lstClientes;
+            List<Vendas> lstVendas = PersistDataService.Instance.lstVendas;
+
+            return lstClientes
+                    .GroupJoin(lstVendas,
+                               c => c.IdCliente,
+                               v => v.IdCliente,
+                               (c, v) => new
+                               {
+                                   Nome = c.Nome,
+                                   Total = v.Sum(t => t.TotalVenda)
+                               })
+                    .OrderByDescending(c => c.Total)
+                    .ToList()
+                    .Take(1)
+                    .FirstOrDefault().Nome;
         }
  
     }

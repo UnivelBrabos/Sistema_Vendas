@@ -34,7 +34,7 @@ namespace Sistema_Vendas.View
             btnEstoque.Click += (s, e) => eventEstoque?.Invoke(this, EventArgs.Empty);
         }
 
-        public void DestacarBotao(Button botaoSelecionado, Rectangle retanguloSelecionado)
+        public void DestacarBotao(int pIndex)
         {
             Button[] botoes = { btnDashboard, btnAuditoria, btnFuncionarios, btnEstoque, btnConfiguracoes, btnUsuario, btnFiltrar };
             Rectangle[] retangulos = { retDashboard, retAuditoria, retFuncionarios, retEstoque };
@@ -50,18 +50,20 @@ namespace Sistema_Vendas.View
                 ret.Visibility = Visibility.Hidden;
             }
 
-            if (retanguloSelecionado != null)
+            if (pIndex < 4)
             {
-                retanguloSelecionado.Visibility = Visibility.Visible;
+                retangulos[pIndex].Visibility = Visibility.Visible;
             }
 
-            botaoSelecionado.Opacity = 0.1;
+            botoes[pIndex].Opacity = 0.1;
         }
 
-        public void ShowContent(UserControl userControl)
+        public void ShowContent(UserControl userControl, int pIndex)
         {
             grdConteudo.Children.Clear();
             grdConteudo.Children.Add(userControl);
+
+            DestacarBotao(pIndex);
         }
 
         private void grdPrincipal_Loaded(object sender, RoutedEventArgs e)

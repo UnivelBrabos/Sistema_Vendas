@@ -23,6 +23,7 @@ namespace Sistema_Vendas.Controller
 
                 if (objUsuario != null)
                 {
+                    App.SetUsuario(objUsuario);
                     App.menuPrincipal.Show();
                     return true;
                 }

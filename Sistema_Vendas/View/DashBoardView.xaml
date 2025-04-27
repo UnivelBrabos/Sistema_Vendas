@@ -6,7 +6,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Sistema_Vendas.View"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800" Loaded="UserControl_Loaded">
     <Grid>
         <Grid Name="grdContDashboard" Background="#FFF0F0F0" Visibility="Visible">
             <Grid Name="grdDadosSimples" Margin="5,10,405,0" Height="72" VerticalAlignment="Top">

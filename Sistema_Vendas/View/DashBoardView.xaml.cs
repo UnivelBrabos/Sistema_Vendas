@@ -50,5 +50,12 @@ namespace Sistema_Vendas.View
                 MessageBox.Show(strMensagem);
             }
         }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            lblTotalVendas.Content = App.dashBoardController.RetornaTotalVendas();
+            lblTotalRecebido.Content = App.dashBoardController.RetornaTotalRecebido();
+            lblMelhorCliente.Content = App.dashBoardController.RetornaMelhorCliente();
+        }
     }
 }
