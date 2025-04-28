@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'app_module.dart';
+import '../core/app_colors.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,10 +33,42 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Trabalho Vendas Univel',
+      title: 'Trabalho Vendas Univel - Spark',
+      debugShowCheckedModeBanner: false,
+
+      theme: ThemeData(
+        primaryColor: AppColors.primaryColor,
+        scaffoldBackgroundColor: AppColors.background,
+        colorScheme: ColorScheme.light(
+          primary:      AppColors.primaryColor,
+          secondary:    AppColors.danger,
+          background:   AppColors.background,
+          surface:      AppColors.background,
+          error:        AppColors.danger,
+          onPrimary:    Colors.white,
+          onSecondary:  Colors.white,
+          onBackground: Colors.black87,
+          onSurface:    Colors.black87,
+          onError:      Colors.white,
+        ),
+
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(color: Colors.black87),
+          bodyMedium: TextStyle(color: Colors.black54),
+        ),
+        
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            foregroundColor: Colors.white, 
+            backgroundColor: AppColors.primaryColor,
+            shape:     RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+        ),
+      ),
       routeInformationParser: Modular.routeInformationParser,
       routerDelegate: Modular.routerDelegate,
-      debugShowCheckedModeBanner: false,
     );
   }
 }

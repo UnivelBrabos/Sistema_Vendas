@@ -1,8 +1,7 @@
-// lib/login/login_form.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:trabalho_vendas_univel/core/app_colors.dart';
 import 'package:trabalho_vendas_univel/modules/auth/auth_controller.dart';
-import 'package:trabalho_vendas_univel/widgets/input_field_widget.dart';
 import 'package:trabalho_vendas_univel/widgets/social_login_button.dart';
 
 class LoginForm extends StatefulWidget {
@@ -14,11 +13,12 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   bool rememberMe = false;
+  bool _obscurePassword = true;
+
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  final String googleSvg =
-      '''<svg version="1.1" width="20" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+  final String googleSvg = '''<svg version="1.1" width="20" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
 <path style="fill:#FBBB00;" d="M113.47,309.408L95.648,375.94l-65.139,1.378C11.042,341.211,0,299.9,0,256
 	c0-42.451,10.324-82.483,28.624-117.732h0.014l57.992,10.632l25.404,57.644c-5.317,15.501-8.215,32.141-8.215,49.456
 	C103.821,274.792,107.225,292.797,113.47,309.408z"/>
@@ -33,8 +33,7 @@ class _LoginFormState extends State<LoginForm> {
 	C318.115,0,375.068,22.126,419.404,58.936z"/>
 </svg>''';
 
-  final String appleSvg =
-      '''<svg version="1.1" height="20" width="20" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 22.773 22.773" style="enable-background:new 0 0 22.773 22.773;" xml:space="preserve">
+  final String appleSvg = '''<svg version="1.1" height="20" width="20" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 22.773 22.773" style="enable-background:new 0 0 22.773 22.773;" xml:space="preserve">
  <g>
   <g>
    <path d="M15.769,0c0.053,0,0.106,0,0.162,0c0.13,1.606-0.483,2.806-1.228,3.675c-0.731,0.863-1.732,1.7-3.351,1.573
@@ -52,169 +51,197 @@ class _LoginFormState extends State<LoginForm> {
   @override
   Widget build(BuildContext context) {
     return Form(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Email',
-            style: TextStyle(
-              color: Color(0xFF151717),
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 10),
-          InputFieldWidget(
-            controller: emailController,
-            hintText: "Enter your Email",
-            obscureText: false,
-            icon: Icons.email,
-          ),
-          const SizedBox(height: 10),
-          const Text(
-            'Password',
-            style: TextStyle(
-              color: Color(0xFF151717),
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 10),
-          InputFieldWidget(
-            controller: passwordController,
-            hintText: "Enter your Password",
-            obscureText: true,
-            icon: Icons.lock,
-          ),
-          const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Checkbox(
-                    value: rememberMe,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        rememberMe = value ?? false;
-                      });
-                    },
-                  ),
-                  const Text(
-                    'Remember me',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ],
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 48),
+
+            // LOGO SPARK
+            Center(
+              child: Image.asset(
+                'lib/assets/logo/spark_logo.jpg',
+                height: 100,
+                fit: BoxFit.contain,
               ),
-              GestureDetector(
-                onTap: () {
-                  // Ação para "Forgot password?" pode ser implementada aqui
-                },
-                child: const Text(
-                  'Forgot password?',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Color(0xFF2d79f3),
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+            ),
+            const SizedBox(height: 32),
+
+            // E-MAIL
+            const Text(
+              'Email',
+              style: TextStyle(
+                color: Color(0xFF151717),
+                fontWeight: FontWeight.w600,
               ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          SizedBox(
-            height: 50,
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () {
-                final authController = Modular.get<AuthController>();
-                authController.login(
-                  emailController.text, 
-                  passwordController.text, 
-                  context,
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF151717),
-                shape: RoundedRectangleBorder(
+            ),
+            const SizedBox(height: 8),
+            TextFormField(
+              controller: emailController,
+              keyboardType: TextInputType.emailAddress,
+              decoration: InputDecoration(
+                hintText: 'Enter your Email',
+                prefixIcon: Icon(Icons.email, color: AppColors.primaryColor),
+                border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              child: const Text(
-                'Sign In',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
-                ),
+              validator: (v) =>
+                  v == null || v.isEmpty ? 'Informe seu e-mail' : null,
+            ),
+
+            const SizedBox(height: 16),
+
+             const Text(
+              'Password',
+              style: TextStyle(
+                color: Color(0xFF151717),
+                fontWeight: FontWeight.w600,
               ),
             ),
-          ),
-          const SizedBox(height: 10),
-          Center(
-            child: Column(
-              children: [
-                const Text(
-                  "Don't have an account?",
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.black,
+            const SizedBox(height: 8),
+            TextFormField(
+              controller: passwordController,
+              obscureText: _obscurePassword,
+              decoration: InputDecoration(
+                hintText: 'Enter your Password',
+                prefixIcon: Icon(Icons.lock, color: AppColors.primaryColor),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _obscurePassword
+                        ? Icons.visibility_off
+                        : Icons.visibility,
+                    color: AppColors.primaryColor,
                   ),
+                  onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
                 ),
-                const SizedBox(height: 5),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              validator: (v) =>
+                  v == null || v.isEmpty ? 'Informe sua senha' : null,
+            ),
+
+            const SizedBox(height: 16),
+
+            // Remember me / Forgot
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Checkbox(
+                      value: rememberMe,
+                      activeColor: AppColors.primaryColor,
+                      onChanged: (v) => setState(() => rememberMe = v ?? false),
+                    ),
+                    const Text(
+                      'Remember me',
+                      style: TextStyle(fontSize: 14),
+                    ),
+                  ],
+                ),
                 GestureDetector(
-                  onTap: () {
-                    // Se necessário, implementar ação de Sign Up
-                  },
-                  child: const Text(
-                    'Sign Up',
+                  onTap: () {},
+                  child: Text(
+                    'Forgot password?',
                     style: TextStyle(
                       fontSize: 14,
-                      color: Color(0xFF2d79f3),
+                      color: AppColors.primaryColor,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
               ],
             ),
-          ),
-          const SizedBox(height: 5),
-          const Center(
-            child: Text(
-              "Or With",
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.black,
+
+            const SizedBox(height: 24),
+
+            // SIGN IN BUTTON
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: () {
+                  final authController = Modular.get<AuthController>();
+                  authController.login(
+                    emailController.text,
+                    passwordController.text,
+                    context,
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primaryColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: const Text(
+                  'Sign In',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white,
+                  ),
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 10),
-          Row(
-            children: [
-              Expanded(
-                child: SocialLoginButton(
-                  svgCode: googleSvg,
-                  label: 'Google',
-                  onPressed: () {
-                    // Implementar login com Google, se necessário
-                  },
-                ),
+
+            const SizedBox(height: 16),
+
+            // SIGN UP
+            Center(
+              child: Column(
+                children: [
+                  const Text("Don't have an account?"),
+                  const SizedBox(height: 8),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Text(
+                      'Sign Up',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: AppColors.primaryColor,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: SocialLoginButton(
-                  svgCode: appleSvg,
-                  label: 'Apple',
-                  onPressed: () {
-                    // Implementar login com Apple, se necessário
-                  },
+            ),
+
+            const SizedBox(height: 24),
+
+            // "Or With"
+            const Center(child: Text("Or With")),
+            const SizedBox(height: 16),
+
+            // SOCIAL LOGIN BUTTONS
+            Row(
+              children: [
+                Expanded(
+                  child: SocialLoginButton(
+                    svgCode: googleSvg,
+                    label: 'Google',
+                    onPressed: () {},
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
+                const SizedBox(width: 12),
+                Expanded(
+                  child: SocialLoginButton(
+                    svgCode: appleSvg,
+                    label: 'Apple',
+                    onPressed: () {},
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 24),
+          ],
+        ),
       ),
     );
   }

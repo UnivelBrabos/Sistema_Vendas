@@ -76,6 +76,7 @@ flutter:
   assets:
     - lib/assets/images/carrinho.png
     - .env
+    - lib/assets/logo/spark_logo.jpg
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -1,44 +1,46 @@
 import 'package:flutter/material.dart';
+import '../core/app_colors.dart';
 
-class InputFieldWidget extends StatelessWidget {
+class InputFieldWidget extends StatefulWidget {
   final TextEditingController controller;
-  final String hintText;
-  final bool obscureText;
-  final IconData icon;
+  final String label;
+  final bool isPassword;
 
   const InputFieldWidget({
     Key? key,
     required this.controller,
-    required this.hintText,
-    this.obscureText = false,
-    required this.icon,
+    required this.label,
+    this.isPassword = false,
   }) : super(key: key);
 
   @override
+  _InputFieldWidgetState createState() => _InputFieldWidgetState();
+}
+
+class _InputFieldWidgetState extends State<InputFieldWidget> {
+  bool _obscure = true;
+
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 50,
-      padding: const EdgeInsets.only(left: 10),
-      decoration: BoxDecoration(
-        border: Border.all(color: const Color(0xFFecedec), width: 1.5),
-        borderRadius: BorderRadius.circular(10),
+    return TextFormField(
+      controller: widget.controller,
+      obscureText: widget.isPassword ? _obscure : false,
+      decoration: InputDecoration(
+        labelText: widget.label,
+        border: const OutlineInputBorder(),
+        suffixIcon: widget.isPassword
+            ? IconButton(
+                icon: Icon(
+                  _obscure ? Icons.visibility_off : Icons.visibility,
+                  color: AppColors.primaryColor,
+                ),
+                onPressed: () {
+                  setState(() => _obscure = !_obscure);
+                },
+              )
+            : null,
       ),
-      child: Row(
-        children: [
-          Icon(icon, size: 20),
-          const SizedBox(width: 10),
-          Expanded(
-            child: TextFormField(
-              controller: controller,
-              obscureText: obscureText,
-              decoration: InputDecoration(
-                hintText: hintText,
-                border: InputBorder.none,
-              ),
-            ),
-          ),
-        ],
-      ),
+      validator: (v) => v != null && v.isEmpty ? 'Preencha este campo' : null,
     );
   }
 }
