@@ -280,11 +280,11 @@ namespace Sistema_Vendas.Controller
         {
             try
             {
-                objGrafico.Series = new SeriesCollection();
+                SeriesCollection Series = new SeriesCollection();
                 List<Vendas> lstAuxiliar = new();
                 List<Cliente> lstClientesAuxiliar = new();
 
-                if (pFiltrar)
+                /*if (pFiltrar)
                 {
                     lstAuxiliar = PersistDataService.Instance.lstVendas.Where(d => (d.DataVenda >= Convert.ToDateTime(pFiltros.Inicial) &&
                                                               d.DataVenda <= Convert.ToDateTime(pFiltros.Final)) &&
@@ -292,12 +292,11 @@ namespace Sistema_Vendas.Controller
                                                               pFiltros.IdClientes.Contains(d.IdCliente)).ToList();
 
                     lstClientesAuxiliar = PersistDataService.Instance.lstClientes.Where(p => pFiltros.IdClientes.Contains(p.IdCliente)).ToList();
-                }
-                else
-                {
-                    lstAuxiliar = PersistDataService.Instance.lstVendas;
-                    lstClientesAuxiliar = PersistDataService.Instance.lstClientes;
-                }
+                }*/
+
+                lstAuxiliar = PersistDataService.Instance.lstVendas;
+                lstClientesAuxiliar = PersistDataService.Instance.lstClientes;
+
 
                 var lstFiltrada = lstClientesAuxiliar
                     .GroupJoin(lstAuxiliar,
@@ -318,7 +317,7 @@ namespace Sistema_Vendas.Controller
 
                 foreach (var item in topClientes)
                 {
-                    objGrafico.Series.Add(new PieSeries
+                    Series.Add(new PieSeries
                     {
                         Title = item.Nome,
                         Values = new ChartValues<double> { Convert.ToDouble(item.Total) }
@@ -327,20 +326,22 @@ namespace Sistema_Vendas.Controller
 
                 if (lstFiltrada.Count > 5)
                 {
-                    objGrafico.Series.Add(new PieSeries
+                    Series.Add(new PieSeries
                     {
                         Title = "Outros",
                         Values = new ChartValues<double> { Convert.ToDouble(outrosTotal) }
                     });
                 }
+
+                pGraficosAuxiliar.SeriesClientes = Series;
             }
             catch (Exception ex)
             {
-                pRetorno = $"Erro durante cálculo de participação de lucros: {ex.Message}";
+                strRetorno = $"Erro durante cálculo de participação de lucros: {ex.Message}";
                 return false;
             }
 
-            pRetorno = "Sucesso";
+            strRetorno = "Sucesso";
             return true;
         }
 

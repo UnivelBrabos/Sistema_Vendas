@@ -18,6 +18,5 @@ namespace Sistema_Vendas.Model.DashboardModel
 
         // Melhores Clientes 
         public SeriesCollection SeriesClientes { get; set; }
-        public decimal TotalOutros { get; set; }
     }
 }

@@ -150,27 +150,6 @@ namespace Sistema_Vendas
 
         public void Graficos(bool pFiltrar, Filtros pFiltros)
         {
-            string strMensagem;
-
-            if(!GraficosController.MaisVendidos(ref ProdutosCharControl, pFiltrar, pFiltros, out strMensagem))
-            {
-                MessageBox.Show(strMensagem);
-            }
-
-            /*if (!GraficosController.ParticipacaoLucros(ref VendedoresChartControl, pFiltrar, pFiltros, out strMensagem))
-            {
-                MessageBox.Show(strMensagem);
-            }*/
-
-            if (!GraficosController.VendasMensais(ref VendasCharControl, pFiltrar, pFiltros, out strMensagem))
-            {
-                MessageBox.Show(strMensagem);
-            }
-
-            if (!GraficosController.MelhoresClientes(ref ClientesChartControl, pFiltrar, pFiltros, out strMensagem))
-            {
-                MessageBox.Show(strMensagem);
-            }
         }
 
         #endregion :: Carregamento dos gráficos ::
