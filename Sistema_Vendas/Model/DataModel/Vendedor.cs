@@ -3,31 +3,31 @@ using System.Windows;
 using Sistema_Vendas.Interfaces;
 using Newtonsoft.Json;
 
-namespace Sistema_Vendas.Model
+namespace Sistema_Vendas.Model.DataModel
 {
     public class Vendedor : IModel<Vendedor>
     {
         #region :: Atributos ::
 
-        [JsonProperty("id_vendedor")] 
-        public int IdVendedor {get; set;}
+        [JsonProperty("id_vendedor")]
+        public int IdVendedor { get; set; }
 
         [JsonProperty("nome")]
-        public string Nome { get; set;}
+        public string Nome { get; set; }
 
         [JsonProperty("email")]
-        public string Email { get; set;}
+        public string Email { get; set; }
 
         [JsonProperty("telefone")]
-        public string Telefone { get; set;}
+        public string Telefone { get; set; }
 
         [JsonProperty("data_contratacao")]
-        public string DataContratacao {  get; set;}
+        public string DataContratacao { get; set; }
 
         #endregion :: Atributos ::
 
         #region :: Construtor ::
-        
+
         public Vendedor() { }
 
         #endregion :: Construtor ::

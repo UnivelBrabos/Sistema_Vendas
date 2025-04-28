@@ -1,4 +1,4 @@
-﻿using Sistema_Vendas.Model;
+﻿using Sistema_Vendas.Model.DataModel;
 using System.Net.Http;
 using System.Security.Policy;
 using System.Text;

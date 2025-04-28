@@ -3,7 +3,7 @@ using Sistema_Vendas.Data;
 using System.Windows;
 using Newtonsoft.Json;
 
-namespace Sistema_Vendas.Model
+namespace Sistema_Vendas.Model.DataModel
 {
     public class ItensVenda : IModel<ItensVenda>
     {
@@ -21,7 +21,7 @@ namespace Sistema_Vendas.Model
         public int QuantidadeLote { get; set; }
 
         [JsonProperty("sub_total")]
-        public double SubTotal {  get; set; }
+        public double SubTotal { get; set; }
 
         #endregion :: Atributos ::
 

@@ -3,6 +3,7 @@ using LiveCharts.Wpf;
 using Sistema_Vendas.Controller;
 using Sistema_Vendas.Data;
 using Sistema_Vendas.Model;
+using Sistema_Vendas.Model.DataModel;
 using Sistema_Vendas.Model.FilteredModel;
 using Sistema_Vendas.View;
 using System.Collections.ObjectModel;

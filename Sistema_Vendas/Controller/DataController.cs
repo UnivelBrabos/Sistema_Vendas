@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using Sistema_Vendas.Model;
+using Sistema_Vendas.Model.DataModel;
 using Sistema_Vendas.Service;
 using System.Net.Http;
 using System.Text.Json;

@@ -1,6 +1,8 @@
 ﻿using LiveCharts;
 using LiveCharts.Wpf;
-using Sistema_Vendas.Model;
+using Sistema_Vendas.Interfaces;
+using Sistema_Vendas.Model.DashboardModel;
+using Sistema_Vendas.Model.DataModel;
 using Sistema_Vendas.Model.FilteredModel;
 using Sistema_Vendas.Service;
 using System.Globalization;
@@ -10,12 +12,93 @@ namespace Sistema_Vendas.Controller
 {
     public class DashboardController
     {
-        public DashboardController()
+        private IDashboard _Dashboard;
+
+        public DashboardController(IDashboard Dashboard)
         {
+            _Dashboard = Dashboard;
+            _Dashboard.EventLoaded += TrataDashboard;
         }
 
-        public bool MaisVendidos(ref CartesianChart objGrafico, bool pFiltrar, Filtros pFiltros, out string pRetorno)
+        private void TrataDashboard(object sender, EventArgs e)
         {
+            DadosGraficos();
+            CarregaCards();
+        }
+
+        public void CarregaCards()
+        {
+            List<Cliente> lstClientes = PersistDataService.Instance.lstClientes;
+            List<Vendas> lstVendas = PersistDataService.Instance.lstVendas;
+
+            try
+            {
+                Cards cards = new Cards();
+
+                cards.TotalVendas = PersistDataService.Instance.lstVendas.Count.ToString();
+                cards.TotalVendido = PersistDataService.Instance.lstVendas.Sum(p => p.TotalVenda).ToString();
+
+                cards.MelhorCliente = lstClientes
+                                        .GroupJoin(lstVendas,
+                                                   c => c.IdCliente,
+                                                   v => v.IdCliente,
+                                                   (c, v) => new
+                                                   {
+                                                       Nome = c.Nome,
+                                                       Total = v.Sum(t => t.TotalVenda)
+                                                   })
+                                        .OrderByDescending(c => c.Total)
+                                        .ToList()
+                                        .Take(1)
+                                        .FirstOrDefault().Nome;
+
+                _Dashboard.CarregaCards(cards);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro ao carrega Cards: {ex.Message}");
+            }
+        }
+
+        private void DadosGraficos()
+        {
+            GraficosModel GraficosAuxiliar = new();
+            string strMensagemRetorno = string.Empty;
+
+            try
+            {
+
+                if (!MaisVendidos(ref GraficosAuxiliar, out strMensagemRetorno))
+                {
+                    throw new Exception(strMensagemRetorno);
+                }
+
+                if (!ParticipacaoLucros(ref GraficosAuxiliar, out strMensagemRetorno))
+                {
+                    throw new Exception(strMensagemRetorno);
+                }
+
+                if (!VendasMensais(ref GraficosAuxiliar, out strMensagemRetorno))
+                {
+                    throw new Exception(strMensagemRetorno);
+                }
+
+                if (!MelhoresClientes(ref GraficosAuxiliar, out strMensagemRetorno))
+                {
+                    throw new Exception(strMensagemRetorno);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro ao carregar gráficos: {ex.Message}");
+            }
+        }
+
+        public bool MaisVendidos(ref GraficosModel pGraficosAuxiliar, out string strRetorno)
+        {
+            // Tratar uma rowSeries e um string[]
+
             try
             {
                 RowSeries rowSeries = new RowSeries
@@ -28,14 +111,14 @@ namespace Sistema_Vendas.Controller
 
                 var lstFiltrada = GraficoMainVendidos();
 
-                if (pFiltrar)
+                /*if (pFiltrar)
                 {
                     #region :: Por Data ::
 
                     lstFiltrada = FiltrarVendidosPorData(lstFiltrada, pFiltros);
 
                     #endregion :: Por Data ::
-                }
+                }*/
 
                 var lstMaisVendidos = lstFiltrada.OrderByDescending(p => p.TotalVendido)
                                       .Take(5)
@@ -48,33 +131,29 @@ namespace Sistema_Vendas.Controller
                     labelsY[i] = lstMaisVendidos[i].Produto;
                 }
 
-                objGrafico.Series = new SeriesCollection
-                {
-                    rowSeries
-                };
-
-                objGrafico.AxisY[0].Labels = labelsY;
+                pGraficosAuxiliar.SeriesMaisVendidos = rowSeries;
+                pGraficosAuxiliar.LabelsY = labelsY;
             }
             catch (Exception ex)
             {
-                pRetorno = $"Erro ao criar gráfico de vendas: {ex.Message}";
+                strRetorno = $"Erro ao criar gráfico de vendas: {ex.Message}";
                 return false;
             }
 
-            pRetorno = "Sucesso";
+            strRetorno = "Sucesso";
             return true;
         }
 
-        public bool ParticipacaoLucros(ref PieChart objGrafico, bool pFiltrar, Filtros pFiltros, out string pRetorno)
+        public bool ParticipacaoLucros(ref GraficosModel pGraficosAuxiliar, out string strRetorno)
         {
             try
             {
-                objGrafico.Series = new SeriesCollection();
+                SeriesCollection Series = new SeriesCollection();
 
                 List<Vendas> lstAuxiliar = new();
                 List<Vendedor> lstVendedoresAuxiliar = new();
 
-                if (pFiltrar)
+                /*if (pFiltrar)
                 {
                     lstAuxiliar = PersistDataService.Instance.lstVendas.Where(p => (p.DataVenda >= pFiltros.Inicial &&
                                                               p.DataVenda <= pFiltros.Final) &&
@@ -82,12 +161,10 @@ namespace Sistema_Vendas.Controller
                                                               pFiltros.IdClientes.Contains(p.IdCliente)).ToList();
 
                     lstVendedoresAuxiliar = PersistDataService.Instance.lstVendedores.Where(p => pFiltros.IdVendedores.Contains(p.IdVendedor)).ToList();
-                }
-                else
-                {
-                    lstAuxiliar = PersistDataService.Instance.lstVendas;
-                    lstVendedoresAuxiliar = PersistDataService.Instance.lstVendedores;
-                }
+                }*/
+
+                lstAuxiliar = PersistDataService.Instance.lstVendas;
+                lstVendedoresAuxiliar = PersistDataService.Instance.lstVendedores;
 
                 for (int i = 0; i < lstVendedoresAuxiliar.Count; i++)
                 {
@@ -102,30 +179,34 @@ namespace Sistema_Vendas.Controller
                                      .Sum(p => p.TotalVenda))
                         };
 
-                    objGrafico.Series.Add(pieSeries);
+                    Series.Add(pieSeries);
                 }
 
+                pGraficosAuxiliar.SeriesParticipacao = Series;
             }
             catch (Exception ex)
             {
-                pRetorno = $"Erro ao carregar gráfico de participação: {ex.Message}";
+                strRetorno = $"Erro ao carregar gráfico de participação: {ex.Message}";
                 return false;
             }
 
-            pRetorno = "Sucesso";
+            strRetorno = "Sucesso";
             return true;
         }
 
-        public bool VendasMensais(ref CartesianChart objGrafico, bool pFiltrar, Filtros pFiltros, out string pRetorno)
+        public bool VendasMensais(ref GraficosModel pGraficosAuxiliar, out string strRetorno)
         {
             List<Vendas> lstAuxiliar = new();
 
             try
             {
-                // Limpa os dados anteriores do gráfico
-                objGrafico.Series.Clear();
-                objGrafico.AxisX.Clear();
-                objGrafico.AxisY.Clear();
+                SeriesCollection Series = new();
+
+                Axis AxisY = new()
+                {
+                    Title = "Vendas",
+                    LabelFormatter = value => value.ToString("N")
+                };
 
                 // Cria a série de colunas
                 ColumnSeries columnSeries = new ColumnSeries()
@@ -142,26 +223,24 @@ namespace Sistema_Vendas.Controller
                     VerticalAlignment = VerticalAlignment.Center
                 };
 
-                // Define o eixo Y
+                /* Tem que ser feito na View
                 objGrafico.AxisY.Add(new Axis
                 {
                     Title = "Vendas",
                     LabelFormatter = value => value.ToString("N")
                 });
+                */
 
-
-                if (pFiltrar)
+                /*if (pFiltrar)
                 {
                     lstAuxiliar = PersistDataService.Instance.lstVendas
                                         .Where(d => ((d.DataVenda >= Convert.ToDateTime(pFiltros.Inicial) &&
                                                     (d.DataVenda <= Convert.ToDateTime(pFiltros.Final)))) &&
                                                      pFiltros.IdVendedores.Contains(d.IdVendedor) &&
                                                      pFiltros.IdClientes.Contains(d.IdCliente)).ToList();
-                }
-                else
-                {
-                    lstAuxiliar = PersistDataService.Instance.lstVendas;
-                }
+                }*/
+
+                lstAuxiliar = PersistDataService.Instance.lstVendas;
 
                 var lstVendasOrg = lstAuxiliar
                     .GroupBy(p => new { p.DataVenda.Year, p.DataVenda.Month })
@@ -183,22 +262,21 @@ namespace Sistema_Vendas.Controller
                     EixoX.Labels.Add(venda.MesNome);
                 }
 
-                // Adiciona os eixos e séries ao gráfico
-                objGrafico.AxisX.Add(EixoX);
-                objGrafico.Series.Add(columnSeries);
+                pGraficosAuxiliar.SeriesVendas.Add(columnSeries);
+                pGraficosAuxiliar.VendasEixos = [EixoX, AxisY];
             }
             catch (Exception ex)
             {
-                pRetorno = $"Erro durante cálculo das vendas por mês: {ex.Message}";
+                strRetorno = $"Erro durante cálculo das vendas por mês: {ex.Message}";
 
                 return false;
             }
 
-            pRetorno = "Sucesso";
+            strRetorno = "Sucesso";
             return true;
         }
 
-        public bool MelhoresClientes(ref PieChart objGrafico, bool pFiltrar, Filtros pFiltros, out string pRetorno)
+        public bool MelhoresClientes(ref GraficosModel pGraficosAuxiliar, out string strRetorno)
         {
             try
             {
@@ -233,9 +311,9 @@ namespace Sistema_Vendas.Controller
                     .OrderByDescending(c => c.Total)
                     .ToList();
 
-                
+
                 var topClientes = lstFiltrada.Take(5).ToList();
-                
+
                 decimal outrosTotal = lstFiltrada.Skip(5).Sum(c => c.Total);
 
                 foreach (var item in topClientes)
@@ -307,52 +385,6 @@ namespace Sistema_Vendas.Controller
             .OrderByDescending(p => p.TotalVendido);
         }
 
-        public bool CarregaCards(bool pFiltrar, Filtros pFiltros, out string pRetorno)
-        {
-            try
-            {
-                /*lblTotalVendas.Content = PersistDataService.Instance.lstVendas.Count.ToString();
-                lblTotalRecebido.Content = PersistDataService.Instance.lstVendas.Sum(p => p.TotalVenda).ToString();*/
-            }
-            catch(Exception ex)
-            {
-                pRetorno = $"Falha ao carregar cards: {ex.Message}";
-                return false; 
-            }
 
-            pRetorno = "Sucesso";
-            return true;
-        }
-
-        public string RetornaTotalVendas()
-        {
-            return PersistDataService.Instance.lstVendas.Count.ToString();
-        }
-
-        public string RetornaTotalRecebido()
-        {
-            return PersistDataService.Instance.lstVendas.Sum(p => p.TotalVenda).ToString();
-        }
-
-        public string RetornaMelhorCliente()
-        {
-            List<Cliente> lstClientes = PersistDataService.Instance.lstClientes;
-            List<Vendas> lstVendas = PersistDataService.Instance.lstVendas;
-
-            return lstClientes
-                    .GroupJoin(lstVendas,
-                               c => c.IdCliente,
-                               v => v.IdCliente,
-                               (c, v) => new
-                               {
-                                   Nome = c.Nome,
-                                   Total = v.Sum(t => t.TotalVenda)
-                               })
-                    .OrderByDescending(c => c.Total)
-                    .ToList()
-                    .Take(1)
-                    .FirstOrDefault().Nome;
-        }
- 
     }
 }

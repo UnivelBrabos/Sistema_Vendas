@@ -3,7 +3,7 @@ using Sistema_Vendas.Data;
 using Newtonsoft.Json;
 using System.Windows;
 
-namespace Sistema_Vendas.Model
+namespace Sistema_Vendas.Model.DataModel
 {
     public class Usuarios : IModel<Usuarios>
     {

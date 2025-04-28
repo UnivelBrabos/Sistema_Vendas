@@ -2,7 +2,7 @@
 using System.Windows;
 using Sistema_Vendas.View;
 using Sistema_Vendas.Controller;
-using Sistema_Vendas.Model;
+using Sistema_Vendas.Model.DataModel;
 
 namespace Sistema_Vendas
 {
@@ -15,6 +15,8 @@ namespace Sistema_Vendas
 
         public static MenuPrincipal? menuPrincipal { get; set; }
 
+        public static DashBoardView? DashBoardView { get; set; }
+
         public static ContentController? contentController { get; set; }
 
         public static DataController? dataController { get; set; }
@@ -25,8 +27,11 @@ namespace Sistema_Vendas
         {
             base.OnStartup(e);
 
-            ConnectionService _ = ConnectionService.Instance;
+            ConnectionService ConnService = ConnectionService.Instance;
+            ContentService ContService = ContentService.Instance;
+            
             menuPrincipal = new();
+            DashBoardView = new();
 
             InitControllers();
 
@@ -37,8 +42,8 @@ namespace Sistema_Vendas
         private void InitControllers()
         {
             contentController = new(menuPrincipal);
+            dashBoardController = new(DashBoardView);
             dataController = new();
-            dashBoardController = new();
         }
 
         public static void SetUsuario(Usuarios pUsuarioLogado)

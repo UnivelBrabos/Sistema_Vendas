@@ -1,5 +1,4 @@
-﻿using System.Windows.Shapes;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 namespace Sistema_Vendas.Interfaces
 {

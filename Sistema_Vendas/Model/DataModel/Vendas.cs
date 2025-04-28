@@ -3,14 +3,14 @@ using Sistema_Vendas.Data;
 using Newtonsoft.Json;
 using System.Windows;
 
-namespace Sistema_Vendas.Model
+namespace Sistema_Vendas.Model.DataModel
 {
     public class Vendas : IModel<Vendas>
     {
         #region :: Atributos ::
 
         [JsonProperty("id_venda")]
-        public int IdVenda {  get; set; }
+        public int IdVenda { get; set; }
 
         [JsonProperty("id_Vendedor")]
         public int IdVendedor { get; set; }
@@ -19,13 +19,13 @@ namespace Sistema_Vendas.Model
         public int IdCliente { get; set; }
 
         [JsonProperty("data_venda")]
-        public DateTime DataVenda {  get; set; }
+        public DateTime DataVenda { get; set; }
 
         [JsonProperty("total")]
         public decimal TotalVenda { get; set; }
 
         [JsonProperty("desconto")]
-        public int Desconto {  get; set; }
+        public int Desconto { get; set; }
 
         #endregion :: Atributos ::
 

@@ -3,7 +3,7 @@ using System.Windows;
 using Sistema_Vendas.Interfaces;
 using Newtonsoft.Json;
 
-namespace Sistema_Vendas.Model
+namespace Sistema_Vendas.Model.DataModel
 {
     public class Cliente : IModel<Cliente>
     {
@@ -16,7 +16,7 @@ namespace Sistema_Vendas.Model
         public string Nome { get; set; }
 
         [JsonProperty("cnpj")]
-        public string CNPJ {  get; set; }
+        public string CNPJ { get; set; }
 
         [JsonProperty("telefone")]
         public string Telefone { get; set; }

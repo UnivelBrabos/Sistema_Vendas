@@ -1,4 +1,4 @@
-﻿using Sistema_Vendas.Model;
+﻿using Sistema_Vendas.Model.DataModel;
 namespace Sistema_Vendas.Service
 {
     public class PersistDataService
