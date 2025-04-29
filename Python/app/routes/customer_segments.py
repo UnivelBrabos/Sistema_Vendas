@@ -4,7 +4,7 @@ from fastapi import APIRouter
 
 router = APIRouter()
 
-@router.post('/customer_segments/post', response_model=SegmentosCliente)
+@router.post('/customer_segments/post')
 def insert_customer_segments(segments: SegmentosClienteCreate):
     data = supabase.table("segmentos_cliente").insert(
         segments.model_dump(exclude_none=True)

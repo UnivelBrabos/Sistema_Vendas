@@ -1,5 +1,5 @@
 from app.connection_db import supabase
-from app.schemas.vendas import VendasCreate, Vendas, VendasUpdate
+from app.schemas.vendas import VendasCreate, VendasUpdate
 from fastapi import APIRouter, Depends
 
 router = APIRouter()

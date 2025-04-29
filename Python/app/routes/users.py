@@ -1,10 +1,10 @@
 from app.connection_db import supabase
-from app.schemas.usuarios import UsuariosCreate, Usuarios, UsuariosUpdate
+from app.schemas.usuarios import UsuariosCreate, UsuariosUpdate
 from fastapi import APIRouter, Depends
 
 router = APIRouter()
 
-@router.post('/users/post', response_model=Usuarios)
+@router.post('/users/post')
 def insert_users(users: UsuariosCreate):
     serielized_data = users.model_dump(exclude_none=True)
     serielized_data['criado_em'] = users.criado_em.isoformat() 
