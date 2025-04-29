@@ -67,7 +67,6 @@ namespace Sistema_Vendas.Controller
 
             try
             {
-
                 if (!MaisVendidos(ref GraficosAuxiliar, out strMensagemRetorno))
                 {
                     throw new Exception(strMensagemRetorno);
@@ -88,6 +87,7 @@ namespace Sistema_Vendas.Controller
                     throw new Exception(strMensagemRetorno);
                 }
 
+                _Dashboard.CarregaGraficos(GraficosAuxiliar);
             }
             catch (Exception ex)
             {
@@ -97,8 +97,6 @@ namespace Sistema_Vendas.Controller
 
         public bool MaisVendidos(ref GraficosModel pGraficosAuxiliar, out string strRetorno)
         {
-            // Tratar uma rowSeries e um string[]
-
             try
             {
                 RowSeries rowSeries = new RowSeries
@@ -200,7 +198,7 @@ namespace Sistema_Vendas.Controller
 
             try
             {
-                SeriesCollection Series = new();
+                pGraficosAuxiliar.SeriesVendas = new();
 
                 Axis AxisY = new()
                 {
@@ -263,7 +261,7 @@ namespace Sistema_Vendas.Controller
                 }
 
                 pGraficosAuxiliar.SeriesVendas.Add(columnSeries);
-                pGraficosAuxiliar.VendasEixos = [EixoX, AxisY];
+                pGraficosAuxiliar.VendasEixos = [EixoX];
             }
             catch (Exception ex)
             {

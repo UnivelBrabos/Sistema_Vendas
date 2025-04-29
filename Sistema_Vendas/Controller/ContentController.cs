@@ -43,7 +43,7 @@ namespace Sistema_Vendas.Controller
 
         public void SetContentDashboard(object sender, EventArgs e)
         {
-            DashBoardView Dashboard = new();
+            DashBoardView Dashboard = App.DashBoardView;
             _View.ShowContent(Dashboard, 0);
         }
     }

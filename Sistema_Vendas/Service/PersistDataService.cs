@@ -28,12 +28,12 @@ namespace Sistema_Vendas.Service
 
         public async Task InitAsync()
         {
+            lstUsuarios = await Usuarios.GetModel();
             lstProdutos = await Produto.GetModel();
             lstClientes = await Cliente.GetModel();
             lstVendas = await Vendas.GetModel();
             lstVendedores = await Vendedor.GetModel();
             lstItensVenda = await ItensVenda.GetModel();
-            lstUsuarios = await Usuarios.GetModel();
         }
     }
 

@@ -7,7 +7,7 @@ namespace Sistema_Vendas.Interfaces
     {
         event EventHandler EventLoaded;
 
-        void CarregaGraficos();
+        void CarregaGraficos(GraficosModel pGraficos);
 
         void CarregaCards(Cards pCards);
     }

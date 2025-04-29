@@ -58,7 +58,7 @@ namespace Sistema_Vendas.View
             botoes[pIndex].Opacity = 0.1;
         }
 
-        public void ShowContent(UserControl userControl, int pIndex)
+        public void ShowContent(UserControl userControl, int pIndex)    
         {
             grdConteudo.Children.Clear();
             grdConteudo.Children.Add(userControl);

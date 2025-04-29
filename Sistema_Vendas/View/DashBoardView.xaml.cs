@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using LiveCharts.Wpf;
 using Sistema_Vendas.Controller;
 using Sistema_Vendas.Interfaces;
 using Sistema_Vendas.Model.DashboardModel;
@@ -28,8 +29,40 @@ namespace Sistema_Vendas.View
             lblTotalVendas.Content = pCards.TotalVendas;
         }
 
-        public void CarregaGraficos()
+        public void CarregaGraficos(GraficosModel pGraficos)
         {
+            CarregaVendasMensais(pGraficos);
+            CarregaMelhoresVendedores(pGraficos);
+            CarregaMelhoresClientes(pGraficos);
+            CarregaMelhoresProdutos(pGraficos);
+        }
+
+        private void CarregaVendasMensais(GraficosModel pGraficos)
+        {
+            VendasMensalCharControl.AxisY.Add(new Axis
+            {
+                Title = "Vendas",
+                LabelFormatter = value => value.ToString("N")
+            });
+
+            VendasMensalCharControl.AxisX.Add(pGraficos.VendasEixos[0]);
+            VendasMensalCharControl.Series = pGraficos.SeriesVendas;
+        }
+
+        private void CarregaMelhoresVendedores(GraficosModel pGraficos)
+        {
+            MelhoresVendedoresChartControl.Series = pGraficos.SeriesParticipacao;
+        }
+
+        private void CarregaMelhoresClientes(GraficosModel pGraficos)
+        {
+            MelhoresClientesChartControl.Series = pGraficos.SeriesClientes;
+        }
+
+        private void CarregaMelhoresProdutos(GraficosModel pGraficos)
+        {
+            MelhoresProdutosCharControl.Series.Add(pGraficos.SeriesMaisVendidos);
+            MelhoresProdutosCharControl.AxisY[0].Labels = pGraficos.LabelsY;
         }
     }
 }

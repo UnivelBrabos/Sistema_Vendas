@@ -44,7 +44,7 @@
 
             <Grid Name="grdVendedores">
                 <Rectangle x:Name="RetVendedores" Height="303" Margin="0,16,10,0" RadiusX="20" RadiusY="20" VerticalAlignment="Top" Fill="White" HorizontalAlignment="Right" Width="387"/>
-                <lvc:PieChart x:Name="VendedoresChartControl" 
+                <lvc:PieChart x:Name="MelhoresVendedoresChartControl" 
                   LegendLocation="Right"
                   InnerRadius="50"
                   Foreground="Black"
@@ -60,7 +60,7 @@
 
             <Grid Name ="grdVendaMensal">
                 <Rectangle Height="234" Margin="10,84,415,0" RadiusX="20" RadiusY="20" VerticalAlignment="Top" Fill="White"/>
-                <lvc:CartesianChart x:Name="VendasCharControl" Margin="22,95,425,0" 
+                <lvc:CartesianChart x:Name="VendasMensalCharControl" Margin="22,95,425,0" 
                     Background="White"
                     Foreground="Black"
                     FontSize="14" 
@@ -70,7 +70,7 @@
 
             <Grid Name="grdProdutosMaisVendidos" Margin="463,341,10,10">
                 <Rectangle RadiusX="20" RadiusY="20" Fill="White"/>
-                <lvc:CartesianChart x:Name="ProdutosCharControl" 
+                <lvc:CartesianChart x:Name="MelhoresProdutosCharControl" 
                             Margin="10,10,10,10" 
                             Background="White" 
                             Foreground="Black" 
@@ -86,7 +86,7 @@
 
             <Grid Name="grdMelhoresClientes" HorizontalAlignment="Left" Margin="10,341,0,10" Width="433">
                 <Rectangle x:Name="RetClientes" RadiusX="20" RadiusY="20" Fill="White"/>
-                <lvc:PieChart x:Name="ClientesChartControl" 
+                <lvc:PieChart x:Name="MelhoresClientesChartControl" 
                       LegendLocation="Right"
                       InnerRadius="50"
                       Foreground="Black"
