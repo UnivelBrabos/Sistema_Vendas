@@ -39,6 +39,10 @@ namespace Sistema_Vendas.View
 
         private void CarregaVendasMensais(GraficosModel pGraficos)
         {
+            VendasMensalCharControl.AxisX.Clear();
+            VendasMensalCharControl.AxisY.Clear();
+            VendasMensalCharControl.Series.Clear();
+
             VendasMensalCharControl.AxisY.Add(new Axis
             {
                 Title = "Vendas",
@@ -51,16 +55,21 @@ namespace Sistema_Vendas.View
 
         private void CarregaMelhoresVendedores(GraficosModel pGraficos)
         {
+            MelhoresVendedoresChartControl.Series.Clear();
             MelhoresVendedoresChartControl.Series = pGraficos.SeriesParticipacao;
         }
 
         private void CarregaMelhoresClientes(GraficosModel pGraficos)
         {
+            MelhoresClientesChartControl.Series.Clear();
             MelhoresClientesChartControl.Series = pGraficos.SeriesClientes;
         }
 
         private void CarregaMelhoresProdutos(GraficosModel pGraficos)
         {
+            MelhoresProdutosCharControl.Series.Clear();
+            MelhoresProdutosCharControl.AxisY.Clear();
+
             MelhoresProdutosCharControl.Series.Add(pGraficos.SeriesMaisVendidos);
             MelhoresProdutosCharControl.AxisY[0].Labels = pGraficos.LabelsY;
         }

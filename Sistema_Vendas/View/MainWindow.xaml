@@ -187,7 +187,7 @@
         </Grid>
 
         <Image Source="/Imagens/Vendas_Icon.png" Stretch="Fill" Height="72" VerticalAlignment="Top" HorizontalAlignment="Left" Width="136"/>
-        <Button x:Name="btnAuditoria" Content="Auditoria" HorizontalAlignment="Left" Margin="358,18,0,0" VerticalAlignment="Top" Height="36" Width="100" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" FontFamily="Rockwell" FontSize="18" Click="btnAuditoria_Click">
+        <Button x:Name="btnAuditoria" Content="Auditoria" HorizontalAlignment="Left" Margin="342,18,0,0" VerticalAlignment="Top" Height="36" Width="100" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" FontFamily="Rockwell" FontSize="18" Click="btnAuditoria_Click">
             <Button.Style>
                 <Style TargetType="Button">
                     <Setter Property="Background" Value="Transparent"/>
