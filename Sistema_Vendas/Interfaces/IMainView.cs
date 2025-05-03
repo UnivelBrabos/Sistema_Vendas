@@ -8,6 +8,7 @@ namespace Sistema_Vendas.Interfaces
         event EventHandler eventAuditoria;
         event EventHandler eventFuncionarios;
         event EventHandler eventEstoque;
+        event EventHandler eventFiltrar;
 
         void ShowContent(UserControl userControl, int pIndex);
 

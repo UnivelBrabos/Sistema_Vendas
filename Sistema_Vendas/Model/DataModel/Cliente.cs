@@ -36,7 +36,7 @@ namespace Sistema_Vendas.Model.DataModel
 
         public static async Task<List<Cliente>> GetModel()
         {
-            return await App.dataController.GetListGeral<Cliente>("client", "Clientes");
+            return await App.Controller.Data.GetListGeral<Cliente>("client", "Clientes");
         }
 
         public static async Task<List<Cliente>> PostModel()

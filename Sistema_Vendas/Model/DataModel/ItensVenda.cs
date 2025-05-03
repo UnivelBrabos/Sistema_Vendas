@@ -33,7 +33,7 @@ namespace Sistema_Vendas.Model.DataModel
 
         public static Task<List<ItensVenda>> GetModel()
         {
-            return App.dataController.GetListGeral<ItensVenda>("sales_items", "Vendas de itens");
+            return App.Controller.Data.GetListGeral<ItensVenda>("sales_items", "Vendas de itens");
         }
 
         public static Task<List<ItensVenda>> PostModel()

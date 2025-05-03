@@ -21,6 +21,12 @@ namespace Sistema_Vendas.Controller
             _View.eventAuditoria += SetContentAuditoria;
             _View.eventFuncionarios += SetContentFuncionarios;
             _View.eventEstoque += SetContentEstoque;
+            _View.eventFiltrar += SetContentFiltrar;
+        }
+
+        private void SetContentFiltrar(object? sender, EventArgs e)
+        {
+
         }
 
         private void SetContentEstoque(object? sender, EventArgs e)

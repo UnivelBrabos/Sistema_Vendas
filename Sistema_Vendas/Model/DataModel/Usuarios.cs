@@ -37,7 +37,7 @@ namespace Sistema_Vendas.Model.DataModel
 
         public static Task<List<Usuarios>> GetModel()
         {
-            return App.dataController.GetListGeral<Usuarios>("users", "Usuários");
+            return App.Controller.Data.GetListGeral<Usuarios>("users", "Usuários");
         }
 
         public static Task<List<Usuarios>> PostModel()
