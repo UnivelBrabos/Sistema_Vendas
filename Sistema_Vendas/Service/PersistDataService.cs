@@ -3,12 +3,14 @@ namespace Sistema_Vendas.Service
 {
     public class PersistDataService
     {
+        #region :: Dados :: 
         public List<ItensVenda> lstItensVenda { get; private set; }
         public List<Vendedor> lstVendedores { get; private set; }
         public List<Produto> lstProdutos { get; private set; }
         public List<Cliente> lstClientes { get; private set; }
         public List<Vendas> lstVendas { get; private set; }
         public List<Usuarios> lstUsuarios { get; private set; }
+        #endregion :: Dados :: 
 
         private static PersistDataService _instance;
         private static readonly object _lock = new();

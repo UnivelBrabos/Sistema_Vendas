@@ -5,11 +5,11 @@ using System.Windows.Controls;
 
 namespace Sistema_Vendas.Controller
 {
-    public class ContentController
+    public class PrincipalController
     {
         private IMainView _View;
 
-        public ContentController(IMainView view)
+        public PrincipalController(IMainView view)
         {
             _View = view;
             SetEventControl();
@@ -25,25 +25,25 @@ namespace Sistema_Vendas.Controller
 
         private void SetContentEstoque(object? sender, EventArgs e)
         {
-           EstoqueView Estoque = new();
+           EstoqueView Estoque = App.View.Estoque;
             _View.ShowContent(Estoque, 3);
         }
 
         private void SetContentFuncionarios(object? sender, EventArgs e)
         {
-            FuncionarioView Funcionario = new();
+            FuncionarioView Funcionario = App.View.Funcionario;
             _View.ShowContent(Funcionario, 2);
         }
 
         private void SetContentAuditoria(object? sender, EventArgs e)
         {
-            AuditoriaView Auditoria = new();
+            AuditoriaView Auditoria = App.View.Auditoria;
             _View.ShowContent(Auditoria, 1);
         }
 
         public void SetContentDashboard(object sender, EventArgs e)
         {
-            DashBoardView Dashboard = App.DashBoardView;
+            DashBoardView Dashboard = App.View.Dashboard;
             _View.ShowContent(Dashboard, 0);
         }
     }

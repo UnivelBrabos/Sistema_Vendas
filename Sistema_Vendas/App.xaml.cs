@@ -13,37 +13,26 @@ namespace Sistema_Vendas
     {
         public static Usuarios? Usuario {  get; set; }
 
-        public static MenuPrincipal? menuPrincipal { get; set; }
-
-        public static DashBoardView? DashBoardView { get; set; }
-
-        public static ContentController? contentController { get; set; }
-
-        public static DataController? dataController { get; set; }
-
-        public static DashboardController? dashBoardController { get; set; }
+        public static ConnectionService Connection {  get; set; }
+        public static ContentService Content { get; set; }
+        public static ViewService View {  get; set; }
+        public static ControllerService Controller { get; set; }
 
         protected override async void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-
-            ConnectionService ConnService = ConnectionService.Instance;
-            ContentService ContService = ContentService.Instance;
-            
-            menuPrincipal = new();
-            DashBoardView = new();
-
-            InitControllers();
+            InitServices();
 
             // Manter por último
             await PersistDataService.Instance.InitAsync();
         }
 
-        private void InitControllers()
+        private void InitServices()
         {
-            contentController = new(menuPrincipal);
-            dashBoardController = new(DashBoardView);
-            dataController = new();
+            Connection = ConnectionService.Instance;
+            Content = ContentService.Instance;
+            View = ViewService.Instance;
+            Controller = ControllerService.Instance;
         }
 
         public static void SetUsuario(Usuarios pUsuarioLogado)
