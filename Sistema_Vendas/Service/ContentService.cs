@@ -1,5 +1,6 @@
 ﻿using System.Windows.Controls;
 using Sistema_Vendas.View;
+using Sistema_Vendas.View.UserController;
 
 namespace Sistema_Vendas.Service
 {
@@ -9,6 +10,8 @@ namespace Sistema_Vendas.Service
         public UserControl Auditoria { get; set; }
         public UserControl Estoque { get; set; }
         public UserControl Funcionario { get; set; }
+
+        public UserControl Filtros { get; set; }
 
         private static ContentService _instance;
         private static readonly object _lock = new();
@@ -30,6 +33,7 @@ namespace Sistema_Vendas.Service
             Auditoria = new AuditoriaView();
             Estoque = new EstoqueView();
             Funcionario = new FuncionarioView();
+            Filtros = new FiltrarView();
         }
     }
 }
