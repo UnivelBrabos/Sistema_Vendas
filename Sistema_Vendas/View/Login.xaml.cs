@@ -1,19 +1,22 @@
 ﻿using System.Windows;
 using Sistema_Vendas.Model;
 using Sistema_Vendas.Controller;
+using Sistema_Vendas.Interfaces;
 
 namespace Sistema_Vendas.View
 {
-    public partial class Login : Window
+    public partial class Login : Window, ILogin
     {
-        private DataController dataController;
+        public string Usuario { get; set; }
+        public string Senha { get; set; }
+
+        public event EventHandler eventValidaDados;
 
         public Login()
         {
             InitializeComponent();
-            dataController = new();
         }
-
+        
         private void txtUsuarioEmail_GotFocus(object sender, RoutedEventArgs e)
         {
             if(txtUsuarioEmail.Text == "Usuario/Email")
@@ -28,25 +31,21 @@ namespace Sistema_Vendas.View
             {
                 txtSenha.Text = "";
             }
+
+            eventValidaDados?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void Logar()
+        {
+            Close();
         }
 
         private void btnLogar_Click(object sender, RoutedEventArgs e)
         {
-            if(dataController.LogarUsuario(txtUsuarioEmail.Text, txtSenha.Text))
-            {
-                Close();
-            }
-        }
+            Usuario = txtUsuarioEmail.Text;
+            Senha = txtSenha.Text;
 
-        private void grdPrincipal_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
-        {
-            if (e.Key == System.Windows.Input.Key.Enter)
-            {
-                if(dataController.LogarUsuario(txtUsuarioEmail.Text, txtSenha.Text))
-                {
-                    Close();
-                }
-            }
+            eventValidaDados?.Invoke(this, EventArgs.Empty);
         }
     }
 }

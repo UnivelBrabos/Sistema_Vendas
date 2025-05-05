@@ -1,6 +1,7 @@
 ﻿using Sistema_Vendas.Interfaces;
 using Sistema_Vendas.View;
 using System.Windows.Controls;
+using Sistema_Vendas.View.UserController;
 
 
 namespace Sistema_Vendas.Controller
@@ -26,7 +27,8 @@ namespace Sistema_Vendas.Controller
 
         private void SetContentFiltrar(object? sender, EventArgs e)
         {
-
+            FiltrarView Filtrar = App.View.Filtrar;
+            _View.ShowContent(Filtrar, 6);
         }
 
         private void SetContentEstoque(object? sender, EventArgs e)

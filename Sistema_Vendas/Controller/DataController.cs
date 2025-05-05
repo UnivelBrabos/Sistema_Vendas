@@ -15,27 +15,6 @@ namespace Sistema_Vendas.Controller
         {
         }
 
-        public bool LogarUsuario(string pUserName, string pSenha)
-        {
-            try
-            {
-                Usuarios objUsuario = PersistDataService.Instance.lstUsuarios.Where(p => (p.NomeUsuario == pUserName || p.Email == pUserName) && p.SenhaUsuario == pSenha).First();
-
-                if (objUsuario != null)
-                {
-                    App.SetUsuario(objUsuario);
-                    App.View.Principal.Show();
-                    return true;
-                }
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Usuario/Email ou senha incorretos!");
-            }
-
-            return false;
-        }
-
         public async Task<List<T>> GetListGeral<T>(string pEndPoint, string pSubElemento)
         {
             try

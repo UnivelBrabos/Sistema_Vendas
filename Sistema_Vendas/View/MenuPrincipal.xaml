@@ -16,8 +16,8 @@
 
     <Grid Margin="0,0,0,0">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="679*"/>
-            <ColumnDefinition Width="561*"/>
+            <ColumnDefinition Width="719*"/>
+            <ColumnDefinition Width="521*"/>
         </Grid.ColumnDefinitions>
 
         <Grid Name="grdMenuLateral" Background="#FF73B8DA" HorizontalAlignment="Left" Width="194">
@@ -230,9 +230,131 @@
         </Grid>
 
         <Grid Name="grdConteudo" Margin="194,68,0,0" Grid.ColumnSpan="2">
+            <Label x:Name="lblFiltros" Content="Filtros&#xD;&#xA;" HorizontalAlignment="Center" VerticalAlignment="Top" RenderTransformOrigin="0.566,0.499" Width="104" HorizontalContentAlignment="Center" FontSize="22" FontFamily="Rockwell" Height="35"/>
+            <DatePicker x:Name="dtpInicial" HorizontalAlignment="Left" Margin="243,63,0,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="#FF333333" BorderBrush="{x:Null}" FontFamily="Rockwell" Width="228" FontSize="20" Height="33"/>
+            <DatePicker x:Name="dtpFinal" HorizontalAlignment="Right" Margin="0,63,242,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="#FF333333" BorderBrush="{x:Null}" FontFamily="Rockwell" Width="229" Height="33" FontSize="20"/>
+            <Label x:Name="lblAte" Content="Até" HorizontalAlignment="Center" Margin="0,63,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" Width="104" FontSize="20" FontFamily="Rockwell"/>
+            <Rectangle x:Name="retDiv1" Height="2" Margin="0,107,0,0" Stroke="Black" VerticalAlignment="Top" Width="797" RenderTransformOrigin="0.5,0.5">
+                <Rectangle.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform AngleX="-0.286"/>
+                        <RotateTransform/>
+                        <TranslateTransform X="-0.008"/>
+                    </TransformGroup>
+                </Rectangle.RenderTransform>
+            </Rectangle>
+            <ComboBox x:Name="cmbVendedores"
+                HorizontalAlignment="Right"
+                Margin="0,192,242,0"
+                VerticalAlignment="Top"
+                Width="229"
+                ItemsSource="{Binding ItemscCheckBox}"
+                FontFamily="Rockwell" Background="{x:Null}" BorderBrush="{x:Null}" FontSize="20" Height="29">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox IsChecked="{Binding IsSelected}" Content="{Binding Name}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <TextBlock x:Name="txtVendedores" Margin="243,192,0,0" TextWrapping="Wrap" FontFamily="Rockwell" TextAlignment="Center" HorizontalAlignment="Left" Width="228" Height="29" VerticalAlignment="Top" FontSize="20"><Run Language="pt-br" Text="Vendedores"/></TextBlock>
+            <Rectangle x:Name="retDiv2" Height="2" Margin="124,239,124,0" Stroke="Black" VerticalAlignment="Top" Width="797" RenderTransformOrigin="0.5,0.5">
+                <Rectangle.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform AngleX="-0.286"/>
+                        <RotateTransform/>
+                        <TranslateTransform X="-0.008"/>
+                    </TransformGroup>
+                </Rectangle.RenderTransform>
+            </Rectangle>
+            <TextBlock x:Name="txtClientes" Margin="243,335,0,0" TextWrapping="Wrap" FontFamily="Rockwell" TextAlignment="Center" HorizontalAlignment="Left" Width="228" Height="29" VerticalAlignment="Top" Text="Clientes" FontSize="20"/>
+            <ComboBox x:Name="cmbClientes"
+                HorizontalAlignment="Right"
+                Margin="0,332,242,0"
+                VerticalAlignment="Top"
+                Width="229"
+                ItemsSource="{Binding ItemsClientesCheckBox}"
+                FontFamily="Rockwell" Background="{x:Null}" BorderBrush="{x:Null}" FontSize="20">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox IsChecked="{Binding IsSelected}" Content="{Binding Name}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <Rectangle x:Name="retDiv2_Copiar" Height="2" Margin="125,380,124,0" Stroke="Black" VerticalAlignment="Top" Width="797" RenderTransformOrigin="0.5,0.5">
+                <Rectangle.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform AngleX="-0.286"/>
+                        <RotateTransform/>
+                        <TranslateTransform X="-0.008"/>
+                    </TransformGroup>
+                </Rectangle.RenderTransform>
+            </Rectangle>
+            <Button x:Name="btnFiltrar_Copiar" Content="Filtrar" HorizontalAlignment="Left" Margin="126,0,0,19" Width="101" Background="#FF8DED88" BorderBrush="{x:Null}" FontFamily="Rockwell" Click="btnFiltrar_Click" Height="34" VerticalAlignment="Bottom" FontSize="20">
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                        <Setter Property="Cursor" Value="Hand"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border Background="{TemplateBinding Background}" CornerRadius="2" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="0.95" ScaleY="0.95"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            <Button x:Name="btnLimpar" Content="Limpar" HorizontalAlignment="Right" Margin="0,0,124,19" Width="101" Background="#FFED8888" BorderBrush="{x:Null}" FontFamily="Rockwell" Height="34" VerticalAlignment="Bottom" Click="btnLimpar_Click" FontSize="20">
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                        <Setter Property="Cursor" Value="Hand"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border Background="{TemplateBinding Background}" CornerRadius="2" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="0.95" ScaleY="0.95"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
 
         </Grid>
-        
+
         <Grid Name="MenuHorizontal" VerticalAlignment="Top" Height="68" Margin="194,0,0,0" Background="#FFF0F0F0" Grid.ColumnSpan="2">
             <Image x:Name="imgUsuario" Margin="0,10,10,0" Source="/Imagens/User_Icon.png" Stretch="Fill" HorizontalAlignment="Right" VerticalAlignment="Top" Width="45" Height="45"/>
             <Image x:Name="imgFiltros" Margin="10,10,0,0" Source="/Imagens/Filtro_Icon.png" Stretch="Fill" Height="45" VerticalAlignment="Top" HorizontalAlignment="Left" Width="45"/>

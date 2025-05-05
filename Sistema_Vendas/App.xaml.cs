@@ -1,8 +1,7 @@
 ﻿using Sistema_Vendas.Service;
 using System.Windows;
-using Sistema_Vendas.View;
-using Sistema_Vendas.Controller;
 using Sistema_Vendas.Model.DataModel;
+using Sistema_Vendas.Model.FilteredModel;
 
 namespace Sistema_Vendas
 {
@@ -12,6 +11,7 @@ namespace Sistema_Vendas
     public partial class App : Application
     {
         public static Usuarios? Usuario {  get; set; }
+        public static Filtros? Filtro { get; set; }
 
         public static ConnectionService Connection {  get; set; }
         public static ContentService Content { get; set; }
@@ -38,6 +38,11 @@ namespace Sistema_Vendas
         public static void SetUsuario(Usuarios pUsuarioLogado)
         {
             Usuario = pUsuarioLogado;
+        }
+
+        public static void SetFiltros(Filtros pFiltros)
+        {
+            Filtro = pFiltros;
         }
     }
 
