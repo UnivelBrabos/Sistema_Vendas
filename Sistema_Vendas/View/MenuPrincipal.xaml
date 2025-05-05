@@ -296,7 +296,7 @@
                     </TransformGroup>
                 </Rectangle.RenderTransform>
             </Rectangle>
-            <Button x:Name="btnFiltrar_Copiar" Content="Filtrar" HorizontalAlignment="Left" Margin="126,0,0,19" Width="101" Background="#FF8DED88" BorderBrush="{x:Null}" FontFamily="Rockwell" Click="btnFiltrar_Click" Height="34" VerticalAlignment="Bottom" FontSize="20">
+            <Button x:Name="btnFiltrar_Copiar" Content="Filtrar" HorizontalAlignment="Left" Margin="126,0,0,19" Width="101" Background="#FF8DED88" BorderBrush="{x:Null}" FontFamily="Rockwell" Height="34" VerticalAlignment="Bottom" FontSize="20">
                 <Button.Style>
                     <Style TargetType="{x:Type Button}">
                         <Setter Property="Background" Value="Transparent"/>
@@ -324,7 +324,7 @@
                     </Style>
                 </Button.Style>
             </Button>
-            <Button x:Name="btnLimpar" Content="Limpar" HorizontalAlignment="Right" Margin="0,0,124,19" Width="101" Background="#FFED8888" BorderBrush="{x:Null}" FontFamily="Rockwell" Height="34" VerticalAlignment="Bottom" Click="btnLimpar_Click" FontSize="20">
+            <Button x:Name="btnLimpar" Content="Limpar" HorizontalAlignment="Right" Margin="0,0,124,19" Width="101" Background="#FFED8888" BorderBrush="{x:Null}" FontFamily="Rockwell" Height="34" VerticalAlignment="Bottom" FontSize="20">
                 <Button.Style>
                     <Style TargetType="{x:Type Button}">
                         <Setter Property="Background" Value="Transparent"/>

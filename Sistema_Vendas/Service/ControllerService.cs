@@ -9,6 +9,7 @@ namespace Sistema_Vendas.Service
         public DashboardController Dashboard { get; set; }
         public PrincipalController Principal { get; set; }
         public DataController Data { get; set; }
+        public LoginController Login { get; set; }
 
         #endregion :: Controllers ::    
 
@@ -31,6 +32,7 @@ namespace Sistema_Vendas.Service
             Auditoria = new();
             Dashboard = new(App.View.Dashboard);
             Principal = new(App.View.Principal);
+            Login = new(App.View.Login);
             Data = new();
         }
     }

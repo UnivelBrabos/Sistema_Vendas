@@ -11,7 +11,8 @@ namespace Sistema_Vendas.Service
         public EstoqueView Estoque { get; set; }
         public FuncionarioView Funcionario { get; set; }
         public MenuPrincipal Principal { get; set; }
-        public FiltrarView Filtrar { get; set; }    
+        public FiltrarView Filtrar { get; set; }
+        public Login Login { get; set; }
         #endregion :: Views ::
 
         private static ViewService _instance;
@@ -36,6 +37,7 @@ namespace Sistema_Vendas.Service
             Funcionario = new();
             Principal = new();
             Filtrar = new();
+            Login = new();
         }
 
     }

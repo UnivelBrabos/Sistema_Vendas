@@ -30,7 +30,8 @@ namespace Sistema_Vendas.Controller
                 {
                     App.SetUsuario(objUsuario);
                     App.View.Principal.Show();
-                    return true;
+
+                    _Login.Logar();
                 }
             }
             catch (Exception)

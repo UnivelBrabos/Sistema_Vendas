@@ -23,6 +23,8 @@ namespace Sistema_Vendas
             base.OnStartup(e);
             InitServices();
 
+            View.Login.Show();
+
             // Manter por último
             await PersistDataService.Instance.InitAsync();
         }
