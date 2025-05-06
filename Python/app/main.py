@@ -1,6 +1,6 @@
 import uvicorn
 from fastapi import FastAPI
-from app.routes import clients, customer_segments, payments, product_category, products, sales_items, sales, sellers, users
+from routes import clients, customer_segments, payments, product_category, products, sales_items, sales, sellers, users
 
 app = FastAPI()
 

@@ -1,5 +1,5 @@
-from app.connection_db import supabase
-from app.schemas.logs import LogsCreate
+from connection_db.database import supabase
+from schemas.logs import LogsCreate
 from fastapi import APIRouter, Depends
 
 router = APIRouter()

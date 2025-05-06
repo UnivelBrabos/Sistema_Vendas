@@ -1,30 +1,30 @@
-from app.connection_db import supabase
-from app.schemas.categoria_produto import CategoriasProdutoCreate
+from connection_db.database import supabase
+from schemas.categoria_produto import CategoriasProdutoCreate
 from fastapi import APIRouter, Depends
 
 router = APIRouter()
 
 @router.post('/category/post')
-def insert_product_category(category: CategoriasProdutoCreate):
+async def insert_product_category(category: CategoriasProdutoCreate):
     data = supabase.table("categorias_produto").insert(
         category.model_dump(exclude_none=True)
     ).execute()
     return {"Categoria de Produtos inserido": data}
 
 @router.get('/category/get')
-def get_product_category():
+async def get_product_category():
     data = supabase.table("categorias_produto").select("*").execute()
     return {"Categoria de Produtos": data}
 
 @router.put('/category/put/{id_categoria}')
-def update_product_category(id: int, update: CategoriasProdutoCreate):
+async def update_product_category(id: int, update: CategoriasProdutoCreate):
     data = supabase.table("categorias_produto").insert(
         update.model_dump(exclude_none=True)
     ).eq("id_categoria", id).execute()
     return {"Categoria de Produtos atualizado": data}
 
 @router.delete('/category/delete/{id_categoria}')
-def delete_product_category(id: int):
+async def delete_product_category(id: int):
     data = supabase.table("categorias_produto").delete().eq("id_categoria", id).execute()
     return {"Categoria de Produtos deletado": data}  
   
