@@ -13,8 +13,6 @@ namespace Sistema_Vendas
 {
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
-        private ObservableCollection<CheckBoxOptions> _itemscCheckBox;
-        private ObservableCollection<CheckBoxOptions> _itemsClientesCheckBox;
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
@@ -25,27 +23,6 @@ namespace Sistema_Vendas
         private readonly ConnectionDB objConnect;
 
         private DashboardController GraficosController;
-
-        public ObservableCollection<CheckBoxOptions> ItemscCheckBox
-        {
-            get { return _itemscCheckBox; }
-            set
-            {
-                _itemscCheckBox = value;
-                OnPropertyChanged(nameof(ItemscCheckBox));
-            }
-        }
-
-        public ObservableCollection<CheckBoxOptions> ItemsClientesCheckBox
-        {
-            get { return _itemsClientesCheckBox; }
-            set
-            {
-                _itemsClientesCheckBox = value;
-                OnPropertyChanged(nameof(ItemsClientesCheckBox));
-            }
-        }
-
         public List<ItensVenda> lstItensVenda;
         public List<Vendedor> lstVendedores;
         public List<Produto> lstProdutos;
@@ -68,37 +45,7 @@ namespace Sistema_Vendas
         }
 
         #region :: BI ::
-        public void CarregaCheckBox()
-        {
-            if (lstVendedores == null || lstVendedores.Count == 0 || lstClientes == null || lstClientes.Count == 0)
-            {
-                MessageBox.Show("Nenhum vendedor encontrado.");
-                return;
-            }
-
-            if (ItemscCheckBox == null) // Inicializa apenas se for nula
-                ItemscCheckBox = new ObservableCollection<CheckBoxOptions>();
-
-            if (ItemsClientesCheckBox == null)
-                ItemsClientesCheckBox = new ObservableCollection<CheckBoxOptions>();
-
-            ItemscCheckBox.Clear();
-            ItemsClientesCheckBox.Clear();
-
-            foreach (var vendedor in lstVendedores)
-            {
-                ItemscCheckBox.Add(new CheckBoxOptions { Name = vendedor.Nome, Id = vendedor.IdVendedor, IsSelected = true });
-            }
-
-            foreach (var cliente in lstClientes)
-            {
-                ItemsClientesCheckBox.Add(new CheckBoxOptions { Name = cliente.Nome, Id = cliente.IdCliente, IsSelected = true });
-            }
-
-            OnPropertyChanged(nameof(ItemscCheckBox));
-            OnPropertyChanged(nameof(ItemsClientesCheckBox));
-
-        }
+       
 
         /*public async void CarregaDados()
         {
@@ -123,21 +70,7 @@ namespace Sistema_Vendas
             List<int> lstVendedoresId = new();
             List<int> lstClientesId = new();
             
-            if(ItemscCheckBox != null)
-            {
-                lstVendedoresId = ItemscCheckBox
-                    .Where(v => v.IsSelected)
-                    .Select(v => v.Id)
-                    .ToList();
-            }
 
-            if (ItemsClientesCheckBox != null)
-            {
-                lstClientesId = ItemsClientesCheckBox
-                    .Where(v => v.IsSelected)
-                    .Select(v => v.Id)
-                    .ToList();
-            }
 
             Filtros objFiltros = new(Convert.ToDateTime(dtpInicial.Text), Convert.ToDateTime(dtpFinal.Text), lstVendedoresId, lstClientesId);
 
@@ -185,7 +118,6 @@ namespace Sistema_Vendas
             CarregaGrafico();
             dtpInicial.Text = "01/01/2025";
             dtpFinal.Text = DateTime.Now.ToString("dd/MM/yyyy");
-            CarregaCheckBox();
         }
 
         private void dtpInicial_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
