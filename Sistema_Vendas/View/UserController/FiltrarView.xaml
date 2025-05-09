@@ -44,7 +44,7 @@
                     </TransformGroup>
                 </Rectangle.RenderTransform>
             </Rectangle>
-            <Button x:Name="btnFiltrar_Copiar" Content="Filtrar" HorizontalAlignment="Left" Margin="126,0,0,19" Width="101" Background="#FF8DED88" BorderBrush="{x:Null}" FontFamily="Rockwell" Height="34" VerticalAlignment="Bottom" FontSize="20">
+            <Button x:Name="btnFiltrar" Content="Filtrar" HorizontalAlignment="Left" Margin="126,0,0,19" Width="101" Background="#FF8DED88" BorderBrush="{x:Null}" FontFamily="Rockwell" Height="34" VerticalAlignment="Bottom" FontSize="20" Click="btnFiltrar_Click">
                 <Button.Style>
                     <Style TargetType="{x:Type Button}">
                         <Setter Property="Background" Value="Transparent"/>
@@ -72,7 +72,7 @@
                     </Style>
                 </Button.Style>
             </Button>
-            <Button x:Name="btnLimpar" Content="Limpar" HorizontalAlignment="Right" Margin="0,0,124,19" Width="101" Background="#FFED8888" BorderBrush="{x:Null}" FontFamily="Rockwell" Height="34" VerticalAlignment="Bottom" FontSize="20">
+            <Button x:Name="btnLimpar" Content="Limpar" HorizontalAlignment="Right" Margin="0,0,124,19" Width="101" Background="#FFED8888" BorderBrush="{x:Null}" FontFamily="Rockwell" Height="34" VerticalAlignment="Bottom" FontSize="20" Click="btnLimpar_Click">
                 <Button.Style>
                     <Style TargetType="{x:Type Button}">
                         <Setter Property="Background" Value="Transparent"/>
@@ -101,9 +101,9 @@
                 </Button.Style>
             </Button>
             <Rectangle x:Name="retVendedores" HorizontalAlignment="Left" Height="106" Margin="562,121,0,0" VerticalAlignment="Top" Width="255" RadiusX="10" RadiusY="10" Fill="#FFF9F9F9"/>
-            <StackPanel x:Name="plnVendedores" Margin="575,124,242,412" Background="#FFF9F9F9"/>
+            <StackPanel x:Name="plnVendedores" Margin="575,124,0,0" Background="#FFF9F9F9" HorizontalAlignment="Left" Width="229" Height="99" VerticalAlignment="Top"/>
             <Rectangle x:Name="retClientes" HorizontalAlignment="Left" Height="106" Margin="562,261,0,0" VerticalAlignment="Top" Width="255" RadiusX="10" RadiusY="10" Fill="#FFF9F9F9"/>
-            <StackPanel x:Name="plnClientes" Margin="575,264,242,272" Background="#FFF9F9F9"/>
+            <StackPanel x:Name="plnClientes" Margin="575,264,0,0" Background="#FFF9F9F9" Height="99" VerticalAlignment="Top" HorizontalAlignment="Left" Width="229"/>
         </Grid>
     </Grid>
 </UserControl>

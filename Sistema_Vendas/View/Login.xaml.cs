@@ -31,8 +31,6 @@ namespace Sistema_Vendas.View
             {
                 txtSenha.Text = "";
             }
-
-            eventValidaDados?.Invoke(this, EventArgs.Empty);
         }
 
         public void Logar()

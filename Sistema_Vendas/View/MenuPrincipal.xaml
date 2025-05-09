@@ -21,10 +21,10 @@
         </Grid.ColumnDefinitions>
 
         <Grid Name="grdMenuLateral" Background="#FF73B8DA" HorizontalAlignment="Left" Width="194">
-            <Image Source="/Imagens/Vendas_Icon.png" Stretch="Fill" HorizontalAlignment="Center" VerticalAlignment="Top" Height="69" Width="122"/>
+            <Image Source="/Midia/Vendas_Icon.png" Stretch="Fill" HorizontalAlignment="Center" VerticalAlignment="Top" Height="69" Width="122"/>
 
             <Grid Name="grdDashboard">
-                <Image x:Name="imgDashboard" Margin="16,143,0,0" Source="/Imagens/Dashboard_Icon.png" Stretch="Fill" HorizontalAlignment="Left" VerticalAlignment="Top" Height="35" Width="35"/>
+                <Image x:Name="imgDashboard" Margin="16,143,0,0" Source="/Midia/Dashboard_Icon.png" Stretch="Fill" HorizontalAlignment="Left" VerticalAlignment="Top" Height="35" Width="35"/>
                 <Label x:Name="lblDashboard" Content="Dashboard" HorizontalAlignment="Left" Margin="59,148,0,0" VerticalAlignment="Top" Width="119" FontFamily="Rockwell" FontSize="14"/>
 
                 <Grid Name="grdVisibilityDashboard" Visibility="Visible">
@@ -61,7 +61,7 @@
             </Grid>
 
             <Grid Name="grdAuditoria">
-                <Image Margin="16,233,0,0" Source="/Imagens/Auditoria_Icon.png" Stretch="Fill" HorizontalAlignment="Left" VerticalAlignment="Top" Height="35" Width="35"/>
+                <Image Margin="16,233,0,0" Source="/Midia/Auditoria_Icon.png" Stretch="Fill" HorizontalAlignment="Left" VerticalAlignment="Top" Height="35" Width="35"/>
                 <Label x:Name="lblAudiotoria" Content="Auditoria" HorizontalAlignment="Left" Margin="59,238,0,0" VerticalAlignment="Top" Width="119" FontFamily="Rockwell" FontSize="14"/>
 
                 <Grid Name="grdVisibilityAuditoria" Visibility="Visible">
@@ -98,7 +98,7 @@
             </Grid>
 
             <Grid Name="grdFuncionarios">
-                <Image Margin="16,324,0,0" Source="/Imagens/Funcionarios_Icon.png" Stretch="Fill" HorizontalAlignment="Left" VerticalAlignment="Top" Height="35" Width="35"/>
+                <Image Margin="16,324,0,0" Source="/Midia/Funcionarios_Icon.png" Stretch="Fill" HorizontalAlignment="Left" VerticalAlignment="Top" Height="35" Width="35"/>
                 <Label x:Name="lblFuncionarios" Content="Funcionários" HorizontalAlignment="Left" Margin="60,327.3,0,0" VerticalAlignment="Top" Width="118" FontFamily="Rockwell" FontSize="14"/>
 
                 <Grid Name="grdVisibilityFuncionarios" Visibility="Visible">
@@ -135,7 +135,7 @@
             </Grid>
 
             <Grid Name="grdEstoque">
-                <Image Margin="16,415,0,0" Source="/Imagens/Estoque_Icon.png" Stretch="Fill" HorizontalAlignment="Left" VerticalAlignment="Top" Height="35" Width="35"/>
+                <Image Margin="16,415,0,0" Source="/Midia/Estoque_Icon.png" Stretch="Fill" HorizontalAlignment="Left" VerticalAlignment="Top" Height="35" Width="35"/>
                 <Label x:Name="lblEstoque" Content="Estoque" HorizontalAlignment="Left" Margin="56,419,0,0" VerticalAlignment="Top" Width="118" FontFamily="Rockwell" FontSize="14"/>
 
                 <Grid Name="grdVisibilityEstoque" Visibility="Visible">
@@ -172,7 +172,7 @@
             </Grid>
 
             <Grid>
-                <Image Margin="16,0,0,10" Source="/Imagens/Settings_Icon.png" Stretch="Fill" HorizontalAlignment="Left" Width="35" Height="35" VerticalAlignment="Bottom"/>
+                <Image Margin="16,0,0,10" Source="/Midia/Settings_Icon.png" Stretch="Fill" HorizontalAlignment="Left" Width="35" Height="35" VerticalAlignment="Bottom"/>
                 <Grid Name="grdVisibilityConfiguracoes">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="682*"/>
@@ -234,8 +234,8 @@
         </Grid>
 
         <Grid Name="MenuHorizontal" VerticalAlignment="Top" Height="68" Margin="194,0,0,0" Background="#FFF0F0F0" Grid.ColumnSpan="2">
-            <Image x:Name="imgUsuario" Margin="0,10,10,0" Source="/Imagens/User_Icon.png" Stretch="Fill" HorizontalAlignment="Right" VerticalAlignment="Top" Width="45" Height="45"/>
-            <Image x:Name="imgFiltros" Margin="10,10,0,0" Source="/Imagens/Filtro_Icon.png" Stretch="Fill" Height="45" VerticalAlignment="Top" HorizontalAlignment="Left" Width="45"/>
+            <Image x:Name="imgUsuario" Margin="0,10,10,0" Source="/Midia/User_Icon.png" Stretch="Fill" HorizontalAlignment="Right" VerticalAlignment="Top" Width="45" Height="45"/>
+            <Image x:Name="imgFiltros" Margin="10,10,0,0" Source="/Midia/Filtro_Icon.png" Stretch="Fill" Height="45" VerticalAlignment="Top" HorizontalAlignment="Left" Width="45"/>
             <Button x:Name="btnUsuario" Margin="0,10,10,0" Background="Black" BorderBrush="Black" Opacity="0.0" Cursor="Hand" Height="45" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5"  HorizontalAlignment="Right" Width="45">
                 <Button.RenderTransform>
                     <TransformGroup>

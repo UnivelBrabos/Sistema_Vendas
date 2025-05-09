@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sistema_Vendas.Service;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,15 @@ namespace Sistema_Vendas.Model.FilteredModel
             this.Final = Final;
             this.IdVendedores = IdVendedores;
             this.IdClientes = IdClientes;
+        }
+
+        public Filtros()
+        {
+            Inicial = new DateTime(DateTime.Now.Year, 1, 1);
+            Final = DateTime.Now;
+
+            IdVendedores = PersistDataService.Instance.lstVendas.Select(p => p.IdVendedor).ToList();
+            IdClientes = PersistDataService.Instance.lstClientes.Select(p => p.IdCliente).ToList(); 
         }
     }
 }

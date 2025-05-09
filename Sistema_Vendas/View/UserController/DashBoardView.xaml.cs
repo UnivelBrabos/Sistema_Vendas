@@ -71,6 +71,8 @@ namespace Sistema_Vendas.View
             MelhoresProdutosCharControl.AxisY.Clear();
 
             MelhoresProdutosCharControl.Series.Add(pGraficos.SeriesMaisVendidos);
+            MelhoresProdutosCharControl.AxisY.Add(new());
+
             MelhoresProdutosCharControl.AxisY[0].Labels = pGraficos.LabelsY;
         }
     }

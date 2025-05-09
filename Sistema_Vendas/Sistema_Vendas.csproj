@@ -9,36 +9,44 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Imagens\Auditoria_Icon.png" />
-    <None Remove="Imagens\Cliente_Icon.png" />
-    <None Remove="Imagens\Dashboard_Icon.png" />
-    <None Remove="Imagens\Dinheiro_Icon.png" />
-    <None Remove="Imagens\Estoque_Icon.png" />
-    <None Remove="Imagens\Filtro_Icon.png" />
-    <None Remove="Imagens\Funcionarios_Icon.png" />
-    <None Remove="Imagens\Settings_Icon.png" />
-    <None Remove="Imagens\User_Icon.png" />
-    <None Remove="Imagens\Vendas_Icon.png" />
-    <None Remove="Imagens\Venda_Icon.png" />
+    <None Remove="Midia\Auditoria_Icon.png" />
+    <None Remove="Midia\Cliente_Icon.png" />
+    <None Remove="Midia\Dashboard_Icon.png" />
+    <None Remove="Midia\Dinheiro_Icon.png" />
+    <None Remove="Midia\Estoque_Icon.png" />
+    <None Remove="Midia\Filtro_Icon.png" />
+    <None Remove="Midia\Funcionarios_Icon.png" />
+    <None Remove="Midia\Settings_Icon.png" />
+    <None Remove="Midia\SplashScreen.mp4" />
+    <None Remove="Midia\SplashScreen.wmv" />
+    <None Remove="Midia\User_Icon.png" />
+    <None Remove="Midia\Vendas_Icon.png" />
+    <None Remove="Midia\Venda_Icon.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Imagens\Auditoria_Icon.png">
+    <Content Include="Midia\SplashScreen.wmv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Midia\Auditoria_Icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Imagens\Cliente_Icon.png">
+    <Resource Include="Midia\Cliente_Icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Imagens\Dinheiro_Icon.png">
+    <Resource Include="Midia\Dinheiro_Icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Imagens\Estoque_Icon.png">
+    <Resource Include="Midia\Estoque_Icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Imagens\Filtro_Icon.png">
+    <Resource Include="Midia\Filtro_Icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Imagens\Funcionarios_Icon.png">
+    <Resource Include="Midia\Funcionarios_Icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
@@ -53,19 +61,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Imagens\Dashboard_Icon.png">
+    <Resource Include="Midia\Dashboard_Icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Imagens\Settings_Icon.png">
+    <Resource Include="Midia\Settings_Icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Imagens\User_Icon.png">
+    <Resource Include="Midia\User_Icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Imagens\Vendas_Icon.png">
+    <Resource Include="Midia\Vendas_Icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Imagens\Venda_Icon.png">
+    <Resource Include="Midia\Venda_Icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

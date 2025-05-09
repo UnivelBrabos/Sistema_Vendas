@@ -13,6 +13,7 @@ namespace Sistema_Vendas.Controller
     public class DashboardController
     {
         private IDashboard _Dashboard;
+        private Filtros Filtros;
 
         public DashboardController(IDashboard Dashboard)
         {
@@ -22,21 +23,23 @@ namespace Sistema_Vendas.Controller
 
         private void TrataDashboard(object sender, EventArgs e)
         {
+            Filtros = App.Filtro;
+
             DadosGraficos();
             CarregaCards();
         }
 
         public void CarregaCards()
         {
-            List<Cliente> lstClientes = PersistDataService.Instance.lstClientes;
-            List<Vendas> lstVendas = PersistDataService.Instance.lstVendas;
+            List<Cliente> lstClientes = PersistDataService.Instance.lstClientes.Where(p => Filtros.IdClientes.Contains(p.IdCliente)).ToList();
+            List<Vendas> lstVendas = PersistDataService.Instance.lstVendas.Where(p => Filtros.IdClientes.Contains(p.IdCliente) && (p.DataVenda >= Filtros.Inicial && p.DataVenda <= Filtros.Final)).ToList();
 
             try
             {
                 Cards cards = new Cards();
 
-                cards.TotalVendas = PersistDataService.Instance.lstVendas.Count.ToString();
-                cards.TotalVendido = PersistDataService.Instance.lstVendas.Sum(p => p.TotalVenda).ToString();
+                cards.TotalVendas = lstVendas.Count.ToString();
+                cards.TotalVendido = lstVendas.Sum(p => p.TotalVenda).ToString();
 
                 cards.MelhorCliente = lstClientes
                                         .GroupJoin(lstVendas,
@@ -109,14 +112,8 @@ namespace Sistema_Vendas.Controller
 
                 var lstFiltrada = GraficoMainVendidos();
 
-                /*if (pFiltrar)
-                {
-                    #region :: Por Data ::
+                lstFiltrada = FiltrarVendidosPorData(lstFiltrada);
 
-                    lstFiltrada = FiltrarVendidosPorData(lstFiltrada, pFiltros);
-
-                    #endregion :: Por Data ::
-                }*/
 
                 var lstMaisVendidos = lstFiltrada.OrderByDescending(p => p.TotalVendido)
                                       .Take(5)
@@ -151,18 +148,12 @@ namespace Sistema_Vendas.Controller
                 List<Vendas> lstAuxiliar = new();
                 List<Vendedor> lstVendedoresAuxiliar = new();
 
-                /*if (pFiltrar)
-                {
-                    lstAuxiliar = PersistDataService.Instance.lstVendas.Where(p => (p.DataVenda >= pFiltros.Inicial &&
-                                                              p.DataVenda <= pFiltros.Final) &&
-                                                              pFiltros.IdVendedores.Contains(p.IdVendedor) &&
-                                                              pFiltros.IdClientes.Contains(p.IdCliente)).ToList();
+                lstAuxiliar = PersistDataService.Instance.lstVendas.Where(p => (p.DataVenda >= Filtros.Inicial &&
+                                                          p.DataVenda <= Filtros.Final) &&
+                                                          Filtros.IdVendedores.Contains(p.IdVendedor) &&
+                                                          Filtros.IdClientes.Contains(p.IdCliente)).ToList();
 
-                    lstVendedoresAuxiliar = PersistDataService.Instance.lstVendedores.Where(p => pFiltros.IdVendedores.Contains(p.IdVendedor)).ToList();
-                }*/
-
-                lstAuxiliar = PersistDataService.Instance.lstVendas;
-                lstVendedoresAuxiliar = PersistDataService.Instance.lstVendedores;
+                lstVendedoresAuxiliar = PersistDataService.Instance.lstVendedores.Where(p => Filtros.IdVendedores.Contains(p.IdVendedor)).ToList();
 
                 for (int i = 0; i < lstVendedoresAuxiliar.Count; i++)
                 {
@@ -221,24 +212,12 @@ namespace Sistema_Vendas.Controller
                     VerticalAlignment = VerticalAlignment.Center
                 };
 
-                /* Tem que ser feito na View
-                objGrafico.AxisY.Add(new Axis
-                {
-                    Title = "Vendas",
-                    LabelFormatter = value => value.ToString("N")
-                });
-                */
 
-                /*if (pFiltrar)
-                {
-                    lstAuxiliar = PersistDataService.Instance.lstVendas
-                                        .Where(d => ((d.DataVenda >= Convert.ToDateTime(pFiltros.Inicial) &&
-                                                    (d.DataVenda <= Convert.ToDateTime(pFiltros.Final)))) &&
-                                                     pFiltros.IdVendedores.Contains(d.IdVendedor) &&
-                                                     pFiltros.IdClientes.Contains(d.IdCliente)).ToList();
-                }*/
-
-                lstAuxiliar = PersistDataService.Instance.lstVendas;
+                lstAuxiliar = PersistDataService.Instance.lstVendas
+                                    .Where(d => ((d.DataVenda >= Convert.ToDateTime(Filtros.Inicial) &&
+                                                (d.DataVenda <= Convert.ToDateTime(Filtros.Final)))) &&
+                                                 Filtros.IdVendedores.Contains(d.IdVendedor) &&
+                                                 Filtros.IdClientes.Contains(d.IdCliente)).ToList();
 
                 var lstVendasOrg = lstAuxiliar
                     .GroupBy(p => new { p.DataVenda.Year, p.DataVenda.Month })
@@ -282,19 +261,13 @@ namespace Sistema_Vendas.Controller
                 List<Vendas> lstAuxiliar = new();
                 List<Cliente> lstClientesAuxiliar = new();
 
-                /*if (pFiltrar)
-                {
-                    lstAuxiliar = PersistDataService.Instance.lstVendas.Where(d => (d.DataVenda >= Convert.ToDateTime(pFiltros.Inicial) &&
-                                                              d.DataVenda <= Convert.ToDateTime(pFiltros.Final)) &&
-                                                              pFiltros.IdVendedores.Contains(d.IdVendedor) &&
-                                                              pFiltros.IdClientes.Contains(d.IdCliente)).ToList();
 
-                    lstClientesAuxiliar = PersistDataService.Instance.lstClientes.Where(p => pFiltros.IdClientes.Contains(p.IdCliente)).ToList();
-                }*/
+                lstAuxiliar = PersistDataService.Instance.lstVendas.Where(d => (d.DataVenda >= Convert.ToDateTime(Filtros.Inicial) &&
+                                                          d.DataVenda <= Convert.ToDateTime(Filtros.Final)) &&
+                                                          Filtros.IdVendedores.Contains(d.IdVendedor) &&
+                                                          Filtros.IdClientes.Contains(d.IdCliente)).ToList();
 
-                lstAuxiliar = PersistDataService.Instance.lstVendas;
-                lstClientesAuxiliar = PersistDataService.Instance.lstClientes;
-
+                lstClientesAuxiliar = PersistDataService.Instance.lstClientes.Where(p => Filtros.IdClientes.Contains(p.IdCliente)).ToList();
 
                 var lstFiltrada = lstClientesAuxiliar
                     .GroupJoin(lstAuxiliar,
@@ -358,7 +331,7 @@ namespace Sistema_Vendas.Controller
                                     .OrderByDescending(item => item.TotalVendido);
         }
 
-        public IOrderedEnumerable<MaisVendidos> FiltrarVendidosPorData(IEnumerable<dynamic> pListaFiltrada, Filtros pFiltros)
+        public IOrderedEnumerable<MaisVendidos> FiltrarVendidosPorData(IEnumerable<dynamic> pListaFiltrada)
         {
             return PersistDataService.Instance.lstProdutos.Select(p => new MaisVendidos
             {
@@ -366,24 +339,22 @@ namespace Sistema_Vendas.Controller
                 TotalVendido = PersistDataService.Instance.lstItensVenda
                                        .Where(t => t.IdProduto == p.IdProduto &&
                                               PersistDataService.Instance.lstVendas.Any(v => v.IdVenda == t.IdVenda &&
-                                                                  v.DataVenda >= pFiltros.Inicial &&
-                                                                  v.DataVenda <= pFiltros.Final &&
-                                                                  pFiltros.IdVendedores.Contains(v.IdVendedor) &&
-                                                                  pFiltros.IdClientes.Contains(v.IdCliente)))
+                                                                  v.DataVenda >= Filtros.Inicial &&
+                                                                  v.DataVenda <= Filtros.Final &&
+                                                                  Filtros.IdVendedores.Contains(v.IdVendedor) &&
+                                                                  Filtros.IdClientes.Contains(v.IdCliente)))
                                        .Sum(t => t.QuantidadeLote * p.Lote),
                 IdentificadorVenda = PersistDataService.Instance.lstItensVenda
                                        .Where(t => t.IdProduto == p.IdProduto &&
                                                    PersistDataService.Instance.lstVendas.Any(v => v.IdVenda == t.IdVenda &&
-                                                                   v.DataVenda >= pFiltros.Inicial &&
-                                                                   v.DataVenda <= pFiltros.Final &&
-                                                                   pFiltros.IdVendedores.Contains(v.IdVendedor) &&
-                                                                   pFiltros.IdClientes.Contains(v.IdCliente)))
+                                                                   v.DataVenda >= Filtros.Inicial &&
+                                                                   v.DataVenda <= Filtros.Final &&
+                                                                   Filtros.IdVendedores.Contains(v.IdVendedor) &&
+                                                                   Filtros.IdClientes.Contains(v.IdCliente)))
                                        .Select(t => t.IdVenda)
             })
             .Where(p => p.IdentificadorVenda.Any())
             .OrderByDescending(p => p.TotalVendido);
         }
-
-
     }
 }

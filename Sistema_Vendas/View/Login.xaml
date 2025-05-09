@@ -25,7 +25,7 @@
                 </Rectangle.Effect>
             </Rectangle>
 
-            <Image x:Name="imgLogo" Source="/Imagens/Vendas_Icon.png" Stretch="Fill" HorizontalAlignment="Center" VerticalAlignment="Top" Width="166" Height="95"/>
+            <Image x:Name="imgLogo" Source="/Midia/Vendas_Icon.png" Stretch="Fill" HorizontalAlignment="Center" VerticalAlignment="Top" Width="166" Height="95"/>
 
             <TextBox x:Name="txtUsuarioEmail"
                      HorizontalAlignment="Center"

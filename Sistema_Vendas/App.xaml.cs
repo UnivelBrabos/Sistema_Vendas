@@ -21,10 +21,14 @@ namespace Sistema_Vendas
             base.OnStartup(e);
             InitServices();
 
-            View.Login.Show();
+            ViewService.Instance.Splash.Show();
 
-            // Manter por último
             await PersistDataService.Instance.InitAsync();
+
+            ViewService.Instance.Splash.Close();
+
+            View.Login.Show();
+            Filtro = new();
         }
 
         private void InitServices()

@@ -1,4 +1,5 @@
 ﻿using Sistema_Vendas.View;
+
 using Sistema_Vendas.View.UserController;
 
 namespace Sistema_Vendas.Service
@@ -11,8 +12,9 @@ namespace Sistema_Vendas.Service
         public EstoqueView Estoque { get; set; }
         public FuncionarioView Funcionario { get; set; }
         public MenuPrincipal Principal { get; set; }
-        public FiltrarView Filtrar { get; set; }
         public Login Login { get; set; }
+        public FiltrarView Filtrar { get; set; }
+        public SplashScreen Splash {  get; set; }
         #endregion :: Views ::
 
         private static ViewService _instance;
@@ -36,9 +38,9 @@ namespace Sistema_Vendas.Service
             Estoque = new();
             Funcionario = new();
             Principal = new();
-            Filtrar = new();
             Login = new();
+            Filtrar = new();
+            Splash = new();
         }
-
     }
 }

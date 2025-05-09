@@ -10,6 +10,7 @@ namespace Sistema_Vendas.Service
         public PrincipalController Principal { get; set; }
         public DataController Data { get; set; }
         public LoginController Login { get; set; }
+        public FiltrarController Filtrar {  get; set; }
 
         #endregion :: Controllers ::    
 
@@ -33,6 +34,7 @@ namespace Sistema_Vendas.Service
             Dashboard = new(App.View.Dashboard);
             Principal = new(App.View.Principal);
             Login = new(App.View.Login);
+            Filtrar = new(App.View.Filtrar);
             Data = new();
         }
     }

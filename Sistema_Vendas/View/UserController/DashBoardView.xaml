@@ -35,7 +35,7 @@
                 <!-- Elemento da Direita -->
                 <Grid Name="grdMelhorCliente" Grid.Column="2" HorizontalAlignment="Right" Width="125">
                     <Rectangle Name="retMelhorCliente" Height="60" Margin="12,0,10,0" VerticalAlignment="Center" Fill="White" RadiusX="10" RadiusY="10"/>
-                    <Label Name="lblMelhorCliente" Content="Mercado X" HorizontalAlignment="Left" Margin="49,30,0,0" VerticalAlignment="Top" FontSize="9" FontFamily="Rockwell" HorizontalContentAlignment="Center"/>
+                    <Label Name="lblMelhorCliente" Content="Mercado X" Margin="42,30,11,21" FontSize="9" FontFamily="Rockwell" HorizontalContentAlignment="Center"/>
                     <Label Name="lblValorMelhorCliente" Content="Melhor Cliente" HorizontalAlignment="Left" Margin="41,6,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" Width="74" FontSize="9" FontFamily="Rockwell"/>
                     <Image Name="imgMelhorCliente" Margin="12,0,0,0" Source="/Imagens/Cliente_Icon.png" Stretch="Fill" HorizontalAlignment="Left" VerticalAlignment="Center" Width="30" Height="30"/>
                 </Grid>
