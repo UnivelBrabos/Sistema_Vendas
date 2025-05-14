@@ -81,7 +81,7 @@ class _LoginFormState extends State<LoginForm> {
               controller: emailController,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
-                hintText: 'Enter your Email',
+                hintText: 'Digite seu email',
                 prefixIcon: Icon(Icons.email, color: AppColors.primaryColor),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
@@ -105,7 +105,7 @@ class _LoginFormState extends State<LoginForm> {
               controller: passwordController,
               obscureText: _obscurePassword,
               decoration: InputDecoration(
-                hintText: 'Enter your Password',
+                hintText: 'Digite sua senha',
                 prefixIcon: Icon(Icons.lock, color: AppColors.primaryColor),
                 suffixIcon: IconButton(
                   icon: Icon(

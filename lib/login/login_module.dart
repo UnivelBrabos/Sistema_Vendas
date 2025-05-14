@@ -10,6 +10,6 @@ class LoginModule extends Module {
 
   @override
   List<ModularRoute> get routes => [
-        ChildRoute('/', child: (_, args) => HomePage()),
+        ChildRoute('/', child: (_, args) => HomePage(email: '',)),
       ];
 }

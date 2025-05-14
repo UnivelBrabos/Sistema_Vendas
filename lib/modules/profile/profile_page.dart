@@ -14,7 +14,7 @@ class ProfilePage extends StatelessWidget {
           .select('nome, email')
           .eq('email', email.trim().toLowerCase())
           .maybeSingle();
-      return response as Map<String, dynamic>?;
+      return response;
     } catch (_) {
       return null;
     }
@@ -41,7 +41,6 @@ class ProfilePage extends StatelessWidget {
             );
           }
 
-          // Fallback
           final user = snapshot.data ?? {
             'nome': firstName,
             'email': email,
@@ -106,7 +105,6 @@ class ProfilePage extends StatelessWidget {
                         );
                       },
                     ),
-                    // Logout
                     ListTile(
                       leading: const Icon(Icons.logout, size: 28),
                       title: const Text(

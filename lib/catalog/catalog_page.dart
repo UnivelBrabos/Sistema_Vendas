@@ -8,32 +8,46 @@ import '../../store/produto_store.dart';
 import '../../store/cart_store.dart';
 
 class CatalogPage extends StatefulWidget {
-  const CatalogPage({Key? key}) : super(key: key);
-  
+  final String email;
+  const CatalogPage({Key? key, required this.email}) : super(key: key);
+
   @override
   State<CatalogPage> createState() => _CatalogPageState();
 }
 
 class _CatalogPageState extends State<CatalogPage> {
   final ProdutoStore store = ProdutoStore();
-  
+
   @override
   void initState() {
     super.initState();
     store.fetchProdutos();
   }
-  
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    store.fetchProdutos();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Modular.to.pushReplacementNamed(
+            '/welcome',
+            arguments: widget.email,
+          ),
+        ),
         title: const Text('Catálogo de Produtos'),
         actions: [
           IconButton(
-            onPressed: () {
-              print("Carrinho clicado");
-              Modular.to.navigate('/cart');
-            },
+            onPressed: () => Modular.to.pushReplacementNamed(
+              '/cart',
+              arguments: widget.email,
+            ),
             icon: Image.asset(
               'lib/assets/images/carrinho.png',
               width: 24,
@@ -43,9 +57,7 @@ class _CatalogPageState extends State<CatalogPage> {
         ],
       ),
       body: RefreshIndicator(
-        onRefresh: () async {
-          await store.fetchProdutos();
-        },
+        onRefresh: () async => await store.fetchProdutos(),
         child: Observer(
           builder: (_) {
             if (store.isLoading) {
@@ -68,24 +80,26 @@ class _CatalogPageState extends State<CatalogPage> {
                   trailing: IconButton(
                     icon: const Icon(Icons.add_shopping_cart),
                     onPressed: () async {
-                      final ClienteRepository clienteRepo = ClienteRepository();
-                      final List<ClienteModel> clientes = await clienteRepo.getAllClients();
-
-                      final ProductSelectionResult? result = await showDialog<ProductSelectionResult>(
+                      final clienteRepo = ClienteRepository();
+                      final clientes = await clienteRepo.getAllClients();
+                      final result = await showDialog<ProductSelectionResult>(
                         context: context,
-                        builder: (context) => ProductSelectionDialog(
+                        builder: (_) => ProductSelectionDialog(
                           productName: nome,
                           clientes: clientes,
                         ),
                       );
-
                       if (result != null) {
-                        print('Produto: $nome, Quantidade: ${result.quantidade}');
-                        print('Clientes selecionados: ${result.clientesSelecionados.map((c) => c.nome).toList()}');
                         final cartStore = Modular.get<CartStore>();
-                        produto['clientesSelecionados'] = result.clientesSelecionados.map((c) => c.toJson()).toList();
+                        produto['clientesSelecionados'] = result
+                            .clientesSelecionados
+                            .map((c) => c.toJson())
+                            .toList();
                         cartStore.addItem(produto, result.quantidade);
-                        Modular.to.navigate('/cart');
+                        Modular.to.pushReplacementNamed(
+                          '/cart',
+                          arguments: widget.email,
+                        );
                       }
                     },
                   ),

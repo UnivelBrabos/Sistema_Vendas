@@ -7,7 +7,8 @@ class VendaController {
   final VendaRepository _vendaRepo = VendaRepository();
   final ItensVendaRepository _itemRepo = ItensVendaRepository();
 
-  /// Orquestra criação da venda e inserção dos itens.
+  VendaController(Object object);
+
   Future<void> emitirVenda({
     required VendaModel venda,
     required List<ItensVendaModel> itens,

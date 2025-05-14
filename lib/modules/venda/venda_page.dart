@@ -1,17 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:trabalho_vendas_univel/core/app_colors.dart';
 import 'venda_controller.dart';
 
-class VendaPage extends StatelessWidget {
-  final controller = Modular.get<VendaController>();
+class CreateSalePage extends StatelessWidget {
+  const CreateSalePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final controller = Modular.get<VendaController>();
+
     return Scaffold(
-      appBar: AppBar(title: Text('Nova Venda')),
+      appBar: AppBar(
+        title: const Text('Nova Venda'),
+        backgroundColor: AppColors.primaryColor,
+        centerTitle: true,
+      ),
       body: Center(
         child: ElevatedButton(
-          child: Text('Finalizar Venda'),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.success,
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
           onPressed: () async {
             try {
               await controller.salvarVenda(
@@ -21,14 +34,18 @@ class VendaPage extends StatelessWidget {
                 desconto: 0,
               );
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Venda criada com sucesso!')),
+                const SnackBar(content: Text('Venda criada com sucesso!')),
               );
             } catch (e) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Erro: $e')),
+                SnackBar(content: Text('Erro ao criar venda: $e')),
               );
             }
           },
+          child: const Text(
+            'Finalizar Venda',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          ),
         ),
       ),
     );

@@ -9,3 +9,5 @@ class AppColors {
 
   static Color? primary;  // off-white
 }
+
+//73B8DA mudar a cor do azul para hexadecimal 
