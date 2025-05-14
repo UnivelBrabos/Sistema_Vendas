@@ -7,10 +7,12 @@
         mc:Ignorable="d"
         Title="Carregando" MinHeight="550" MinWidth="950" MaxHeight="550" MaxWidth="950">
     <Grid x:Name="grdSplashScreen" Background="#FF73B8DA">
-        <MediaElement Name="SplashScreenElement"
+        <Rectangle HorizontalAlignment="Center" Height="515" VerticalAlignment="Center" Width="930" Fill="#FFFDFDFD" RadiusX="10" RadiusY="10"/>
+        <MediaElement x:Name="SplashScreenElement"
                       Visibility="Visible"
                       LoadedBehavior="Manual"
                       Stretch="UniformToFill"
-                      MediaEnded="meuVideo_MediaEnded" Margin="0,110,2,0" VerticalAlignment="Top" Height="423"/>
+                      MediaEnded="meuVideo_MediaEnded" Margin="125,158,125,0" VerticalAlignment="Top" Height="251"/>
+        <Image Margin="309,66,310,284" Source="/Midia/Vendas_Icon.png" Stretch="Fill"/>
     </Grid>
 </Window>
