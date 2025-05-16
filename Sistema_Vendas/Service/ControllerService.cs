@@ -30,12 +30,12 @@ namespace Sistema_Vendas.Service
 
         public ControllerService()
         {
-            Auditoria = new();
+            Data = new();
+            Auditoria = new(App.View.Auditoria);
             Dashboard = new(App.View.Dashboard);
             Principal = new(App.View.Principal);
             Login = new(App.View.Login);
             Filtrar = new(App.View.Filtrar);
-            Data = new();
         }
     }
 }

@@ -1,20 +1,7 @@
 ﻿using Sistema_Vendas.Interfaces;
 using Sistema_Vendas.Model.DataModel;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Sistema_Vendas.View
 {
@@ -23,6 +10,12 @@ namespace Sistema_Vendas.View
     /// </summary>
     public partial class AuditoriaView : UserControl, IAuditoria
     {
+        public event EventHandler CarregaIDs;
+        public event EventHandler CarregaVendedor;
+        public event EventHandler CarregaCliente;
+
+        public event EventHandler ItemSelecionado;
+
         public Vendas Venda { get; set; }
 
         public AuditoriaView()
@@ -32,22 +25,43 @@ namespace Sistema_Vendas.View
             LoadEvents();
         }
 
-
-        public event EventHandler CarregaIDs;
-
-        public void CarregaTabelaAuxiliar(DataTable dttVendas)
-        {
-            
-        }
-
         private void LoadEvents()
         {
-            txtIdVenda.GotFocus += (s, e) => CarregaIDs?.Invoke(this, EventArgs.Empty);
+            txtCliente.GotFocus += (s, e) => CarregaCliente?.Invoke(this, EventArgs.Empty);
+            txtVendedor.GotFocus += (s, e) => CarregaVendedor?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void CarregaTabelaAuxiliar(DataGrid dttVendas)
+        {
+            dgvAuxiliar = dttVendas;
+        }
+
+        private void LiberaTextBox()
+        {
+
         }
 
         private void txtIdVenda_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
             e.Handled = !int.TryParse(e.Text, out _);
+        }
+
+        public void CarregaInformacoes(double pTotalVenda, DateTime DataVenda)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void txtIdVenda_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if(e.Key == Key.Enter && string.IsNullOrEmpty(txtIdVenda.Text))
+            {
+                ItemSelecionado?.Invoke(sender, EventArgs.Empty);
+            }
+        }
+
+        private void txtIdVenda_GotFocus(object sender, System.Windows.RoutedEventArgs e)
+        {
+            CarregaIDs?.Invoke(sender, EventArgs.Empty);
         }
     }
 }
