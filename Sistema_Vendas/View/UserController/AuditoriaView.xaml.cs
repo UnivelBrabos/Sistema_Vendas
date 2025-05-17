@@ -33,15 +33,12 @@ namespace Sistema_Vendas.View
 
         public void CarregaTabelaAuxiliar(DataGrid dttVendas)
         {
-            dgvAuxiliar = dttVendas;
+            dgvAuxiliar.Columns.Clear();
+            dgvAuxiliar.ItemsSource = null;
+            dgvAuxiliar.ItemsSource = dttVendas.ItemsSource;
         }
 
-        private void LiberaTextBox()
-        {
-
-        }
-
-        private void txtIdVenda_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        private void txtIdVenda_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             e.Handled = !int.TryParse(e.Text, out _);
         }
@@ -51,7 +48,7 @@ namespace Sistema_Vendas.View
             throw new NotImplementedException();
         }
 
-        private void txtIdVenda_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private void txtIdVenda_KeyDown(object sender, KeyEventArgs e)
         {
             if(e.Key == Key.Enter && string.IsNullOrEmpty(txtIdVenda.Text))
             {

@@ -1,4 +1,5 @@
 ﻿using Sistema_Vendas.Interfaces;
+using Sistema_Vendas.Model;
 using Sistema_Vendas.Service;
 using System.Data;
 using System.Windows.Controls;
@@ -28,15 +29,12 @@ namespace Sistema_Vendas.Controller
             {
                 case "IdVenda":
                     Dados.ItemsSource = PersistDataService.Instance.lstVendas;
-                    Dados.Tag = "Venda";
                     break;
                 case "Vendedores:":
                     Dados.ItemsSource = PersistDataService.Instance.lstVendedores;
-                    Dados.Tag = "Venda";
                     break;
                 case "Clientes":
                     Dados.ItemsSource = PersistDataService.Instance.lstClientes;
-                    Dados.Tag = "Venda";
                     break;
             }
 

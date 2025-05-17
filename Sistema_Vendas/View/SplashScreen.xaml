@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Carregando" MinHeight="550" MinWidth="950" MaxHeight="550" MaxWidth="950">
     <Grid x:Name="grdSplashScreen" Background="#FF73B8DA">
-        <Rectangle HorizontalAlignment="Center" Height="515" VerticalAlignment="Center" Width="930" Fill="#FFFDFDFD" RadiusX="10" RadiusY="10"/>
+        <Rectangle HorizontalAlignment="Center" Height="448" VerticalAlignment="Center" Width="853" Fill="#FFFDFDFD" RadiusX="10" RadiusY="10"/>
         <MediaElement x:Name="SplashScreenElement"
                       Visibility="Visible"
                       LoadedBehavior="Manual"
