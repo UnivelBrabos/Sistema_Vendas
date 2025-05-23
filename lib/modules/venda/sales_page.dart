@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:trabalho_vendas_univel/core/app_colors.dart';
 import 'package:intl/intl.dart';
 
 class SalesPage extends StatelessWidget {
   final String email;
-  const SalesPage({Key? key, required this.email}) : super(key: key);
+  final String? fotoUrl;
+  const SalesPage({
+    Key? key,
+    required this.email,
+    this.fotoUrl,
+  }) : super(key: key);
 
   Future<List<Map<String, dynamic>>> _fetchSales() async {
     final response = await Supabase.instance.client
@@ -23,6 +29,31 @@ class SalesPage extends StatelessWidget {
         title: const Text('Minhas Vendas'),
         backgroundColor: AppColors.primaryColor,
         centerTitle: true,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: GestureDetector(
+              onTap: () => Modular.to.pushNamed(
+                '/profile',
+                arguments: {
+                  'email': email,
+                  'fotoUrl': fotoUrl,
+                },
+              ),
+              child: CircleAvatar(
+                backgroundColor: AppColors.success,
+                backgroundImage:
+                    fotoUrl != null ? AssetImage(fotoUrl!) : null,
+                child: fotoUrl == null
+                    ? Text(
+                        email[0].toUpperCase(),
+                        style: const TextStyle(color: Colors.white),
+                      )
+                    : null,
+              ),
+            ),
+          ),
+        ],
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
         future: _fetchSales(),
@@ -30,11 +61,11 @@ class SalesPage extends StatelessWidget {
           if (snap.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
-          if (!snap.hasData || snap.data!.isEmpty) {
+          final sales = snap.data;
+          if (sales == null || sales.isEmpty) {
             return const Center(
                 child: Text('Você ainda não realizou nenhuma venda.'));
           }
-          final sales = snap.data!;
           return ListView.separated(
             padding: const EdgeInsets.all(16),
             itemCount: sales.length,
@@ -44,7 +75,7 @@ class SalesPage extends StatelessWidget {
               final date = DateTime.parse(sale['data_venda'] as String);
               final formattedDate =
                   DateFormat('dd/MM/yyyy – HH:mm').format(date);
-              final total = sale['valor_total'] as num?;
+              final total = (sale['valor_total'] as num?) ?? 0;
               return Card(
                 elevation: 2,
                 shape: RoundedRectangleBorder(
@@ -57,16 +88,12 @@ class SalesPage extends StatelessWidget {
                     'Venda em $formattedDate',
                     style: const TextStyle(fontWeight: FontWeight.w600),
                   ),
-                  subtitle:
-                      Text('Total: R\$ ${total?.toStringAsFixed(2) ?? '0.00'}'),
+                  subtitle: Text('Total: R\$ ${total.toStringAsFixed(2)}'),
                   trailing: Icon(
                     Icons.chevron_right,
                     color: AppColors.primaryColor,
                   ),
                   onTap: () {
-                    // Se tiver detalhes, navegue para detalhes da venda:
-                    // Modular.to.pushNamed('/venda/details', arguments: sale);
-                    //futuramente, implementar a navegação para detalhes da venda
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text('Funcionalidade em desenvolvimento!'),
@@ -82,4 +109,3 @@ class SalesPage extends StatelessWidget {
     );
   }
 }
-

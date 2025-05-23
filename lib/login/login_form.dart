@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trabalho_vendas_univel/core/app_colors.dart';
 import 'package:trabalho_vendas_univel/modules/auth/auth_controller.dart';
 import 'package:trabalho_vendas_univel/widgets/social_login_button.dart';
@@ -15,10 +16,47 @@ class _LoginFormState extends State<LoginForm> {
   bool rememberMe = false;
   bool _obscurePassword = true;
 
-  final TextEditingController emailController = TextEditingController();
+  final TextEditingController emailController    = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  final String googleSvg = '''<svg version="1.1" width="20" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+  @override
+  void initState() {
+    super.initState();
+    _loadRememberMe();
+  }
+
+  Future<void> _loadRememberMe() async {
+    final prefs = await SharedPreferences.getInstance();
+    final savedEmail = prefs.getString('savedEmail');
+    final savedPass  = prefs.getString('savedPass');
+    if (savedEmail != null && savedPass != null) {
+      setState(() {
+        emailController.text    = savedEmail;
+        passwordController.text = savedPass;
+        rememberMe = true;
+      });
+    }
+  }
+
+  Future<void> _onLogin() async {
+    final email = emailController.text.trim().toLowerCase();
+    final pass  = passwordController.text;
+
+    final prefs = await SharedPreferences.getInstance();
+    if (rememberMe) {
+      await prefs.setString('savedEmail', email);
+      await prefs.setString('savedPass', pass);
+    } else {
+      await prefs.remove('savedEmail');
+      await prefs.remove('savedPass');
+    }
+
+    final authController = Modular.get<AuthController>();
+    await authController.login(email, pass, context);
+  }
+
+  final String googleSvg =
+      '''<svg version="1.1" width="20" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
 <path style="fill:#FBBB00;" d="M113.47,309.408L95.648,375.94l-65.139,1.378C11.042,341.211,0,299.9,0,256
 	c0-42.451,10.324-82.483,28.624-117.732h0.014l57.992,10.632l25.404,57.644c-5.317,15.501-8.215,32.141-8.215,49.456
 	C103.821,274.792,107.225,292.797,113.47,309.408z"/>
@@ -33,7 +71,8 @@ class _LoginFormState extends State<LoginForm> {
 	C318.115,0,375.068,22.126,419.404,58.936z"/>
 </svg>''';
 
-  final String appleSvg = '''<svg version="1.1" height="20" width="20" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 22.773 22.773" style="enable-background:new 0 0 22.773 22.773;" xml:space="preserve">
+  final String appleSvg =
+      '''<svg version="1.1" height="20" width="20" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 22.773 22.773" style="enable-background:new 0 0 22.773 22.773;" xml:space="preserve">
  <g>
   <g>
    <path d="M15.769,0c0.053,0,0.106,0,0.162,0c0.13,1.606-0.483,2.806-1.228,3.675c-0.731,0.863-1.732,1.7-3.351,1.573
@@ -48,7 +87,7 @@ class _LoginFormState extends State<LoginForm> {
  </g>
 </svg>''';
 
-  @override
+ @override
   Widget build(BuildContext context) {
     return Form(
       child: SingleChildScrollView(
@@ -58,7 +97,6 @@ class _LoginFormState extends State<LoginForm> {
           children: [
             const SizedBox(height: 48),
 
-            // LOGO SPARK
             Center(
               child: Image.asset(
                 'lib/assets/logo/spark_logo.jpg',
@@ -68,7 +106,6 @@ class _LoginFormState extends State<LoginForm> {
             ),
             const SizedBox(height: 32),
 
-            // E-MAIL
             const Text(
               'Email',
               style: TextStyle(
@@ -87,13 +124,10 @@ class _LoginFormState extends State<LoginForm> {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              validator: (v) =>
-                  v == null || v.isEmpty ? 'Informe seu e-mail' : null,
             ),
-
             const SizedBox(height: 16),
 
-             const Text(
+            const Text(
               'Password',
               style: TextStyle(
                 color: Color(0xFF151717),
@@ -114,19 +148,16 @@ class _LoginFormState extends State<LoginForm> {
                         : Icons.visibility,
                     color: AppColors.primaryColor,
                   ),
-                  onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                  onPressed: () =>
+                      setState(() => _obscurePassword = !_obscurePassword),
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              validator: (v) =>
-                  v == null || v.isEmpty ? 'Informe sua senha' : null,
             ),
-
             const SizedBox(height: 16),
 
-            // Remember me / Forgot
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -135,7 +166,8 @@ class _LoginFormState extends State<LoginForm> {
                     Checkbox(
                       value: rememberMe,
                       activeColor: AppColors.primaryColor,
-                      onChanged: (v) => setState(() => rememberMe = v ?? false),
+                      onChanged: (v) =>
+                          setState(() => rememberMe = v ?? false),
                     ),
                     const Text(
                       'Remember me',
@@ -144,7 +176,9 @@ class _LoginFormState extends State<LoginForm> {
                   ],
                 ),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    // implementar recuperação de senha
+                  },
                   child: Text(
                     'Forgot password?',
                     style: TextStyle(
@@ -156,22 +190,13 @@ class _LoginFormState extends State<LoginForm> {
                 ),
               ],
             ),
-
             const SizedBox(height: 24),
 
-            // SIGN IN BUTTON
             SizedBox(
               width: double.infinity,
               height: 50,
               child: ElevatedButton(
-                onPressed: () {
-                  final authController = Modular.get<AuthController>();
-                  authController.login(
-                    emailController.text,
-                    passwordController.text,
-                    context,
-                  );
-                },
+                onPressed: _onLogin,  // chama o método que salva e faz login
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primaryColor,
                   shape: RoundedRectangleBorder(
@@ -188,17 +213,17 @@ class _LoginFormState extends State<LoginForm> {
                 ),
               ),
             ),
-
             const SizedBox(height: 16),
 
-            // SIGN UP
             Center(
               child: Column(
                 children: [
                   const Text("Don't have an account?"),
                   const SizedBox(height: 8),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      // implementar sign up
+                    },
                     child: Text(
                       'Sign Up',
                       style: TextStyle(
@@ -211,14 +236,11 @@ class _LoginFormState extends State<LoginForm> {
                 ],
               ),
             ),
-
             const SizedBox(height: 24),
 
-            // "Or With"
             const Center(child: Text("Or With")),
             const SizedBox(height: 16),
 
-            // SOCIAL LOGIN BUTTONS
             Row(
               children: [
                 Expanded(
@@ -238,7 +260,6 @@ class _LoginFormState extends State<LoginForm> {
                 ),
               ],
             ),
-
             const SizedBox(height: 24),
           ],
         ),
@@ -246,3 +267,9 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 }
+
+
+
+
+
+

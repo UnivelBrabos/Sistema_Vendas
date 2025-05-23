@@ -1,116 +1,106 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:http/http.dart' as http;
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-
 import '../../store/cart_store.dart';
+import 'package:trabalho_vendas_univel/core/app_colors.dart';
 
 class CartPage extends StatefulWidget {
-  final String email;                         
-  const CartPage({Key? key, required this.email}) : super(key: key);
+  final String email;
+  final String? fotoUrl;
+  const CartPage({
+    Key? key,
+    required this.email,
+    this.fotoUrl,
+  }) : super(key: key);
 
   @override
   State<CartPage> createState() => _CartPageState();
 }
 
 class _CartPageState extends State<CartPage> {
-  final CartStore cartStore = Modular.get<CartStore>();
-  final String baseUrl = dotenv.env['MIDDLEWARE_URL']!;
-  bool _isLoading = false;
+  final cart = Modular.get<CartStore>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(
-          onPressed: () {
-            Modular.to.pushReplacementNamed(
-              '/catalog',
-              arguments: widget.email,
-            );
-          },
+          onPressed: () => Modular.to.pushReplacementNamed(
+            '/catalog',
+            arguments: {
+              'email': widget.email,
+              'fotoUrl': widget.fotoUrl,
+            },
+          ),
         ),
-        title: const Text("Carrinho de Compras"),
+        title: const Text('Carrinho'),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: GestureDetector(
+              onTap: () => Modular.to.pushNamed(
+                '/profile',
+                arguments: {
+                  'email': widget.email,
+                  'fotoUrl': widget.fotoUrl,
+                },
+              ),
+              child: CircleAvatar(
+                backgroundColor: AppColors.success,
+                backgroundImage:
+                    widget.fotoUrl != null ? AssetImage(widget.fotoUrl!) : null,
+                child: widget.fotoUrl == null
+                    ? Text(
+                        widget.email[0].toUpperCase(),
+                        style: const TextStyle(color: Colors.white),
+                      )
+                    : null,
+              ),
+            ),
+          ),
+        ],
       ),
       body: Observer(builder: (_) {
-        if (cartStore.cartItems.isEmpty) {
-          return const Center(child: Text("O carrinho está vazio."));
+        if (cart.cartItems.isEmpty) {
+          return const Center(child: Text('Carrinho vazio'));
         }
         return ListView.builder(
-          itemCount: cartStore.cartItems.length,
-          itemBuilder: (_, index) {
-            final item = cartStore.cartItems[index];
-            final product = item['product'];
+          itemCount: cart.cartItems.length,
+          itemBuilder: (_, i) {
+            final item = cart.cartItems[i];
+            final prod = item['product'];
             final qty = item['quantity'] as int;
             return ListTile(
-              title: Text(product['nome'] ?? 'Sem nome'),
-              subtitle: Text("Quantidade: $qty"),
+              title: Text(prod['nome'] ?? ''),
+              subtitle: Text('Qtd: $qty'),
               trailing: IconButton(
                 icon: const Icon(Icons.delete),
-                onPressed: () => cartStore.removeItem(product),
+                onPressed: () => cart.removeItem(prod),
               ),
             );
           },
         );
       }),
-      bottomNavigationBar: _buildBottomBar(),
-    );
-  }
-
-  Widget _buildBottomBar() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      color: Colors.grey[200],
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Observer(builder: (_) {
-            final totalItems = cartStore.cartItems.fold<int>(
-              0,
-              (sum, item) => sum + (item['quantity'] as int),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(16),
+        child: ElevatedButton(
+          onPressed: () {
+            // limpa o carrinho e volta para catálogo
+            cart.clearCart();
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Compra finalizada!')),
             );
-            return Text(
-              "Total de itens: $totalItems",
-              style: const TextStyle(fontSize: 16),
+            Modular.to.pushReplacementNamed(
+              '/catalog',
+              arguments: {
+                'email': widget.email,
+                'fotoUrl': widget.fotoUrl,
+              },
             );
-          }),
-          ElevatedButton(
-            onPressed: _isLoading ? null : _finalizarCompra,
-            child: _isLoading
-                ? const SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  )
-                : const Text("Finalizar"),
-          ),
-        ],
+          },
+          child: const Text('Finalizar'),
+        ),
       ),
     );
-  }
-
-  Future<void> _finalizarCompra() async {
-    setState(() => _isLoading = true);
-    try {
-      final conn = await Connectivity().checkConnectivity();
-      if (conn == ConnectivityResult.none) {
-        throw Exception('Sem conexão de rede');
-      }
-      cartStore.clearCart();
-
-      Modular.to.pushReplacementNamed(
-        '/catalog',
-        arguments: widget.email,
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Erro ao finalizar venda: $e')),
-      );
-    } finally {
-      setState(() => _isLoading = false);
-    }
   }
 }

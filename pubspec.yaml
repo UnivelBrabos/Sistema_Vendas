@@ -44,6 +44,7 @@ dependencies:
   intl: ^0.20.2
   flutter_dotenv: ^5.0.2
   http: ^1.3.0
+  shared_preferences: ^2.0.15
 
 
 
@@ -77,6 +78,9 @@ flutter:
     - lib/assets/images/carrinho.png
     - .env
     - lib/assets/logo/spark_logo.jpg
+    - lib/assets/macaco/carlos.png
+    - lib/assets/macaco/diogo.png
+    - lib/assets/macaco/saymon.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

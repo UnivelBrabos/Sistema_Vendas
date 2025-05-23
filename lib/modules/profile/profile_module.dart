@@ -4,9 +4,15 @@ import 'profile_page.dart';
 class ProfileModule extends Module {
   @override
   List<ModularRoute> get routes => [
-    ChildRoute(
-      '/', 
-      child: (_, args) => ProfilePage(email: args.data),
-    ),
-  ];
+        ChildRoute(
+          '/',
+          child: (_, args) {
+            final data = args.data as Map<String, dynamic>;
+            return ProfilePage(
+              email: data['email'] as String,
+              fotoUrl: data['fotoUrl'] as String?,
+            );
+          },
+        ),
+      ];
 }

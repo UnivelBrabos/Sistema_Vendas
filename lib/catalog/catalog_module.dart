@@ -6,7 +6,13 @@ class CatalogModule extends Module {
   List<ModularRoute> get routes => [
         ChildRoute(
           '/',
-          child: (_, args) => CatalogPage(email: args.data as String),
+          child: (_, args) {
+            final data = args.data as Map<String, dynamic>;
+            return CatalogPage(
+              email: data['email'] as String,
+              fotoUrl: data['fotoUrl'] as String?,
+            );
+          },
         ),
       ];
 }

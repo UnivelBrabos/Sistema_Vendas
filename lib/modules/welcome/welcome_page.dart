@@ -4,7 +4,12 @@ import 'package:trabalho_vendas_univel/core/app_colors.dart';
 
 class WelcomePage extends StatefulWidget {
   final String email;
-  const WelcomePage({Key? key, required this.email}) : super(key: key);
+  final String? fotoUrl;
+  const WelcomePage({
+    Key? key,
+    required this.email,
+    this.fotoUrl,
+  }) : super(key: key);
 
   @override
   State<WelcomePage> createState() => _WelcomePageState();
@@ -16,7 +21,6 @@ class _WelcomePageState extends State<WelcomePage>
 
   late final AnimationController _hintController;
   late final Animation<Offset> _hintAnimation;
-
   late final AnimationController _entryController;
   late final Animation<Offset> _slideEntry;
   late final Animation<double> _fadeEntry;
@@ -25,12 +29,10 @@ class _WelcomePageState extends State<WelcomePage>
   void initState() {
     super.initState();
 
-    // Hint "Arraste para abrir" 
     _hintController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 800),
     )..repeat(reverse: true);
-
     _hintAnimation = Tween<Offset>(
       begin: const Offset(-0.3, 0),
       end: Offset.zero,
@@ -42,18 +44,15 @@ class _WelcomePageState extends State<WelcomePage>
       vsync: this,
       duration: const Duration(seconds: 4),
     );
-
     _slideEntry = Tween<Offset>(
       begin: const Offset(0, 0.2),
       end: Offset.zero,
     ).animate(
       CurvedAnimation(parent: _entryController, curve: Curves.easeOut),
     );
-
     _fadeEntry = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(parent: _entryController, curve: Curves.easeIn),
     );
-
     _entryController.forward();
   }
 
@@ -79,8 +78,14 @@ class _WelcomePageState extends State<WelcomePage>
             accountEmail: Text(widget.email),
             currentAccountPicture: CircleAvatar(
               backgroundColor: AppColors.success,
-              child: Text(_initial,
-                  style: const TextStyle(fontSize: 24, color: Colors.white)),
+              backgroundImage: widget.fotoUrl != null
+                  ? AssetImage(widget.fotoUrl!)
+                  : null,
+              child: widget.fotoUrl == null
+                  ? Text(_initial,
+                      style:
+                          const TextStyle(fontSize: 24, color: Colors.white))
+                  : null,
             ),
           ),
           ListTile(
@@ -89,7 +94,7 @@ class _WelcomePageState extends State<WelcomePage>
             onTap: () {
               Navigator.of(context).pop();
               ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Area de Desenvolvimento em construção!')));
+                  const SnackBar(content: Text('Em construção')));
             },
           ),
           ListTile(
@@ -97,7 +102,13 @@ class _WelcomePageState extends State<WelcomePage>
             title: const Text('Catálogo'),
             onTap: () {
               Navigator.of(context).pop();
-              Modular.to.pushNamed('/home', arguments: widget.email);
+              Modular.to.pushNamed(
+                '/catalog',
+                arguments: {
+                  'email': widget.email,
+                  'fotoUrl': widget.fotoUrl,
+                },
+              );
             },
           ),
           ListTile(
@@ -105,7 +116,13 @@ class _WelcomePageState extends State<WelcomePage>
             title: const Text('Minhas Vendas'),
             onTap: () {
               Navigator.of(context).pop();
-              Modular.to.pushNamed('/venda/sales', arguments: widget.email);
+              Modular.to.pushNamed(
+                '/venda',
+                arguments: {
+                  'email': widget.email,
+                  'fotoUrl': widget.fotoUrl,
+                },
+              );
             },
           ),
           const Divider(),
@@ -114,7 +131,13 @@ class _WelcomePageState extends State<WelcomePage>
             title: const Text('Perfil'),
             onTap: () {
               Navigator.of(context).pop();
-              Modular.to.pushNamed('/profile', arguments: widget.email);
+              Modular.to.pushNamed(
+                '/profile',
+                arguments: {
+                  'email': widget.email,
+                  'fotoUrl': widget.fotoUrl,
+                },
+              );
             },
           ),
         ]),
@@ -123,7 +146,6 @@ class _WelcomePageState extends State<WelcomePage>
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      // Swipe na borda 
       onHorizontalDragUpdate: (d) {
         if (d.globalPosition.dx < 50 && d.delta.dx > 10) {
           _scaffoldKey.currentState?.openDrawer();
@@ -144,16 +166,26 @@ class _WelcomePageState extends State<WelcomePage>
             Padding(
               padding: const EdgeInsets.only(right: 16),
               child: GestureDetector(
-                onTap: () =>
-                    Modular.to.pushNamed('/profile', arguments: widget.email),
+                onTap: () => Modular.to.pushNamed(
+                  '/profile',
+                  arguments: {
+                    'email': widget.email,
+                    'fotoUrl': widget.fotoUrl,
+                  },
+                ),
                 child: CircleAvatar(
                   radius: 18,
                   backgroundColor: AppColors.success,
-                  child: Text(_initial,
-                      style: const TextStyle(
-                          fontSize: 18,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold)),
+                  backgroundImage: widget.fotoUrl != null
+                      ? AssetImage(widget.fotoUrl!)
+                      : null,
+                  child: widget.fotoUrl == null
+                      ? Text(_initial,
+                          style: const TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold))
+                      : null,
                 ),
               ),
             ),
@@ -174,8 +206,6 @@ class _WelcomePageState extends State<WelcomePage>
                 ),
               ),
             ),
-            // Hint animado acima
-            // Arrumar texto para nao ficar repetido e sim colocar uma vez e só 
             Positioned(
               top: 80,
               left: 16,
