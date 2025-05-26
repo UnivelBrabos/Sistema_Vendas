@@ -6,15 +6,9 @@ namespace Sistema_Vendas.Interfaces
 {
     public interface IAuditoria
     {
-        event EventHandler CarregaIDs;
-        event EventHandler CarregaVendedor;
-        event EventHandler CarregaCliente;
-
-        event EventHandler ItemSelecionado;
-
-        Vendas Venda { get; set; }
+        event EventHandler CarregaAuxiliar;
+        event EventHandler SetVenda;
 
         void CarregaTabelaAuxiliar(DataGrid dttVendas);
-        void CarregaInformacoes(double pTotalVenda, DateTime DataVenda);
     }
 }
