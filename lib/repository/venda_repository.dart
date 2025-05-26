@@ -6,7 +6,6 @@ import '../models/venda_model.dart';
 class VendaRepository {
   static final _baseUrl = dotenv.get('MIDDLEWARE_URL');
 
-  /// Cria a venda e retorna o ID gerado pelo servidor.
   Future<int> createVenda(VendaModel venda) async {
     final uri = Uri.parse('$_baseUrl/sales/post');
     final resp = await http.post(
@@ -20,7 +19,8 @@ class VendaRepository {
     }
 
     final data = jsonDecode(resp.body) as Map<String, dynamic>;
-    // Ajuste: Extrai o campo correto que seu middleware retorna
-    return data['Vendas']['data'][0]['id_venda'] as int;
+    // Ajuste conforme a resposta do seu middleware:
+    // aqui assumimos que ele retorna { "Vendas": { "data": [ { "id_venda": ... } ] } }
+    return (data['Vendas']['data'] as List).first['id_venda'] as int;
   }
 }

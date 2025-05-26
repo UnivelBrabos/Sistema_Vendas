@@ -6,8 +6,14 @@ class CartModule extends Module {
   List<ModularRoute> get routes => [
     ChildRoute(
       '/',
-      child: (_, args) =>
-          CartPage(email: args.data as String), 
+      child: (_, args) {
+        final data = args.data;
+        if (data is String) {
+          return CartPage(email: data);
+        }
+        final map = data as Map<String, dynamic>;
+        return CartPage(email: map['email'] as String);
+      },
     ),
   ];
 }

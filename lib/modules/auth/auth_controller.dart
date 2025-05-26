@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -6,8 +5,9 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class AuthController {
   final Map<String, String> _staticUsers = {
     'carlos@gmail.com': '123',
-    'saymon@gmail.com' : '123',
-    'diogo@gmail.com'  : '123',
+    'saymon@gmail.com': '123',
+    'diogo@gmail.com': '123',
+    'eder@gmail.com' : '123',
   };
 
   Future<void> login(
@@ -53,7 +53,8 @@ class AuthController {
 
       if (storedHash == null || password != storedHash) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Credenciais inválidas (senha incorreta).')),
+          const SnackBar(
+              content: Text('Credenciais inválidas (senha incorreta).')),
         );
         return;
       }
@@ -71,7 +72,7 @@ class AuthController {
     Modular.to.pushReplacementNamed(
       '/welcome',
       arguments: {
-        'email'  : email,
+        'email': email,
         'fotoUrl': fotoUrl,
       },
     );

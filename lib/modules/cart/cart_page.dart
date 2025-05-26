@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import '../../store/cart_store.dart';
+import '../../store/produto_store.dart';
+import '../../modules/venda/venda_controller.dart';
 import 'package:trabalho_vendas_univel/core/app_colors.dart';
 
 class CartPage extends StatefulWidget {
   final String email;
-  final String? fotoUrl;
   const CartPage({
     Key? key,
     required this.email,
-    this.fotoUrl,
   }) : super(key: key);
 
   @override
@@ -19,46 +19,17 @@ class CartPage extends StatefulWidget {
 
 class _CartPageState extends State<CartPage> {
   final cart = Modular.get<CartStore>();
+  final vendaController = Modular.get<VendaController>();
+  final produtoStore = Modular.get<ProdutoStore>();
+
+  bool _isSubmitting = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: BackButton(
-          onPressed: () => Modular.to.pushReplacementNamed(
-            '/catalog',
-            arguments: {
-              'email': widget.email,
-              'fotoUrl': widget.fotoUrl,
-            },
-          ),
-        ),
+        leading: BackButton(onPressed: Modular.to.pop),
         title: const Text('Carrinho'),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 8),
-            child: GestureDetector(
-              onTap: () => Modular.to.pushNamed(
-                '/profile',
-                arguments: {
-                  'email': widget.email,
-                  'fotoUrl': widget.fotoUrl,
-                },
-              ),
-              child: CircleAvatar(
-                backgroundColor: AppColors.success,
-                backgroundImage:
-                    widget.fotoUrl != null ? AssetImage(widget.fotoUrl!) : null,
-                child: widget.fotoUrl == null
-                    ? Text(
-                        widget.email[0].toUpperCase(),
-                        style: const TextStyle(color: Colors.white),
-                      )
-                    : null,
-              ),
-            ),
-          ),
-        ],
       ),
       body: Observer(builder: (_) {
         if (cart.cartItems.isEmpty) {
@@ -69,7 +40,7 @@ class _CartPageState extends State<CartPage> {
           itemBuilder: (_, i) {
             final item = cart.cartItems[i];
             final prod = item['product'];
-            final qty = item['quantity'] as int;
+            final qty  = item['quantity'] as int;
             return ListTile(
               title: Text(prod['nome'] ?? ''),
               subtitle: Text('Qtd: $qty'),
@@ -84,23 +55,80 @@ class _CartPageState extends State<CartPage> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(16),
         child: ElevatedButton(
-          onPressed: () {
-            // limpa o carrinho e volta para catálogo
-            cart.clearCart();
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Compra finalizada!')),
-            );
-            Modular.to.pushReplacementNamed(
-              '/catalog',
-              arguments: {
-                'email': widget.email,
-                'fotoUrl': widget.fotoUrl,
-              },
-            );
-          },
-          child: const Text('Finalizar'),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.primaryColor,
+            minimumSize: const Size.fromHeight(50),
+          ),
+          onPressed: _isSubmitting ? null : _finalizarVenda,
+          child: _isSubmitting
+              ? const SizedBox(
+                  height: 24,
+                  width: 24,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: Colors.white,
+                  ),
+                )
+              : const Text('Finalizar Venda'),
         ),
       ),
     );
   }
+
+  Future<void> _finalizarVenda() async {
+    setState(() => _isSubmitting = true);
+
+    try {
+      final items = cart.cartItems.map((e) {
+        final p = e['product'];
+        final qty = e['quantity'] as int;
+        return {
+          'id_produto': p['id_produto'],
+          'quantidade': qty,
+          'subtotal': (p['preco'] as num) * qty,
+        };
+      }).toList();
+
+      final total = items.fold<double>(
+        0,
+        (sum, i) => sum + (i['subtotal'] as num).toDouble(),
+      );
+
+      // await vendaController.salvarVenda(
+      //   idVendedor: 7, // Substituir pela lógica real de quem está logado
+      //   idCliente: 7,  // Substituir pela escolha de cliente
+      //   total: total,
+      //   desconto: 0,
+      //   items: items,
+      // );
+
+      //Ajustar aqui
+
+      for (var e in cart.cartItems) {
+        final p = e['product'];
+        final qty = e['quantity'] as int;
+        produtoStore.decrementStock(p['id_produto'] as int, qty);
+      }
+
+      cart.clearCart();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Venda emitida com sucesso!')),
+      );
+
+      await Future.delayed(const Duration(milliseconds: 300));
+      Modular.to.pushReplacementNamed(
+        '/catalog/',
+        arguments: {
+          'email': widget.email,
+        },
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro ao finalizar venda: $e')),
+      );
+    } finally {
+      setState(() => _isSubmitting = false);
+    }
+  }
 }
+

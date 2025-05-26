@@ -117,7 +117,7 @@ class _WelcomePageState extends State<WelcomePage>
             onTap: () {
               Navigator.of(context).pop();
               Modular.to.pushNamed(
-                '/venda',
+                '/venda/sales',
                 arguments: {
                   'email': widget.email,
                   'fotoUrl': widget.fotoUrl,
@@ -227,3 +227,7 @@ class _WelcomePageState extends State<WelcomePage>
     );
   }
 }
+
+
+// Ver para aplicarmos, ou mesmo diminuirmos o tempo da animaccao do Drawe ao lado.
+// para deixar mais agradavel de se ver 

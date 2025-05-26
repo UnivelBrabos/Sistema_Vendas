@@ -25,6 +25,30 @@ mixin _$CartStore on _CartStoreBase, Store {
     });
   }
 
+  late final _$vendaConcluidaAtom =
+      Atom(name: '_CartStoreBase.vendaConcluida', context: context);
+
+  @override
+  bool get vendaConcluida {
+    _$vendaConcluidaAtom.reportRead();
+    return super.vendaConcluida;
+  }
+
+  @override
+  set vendaConcluida(bool value) {
+    _$vendaConcluidaAtom.reportWrite(value, super.vendaConcluida, () {
+      super.vendaConcluida = value;
+    });
+  }
+
+  late final _$concluirVendaAsyncAction =
+      AsyncAction('_CartStoreBase.concluirVenda', context: context);
+
+  @override
+  Future<void> concluirVenda(String clienteId) {
+    return _$concluirVendaAsyncAction.run(() => super.concluirVenda(clienteId));
+  }
+
   late final _$_CartStoreBaseActionController =
       ActionController(name: '_CartStoreBase', context: context);
 
@@ -62,9 +86,21 @@ mixin _$CartStore on _CartStoreBase, Store {
   }
 
   @override
+  void resetVendaFlag() {
+    final _$actionInfo = _$_CartStoreBaseActionController.startAction(
+        name: '_CartStoreBase.resetVendaFlag');
+    try {
+      return super.resetVendaFlag();
+    } finally {
+      _$_CartStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
-cartItems: ${cartItems}
+cartItems: ${cartItems},
+vendaConcluida: ${vendaConcluida}
     ''';
   }
 }

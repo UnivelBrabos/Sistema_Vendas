@@ -7,25 +7,21 @@ import 'package:trabalho_vendas_univel/modules/cart/cart_module.dart';
 import 'package:trabalho_vendas_univel/modules/profile/profile_module.dart';
 import 'package:trabalho_vendas_univel/modules/venda/venda_module.dart';
 import 'package:trabalho_vendas_univel/store/cart_store.dart';
-import '../catalog/catalog_module.dart';
+import 'package:trabalho_vendas_univel/catalog/catalog_module.dart';
 
 class AppModule extends Module {
   @override
   List<Bind> get binds => [
+        // nossa store de carrinho fica disponível em todo app
         Bind.singleton((i) => CartStore()),
       ];
 
   @override
   List<ModularRoute> get routes => [
-        ChildRoute(
-          '/',
-          child: (_, __) => const SplashPage(),
-        ),
 
-        ModuleRoute(
-          '/auth',
-          module: AuthModule(),
-        ),
+        ChildRoute('/', child: (_, __) => const SplashPage()),
+
+        ModuleRoute('/auth', module: AuthModule()),
 
         ChildRoute(
           '/welcome',
@@ -38,29 +34,15 @@ class AppModule extends Module {
           },
         ),
 
-        ModuleRoute(
-          '/home',
-          module: HomeModule(),
-        ),
 
-        ModuleRoute(
-          '/catalog',
-          module: CatalogModule(),
-        ),
+        ModuleRoute('/home', module: HomeModule()),
 
-        ModuleRoute(
-          '/cart',
-          module: CartModule(),
-        ),
+        ModuleRoute('/catalog', module: CatalogModule()),
 
-        ModuleRoute(
-          '/profile',
-          module: ProfileModule(),
-        ),
+        ModuleRoute('/cart', module: CartModule()),
 
-        ModuleRoute(
-          '/venda',
-          module: VendaModule(),
-        ),
+        ModuleRoute('/profile', module: ProfileModule()),
+
+        ModuleRoute('/venda', module: VendaModule()),
       ];
 }
