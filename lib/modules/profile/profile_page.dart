@@ -36,7 +36,7 @@ class ProfilePage extends StatelessWidget {
           .select('nome, email, foto_url')
           .eq('email', normalized)
           .maybeSingle();
-      return response as Map<String, dynamic>?;
+      return response;
     } catch (_) {
       return null;
     }

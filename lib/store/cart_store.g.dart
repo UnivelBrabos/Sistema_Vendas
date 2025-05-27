@@ -41,11 +41,27 @@ mixin _$CartStore on _CartStoreBase, Store {
     });
   }
 
+  late final _$isSubmittingAtom =
+      Atom(name: '_CartStoreBase.isSubmitting', context: context);
+
+  @override
+  bool get isSubmitting {
+    _$isSubmittingAtom.reportRead();
+    return super.isSubmitting;
+  }
+
+  @override
+  set isSubmitting(bool value) {
+    _$isSubmittingAtom.reportWrite(value, super.isSubmitting, () {
+      super.isSubmitting = value;
+    });
+  }
+
   late final _$concluirVendaAsyncAction =
       AsyncAction('_CartStoreBase.concluirVenda', context: context);
 
   @override
-  Future<void> concluirVenda(String clienteId) {
+  Future<String?> concluirVenda(String clienteId) {
     return _$concluirVendaAsyncAction.run(() => super.concluirVenda(clienteId));
   }
 
@@ -100,7 +116,8 @@ mixin _$CartStore on _CartStoreBase, Store {
   String toString() {
     return '''
 cartItems: ${cartItems},
-vendaConcluida: ${vendaConcluida}
+vendaConcluida: ${vendaConcluida},
+isSubmitting: ${isSubmitting}
     ''';
   }
 }

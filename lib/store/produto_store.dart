@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:mobx/mobx.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -14,7 +15,6 @@ abstract class _ProdutoStoreBase with Store {
   @observable
   bool isLoading = false;
 
-  /// Busca no Supabase e atualiza o [produtos].
   @action
   Future<void> fetchProdutos() async {
     isLoading = true;
@@ -26,32 +26,30 @@ abstract class _ProdutoStoreBase with Store {
       final list = (resp as List).cast<Map<String, dynamic>>();
       produtos = ObservableList.of(list);
     } catch (e) {
-      // APLICAR TRATAMENTO DE ERRO :
-      print('Erro ao buscar produtos: $e');
+      debugPrint('Erro ao buscar produtos: $e');
     } finally {
       isLoading = false;
     }
   }
 
-  /// Decrementa o estoque localmente e envia update ao Supabase.
   @action
   Future<void> decrementStock(int idProduto, int quantidade) async {
-    // 1) Atualiza no array local para refletir imediatamente
     final idx = produtos.indexWhere((p) => p['id_produto'] == idProduto);
-    if (idx != -1) {
-      final atual = produtos[idx]['estoque'] as int? ?? 0;
-      produtos[idx]['estoque'] = (atual - quantidade).clamp(0, double.infinity).toInt();
-    }
+    if (idx == -1) return;
 
-    // 2) Opcional: persiste no Supabase
+    final atual = produtos[idx]['estoque'] as int? ?? 0;
+    final novoEstoque = (atual - quantidade).clamp(0, atual);
+
+    produtos[idx]['estoque'] = novoEstoque;
+
     try {
       await supabase
           .from('produtos')
-          .update({'estoque': supabase.rpc('estoque - $quantidade')})
+          .update({'estoque': novoEstoque})
           .eq('id_produto', idProduto);
     } catch (e) {
-      print('Erro ao atualizar estoque no backend: $e');
-      // Se quiser, você pode dar um rollback local aqui
+      debugPrint('Erro ao atualizar estoque no backend: $e');
+      produtos[idx]['estoque'] = atual;
     }
   }
 }

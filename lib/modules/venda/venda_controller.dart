@@ -3,12 +3,11 @@ import '../../models/itens_venda_model.dart';
 import '../../repository/venda_repository.dart';
 import '../../repository/itens_venda_repository.dart';
 
-
 class VendaController {
-  final VendaRepository _vendaRepo = VendaRepository();
-  final ItensVendaRepository _itemRepo  = ItensVendaRepository();
+  final VendaRepository _vendaRepo;
+  final ItensVendaRepository _itemRepo;
 
-  VendaController(Object object);
+  VendaController(this._vendaRepo, this._itemRepo);
 
   Future<void> salvarVenda({
     required int idVendedor,
@@ -19,21 +18,21 @@ class VendaController {
   }) async {
     final venda = VendaModel(
       idVendedor: idVendedor,
-      idCliente:  idCliente,
-      dataVenda:  DateTime.now(),
-      total:      total,
-      desconto:   desconto,
+      idCliente: idCliente,
+      dataVenda: DateTime.now(),
+      total: total,
+      desconto: desconto,
     );
 
     final saleId = await _vendaRepo.createVenda(venda);
 
     for (final item in items) {
       final iv = ItensVendaModel(
-        idVenda:       saleId,
-        idProduto:     item['id_produto'] as int,
-        quantidade:    item['quantidade']  as int,
-        quantidadeLote: item['quantidade'], 
-        subtotal:      (item['subtotal']    as num).toDouble(),
+        idVenda: saleId,
+        idProduto: item['id_produto'] as int,
+        quantidade: item['quantidade'] as int,
+        quantidadeLote: item['quantidade'] as int,
+        subtotal: (item['subtotal'] as num).toDouble(),
       );
       await _itemRepo.insertItem(iv);
     }

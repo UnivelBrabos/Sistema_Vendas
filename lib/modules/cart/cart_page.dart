@@ -40,7 +40,7 @@ class _CartPageState extends State<CartPage> {
           itemBuilder: (_, i) {
             final item = cart.cartItems[i];
             final prod = item['product'];
-            final qty  = item['quantity'] as int;
+            final qty = item['quantity'] as int;
             return ListTile(
               title: Text(prod['nome'] ?? ''),
               subtitle: Text('Qtd: $qty'),
@@ -65,9 +65,7 @@ class _CartPageState extends State<CartPage> {
                   height: 24,
                   width: 24,
                   child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: Colors.white,
-                  ),
+                      strokeWidth: 2, color: Colors.white),
                 )
               : const Text('Finalizar Venda'),
         ),
@@ -78,57 +76,60 @@ class _CartPageState extends State<CartPage> {
   Future<void> _finalizarVenda() async {
     setState(() => _isSubmitting = true);
 
-    try {
-      final items = cart.cartItems.map((e) {
-        final p = e['product'];
-        final qty = e['quantity'] as int;
-        return {
-          'id_produto': p['id_produto'],
-          'quantidade': qty,
-          'subtotal': (p['preco'] as num) * qty,
-        };
-      }).toList();
+    final items = cart.cartItems.map((e) {
+      final p = e['product'];
+      final qty = e['quantity'] as int;
+      return {
+        'id_produto': p['id_produto'],
+        'quantidade': qty,
+        'subtotal': (p['preco'] as num) * qty,
+      };
+    }).toList();
 
-      final total = items.fold<double>(
-        0,
-        (sum, i) => sum + (i['subtotal'] as num).toDouble(),
+    final total = items.fold<double>(
+      0,
+      (sum, i) => sum + (i['subtotal'] as num).toDouble(),
+    );
+
+    try {
+      await vendaController.salvarVenda(
+        idVendedor: 7,
+        idCliente: 7,
+        total: total,
+        desconto: 0,
+        items: items,
       );
 
-      // await vendaController.salvarVenda(
-      //   idVendedor: 7, // Substituir pela lógica real de quem está logado
-      //   idCliente: 7,  // Substituir pela escolha de cliente
-      //   total: total,
-      //   desconto: 0,
-      //   items: items,
-      // );
-
-      //Ajustar aqui
+      // Alterar aqui; 
 
       for (var e in cart.cartItems) {
         final p = e['product'];
         final qty = e['quantity'] as int;
-        produtoStore.decrementStock(p['id_produto'] as int, qty);
+        await produtoStore.decrementStock(p['id_produto'] as int, qty);
       }
 
       cart.clearCart();
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Venda emitida com sucesso!')),
       );
-
       await Future.delayed(const Duration(milliseconds: 300));
       Modular.to.pushReplacementNamed(
         '/catalog/',
-        arguments: {
-          'email': widget.email,
-        },
+        arguments: {'email': widget.email},
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Erro ao finalizar venda: $e')),
+        SnackBar(
+          content: Text(
+            'Não foi possível emitir a venda:\n$e',
+            style: const TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.redAccent,
+          duration: const Duration(seconds: 4),
+        ),
       );
     } finally {
       setState(() => _isSubmitting = false);
     }
   }
 }
-

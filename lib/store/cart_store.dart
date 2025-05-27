@@ -1,8 +1,9 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:async';
 import 'package:mobx/mobx.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import '../models/cliente_model.dart';
 
 part 'cart_store.g.dart';
 
@@ -10,11 +11,13 @@ class CartStore = _CartStoreBase with _$CartStore;
 
 abstract class _CartStoreBase with Store {
   @observable
-  ObservableList<Map<String, dynamic>> cartItems = ObservableList<Map<String, dynamic>>();
+  ObservableList<Map<String, dynamic>> cartItems = ObservableList.of([]);
 
-  // Flag para sinalizar que uma venda foi concluída
   @observable
   bool vendaConcluida = false;
+
+  @observable
+  bool isSubmitting = false;  
 
   @action
   void addItem(Map<String, dynamic> product, int quantity) {
@@ -32,40 +35,49 @@ abstract class _CartStoreBase with Store {
   }
 
   @action
-  Future<void> concluirVenda(String clienteId) async {
+  Future<String?> concluirVenda(String clienteId) async {
     final middlewareUrl = dotenv.env['MIDDLEWARE_URL']?.trim() ?? '';
     if (middlewareUrl.isEmpty) {
-      throw Exception('MIDDLEWARE_URL não está definida no .env');
+      return 'URL de middleware não está configurada.';
     }
-    final url = Uri.parse('\$middlewareUrl/vendas');
 
-    // Payload: lista de itens vendidos e o cliente correspondente
-    final payload = {
-      'clienteId': clienteId,
-      'items': cartItems.map((item) {
-        return {
-          'produtoId': item['product']['id_produto'],
-          'quantidade': item['quantity'],
-        };
-      }).toList(),
-    };
+    isSubmitting = true;
+    try {
+      final url = Uri.parse('$middlewareUrl/vendas');
+      final payload = {
+        'clienteId': clienteId,
+        'items': cartItems.map((item) {
+          return {
+            'produtoId': item['product']['id_produto'],
+            'quantidade': item['quantity'],
+          };
+        }).toList(),
+      };
 
-    final response = await http.post(
-      url,
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(payload),
-    );
+      final response = await http
+          .post(
+            url,
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode(payload),
+          )
+          .timeout(const Duration(seconds: 5));
 
-    if (response.statusCode == 201) {
-      // Venda concluída com sucesso: limpa o carrinho e sinaliza a flag
-      clearCart();
-      vendaConcluida = true;
-    } else {
-      throw Exception('Falha ao concluir venda: \${response.body}');
+      if (response.statusCode == 201) {
+        clearCart();
+        vendaConcluida = true;
+        return null;
+      } else {
+        return 'Falha ao concluir venda: ${response.statusCode}';
+      }
+    } on TimeoutException {
+      return 'Tempo de conexão esgotado. Verifique sua rede ou ngrok.';
+    } catch (e) {
+      return 'Erro ao conectar ao servidor: $e';
+    } finally {
+      isSubmitting = false;
     }
   }
 
-  /// Reseta a flag para futuras vendas
   @action
   void resetVendaFlag() {
     vendaConcluida = false;

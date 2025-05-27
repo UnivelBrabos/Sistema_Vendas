@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:trabalho_vendas_univel/repository/cliente_repository.dart';
 import 'package:trabalho_vendas_univel/widgets/dialogs/product_selection_dialog.dart';
 import '../../store/produto_store.dart';
 import '../../store/cart_store.dart';
-import 'package:trabalho_vendas_univel/core/app_colors.dart';
 
 class CatalogPage extends StatefulWidget {
   final String email;
@@ -21,7 +20,7 @@ class CatalogPage extends StatefulWidget {
 }
 
 class _CatalogPageState extends State<CatalogPage> {
-  final ProdutoStore store = ProdutoStore();
+  final store = Modular.get<ProdutoStore>();
 
   @override
   void initState() {
@@ -45,30 +44,6 @@ class _CatalogPageState extends State<CatalogPage> {
         ),
         title: const Text('Catálogo de Produtos'),
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 8),
-            child: GestureDetector(
-              onTap: () => Modular.to.pushNamed(
-                '/profile',
-                arguments: {
-                  'email': widget.email,
-                  'fotoUrl': widget.fotoUrl,
-                },
-              ),
-              child: CircleAvatar(
-                backgroundColor: AppColors.success,
-                backgroundImage: widget.fotoUrl != null
-                    ? AssetImage(widget.fotoUrl!)
-                    : null,
-                child: widget.fotoUrl == null
-                    ? Text(
-                        widget.email[0].toUpperCase(),
-                        style: const TextStyle(color: Colors.white),
-                      )
-                    : null,
-              ),
-            ),
-          ),
           IconButton(
             onPressed: () => Modular.to.pushNamed(
               '/cart',
@@ -108,8 +83,10 @@ class _CatalogPageState extends State<CatalogPage> {
                   trailing: IconButton(
                     icon: const Icon(Icons.add_shopping_cart),
                     onPressed: () async {
-                      final clientes = await ClienteRepository().getAllClients();
-                      final result = await showDialog<ProductSelectionResult>(
+                      final clientes =
+                          await ClienteRepository().getAllClients();
+                      final result =
+                          await showDialog<ProductSelectionResult>(
                         context: context,
                         builder: (_) => ProductSelectionDialog(
                           productName: nome,
