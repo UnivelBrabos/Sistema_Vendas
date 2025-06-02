@@ -7,14 +7,14 @@ import httpx
 router = APIRouter()
 
     
-@router.get('/product/get_all')
+@router.get('/products/get_all')
 async def get_product(
     client: httpx.AsyncClient = Depends(get_client)
 ):
     response = await get_all(client, "produtos")
     return response.json()
     
-@router.get('/product/get/{id_produto}')    
+@router.get('/products/get/{id_produto}')    
 async def get_product_by_id(
     id_produto: int,
     client: httpx.AsyncClient = Depends(get_client)
@@ -25,7 +25,7 @@ async def get_product_by_id(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Produto não encontrado")
     return product[0]
 
-@router.post('/product/post')
+@router.post('/products/post')
 async def insert_product(
     product: ProdutosCreate,
     client: httpx.AsyncClient = Depends(get_client)
@@ -34,7 +34,7 @@ async def insert_product(
     response = await insert(client, "produtos", data)
     return {"Mensagem": f"{data}"}
     
-@router.put('/product/put/{id_produto}')
+@router.put('/products/put/{id_produto}')
 async def update_product(
     id_produto: int,
     product_update: ProdutosCreate,
@@ -44,7 +44,7 @@ async def update_product(
     response = await update(client, "produtos", "id_produto", id_produto, data)
     return {"Mensagem": f"{data}"}        
 
-@router.delete('/product/delete/{id_produto}')
+@router.delete('/products/delete/{id_produto}')
 async def delete_product(
     id_produto: int,
     client: httpx.AsyncClient = Depends(get_client)
