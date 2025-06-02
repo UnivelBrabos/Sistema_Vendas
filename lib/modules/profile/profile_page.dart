@@ -16,7 +16,13 @@ class ProfilePage extends StatelessWidget {
     'carlos@gmail.com',
     'saymon@gmail.com',
     'diogo@gmail.com',
+    'eder@gmail.com',
   };
+
+  String _capitalize(String s) {
+    if (s.isEmpty) return s;
+    return s[0].toUpperCase() + s.substring(1).toLowerCase();
+  }
 
   Future<Map<String, dynamic>?> _fetchUserData() async {
     final normalized = email.trim().toLowerCase();
@@ -24,19 +30,18 @@ class ProfilePage extends StatelessWidget {
     if (_staticUsers.contains(normalized)) {
       final name = normalized.split('@').first;
       return {
-        'nome': name[0].toUpperCase() + name.substring(1),
+        'nome': name,
         'email': normalized,
         'foto_url': 'lib/assets/macaco/$name.png',
       };
     }
 
     try {
-      final response = await Supabase.instance.client
+      return await Supabase.instance.client
           .from('vendedores')
           .select('nome, email, foto_url')
           .eq('email', normalized)
           .maybeSingle();
-      return response;
     } catch (_) {
       return null;
     }
@@ -44,8 +49,9 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final firstName = email.split('@').first;
-    final initial = firstName.isNotEmpty ? firstName[0].toUpperCase() : '?';
+    final firstNameRaw = email.split('@').first;
+    final initial =
+        firstNameRaw.isNotEmpty ? firstNameRaw[0].toUpperCase() : '?';
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -60,15 +66,27 @@ class ProfilePage extends StatelessWidget {
           if (snap.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
+
           final user = snap.data;
-          final name = (user?['nome'] as String?) ?? firstName;
+          final rawName = (user?['nome'] as String?) ?? firstNameRaw;
+          final name = _capitalize(rawName);
+
           final mail = (user?['email'] as String?) ?? email;
-          final photo = user?['foto_url'] as String?;
+
+          final supabasePhoto = user?['foto_url'] as String?;
+          final rawPhoto =
+              (fotoUrl?.isNotEmpty == true ? fotoUrl : supabasePhoto)?.trim();
+
+          ImageProvider? avatarImage;
+          if (rawPhoto != null && rawPhoto.isNotEmpty) {
+            avatarImage = rawPhoto.startsWith('http')
+                ? NetworkImage(rawPhoto)
+                : AssetImage(rawPhoto);
+          }
 
           return Center(
             child: Card(
-              margin:
-                  const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16)),
               elevation: 8,
@@ -80,9 +98,8 @@ class ProfilePage extends StatelessWidget {
                     CircleAvatar(
                       radius: 48,
                       backgroundColor: AppColors.primaryColor,
-                      backgroundImage:
-                          photo != null ? AssetImage(photo) : null,
-                      child: photo == null
+                      backgroundImage: avatarImage,
+                      child: avatarImage == null
                           ? Text(
                               initial,
                               style: const TextStyle(
@@ -93,28 +110,29 @@ class ProfilePage extends StatelessWidget {
                           : null,
                     ),
                     const SizedBox(height: 16),
-                    Text(name,
-                        style: const TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold)),
+                    Text(
+                      name,
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
                     const SizedBox(height: 8),
-                    Text(mail,
-                        style: const TextStyle(
-                            fontSize: 16, color: Colors.black54)),
+                    Text(
+                      mail,
+                      style:
+                          const TextStyle(fontSize: 16, color: Colors.black54),
+                    ),
                     const Divider(height: 32, thickness: 1),
                     ListTile(
                       leading: const Icon(Icons.settings, size: 28),
                       title: const Text('Configurações',
                           style: TextStyle(fontSize: 16)),
-                      onTap: () => ScaffoldMessenger.of(context)
-                          .showSnackBar(const SnackBar(
-                              content: Text('Em construção'))),
+                      onTap: () => ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Em construção'))),
                     ),
                     ListTile(
                       leading: const Icon(Icons.logout, size: 28),
-                      title: const Text('Sair',
-                          style: TextStyle(fontSize: 16)),
-                      onTap: () =>
-                          Modular.to.pushReplacementNamed('/auth'),
+                      title: const Text('Sair', style: TextStyle(fontSize: 16)),
+                      onTap: () => Modular.to.pushReplacementNamed('/auth'),
                     ),
                   ],
                 ),

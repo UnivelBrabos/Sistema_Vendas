@@ -81,6 +81,7 @@ flutter:
     - lib/assets/macaco/carlos.png
     - lib/assets/macaco/diogo.png
     - lib/assets/macaco/saymon.png
+    - lib/assets/macaco/eder.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

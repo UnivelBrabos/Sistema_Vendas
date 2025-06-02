@@ -7,11 +7,11 @@ class AuthController {
     'carlos@gmail.com': '123',
     'saymon@gmail.com': '123',
     'diogo@gmail.com': '123',
-    'eder@gmail.com' : '123',
+    'eder@gmail.com': '123',
   };
 
   Future<void> login(
-    String email,
+    String email, 
     String password,
     BuildContext context,
   ) async {
@@ -36,7 +36,7 @@ class AuthController {
     try {
       final response = await Supabase.instance.client
           .from('usuarios')
-          .select('senha_hash, foto_url')
+          .select('senha_hash')
           .eq('email', normalizedEmail)
           .maybeSingle();
 
@@ -49,17 +49,16 @@ class AuthController {
 
       final data = response as Map<String, dynamic>;
       final storedHash = data['senha_hash'] as String?;
-      final remoteFoto = data['foto_url'] as String?;
 
       if (storedHash == null || password != storedHash) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text('Credenciais inválidas (senha incorreta).')),
+          const SnackBar(content: Text('Credenciais inválidas (senha incorreta).')),
         );
         return;
       }
 
-      fotoUrl = remoteFoto;
+      fotoUrl = null;
+
       _goToWelcome(normalizedEmail, fotoUrl);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(

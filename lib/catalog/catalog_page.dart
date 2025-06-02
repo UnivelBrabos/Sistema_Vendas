@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:trabalho_vendas_univel/repository/cliente_repository.dart';
-import 'package:trabalho_vendas_univel/widgets/dialogs/product_selection_dialog.dart';
 import '../../store/produto_store.dart';
 import '../../store/cart_store.dart';
+import 'package:trabalho_vendas_univel/widgets/dialogs/product_selection_dialog.dart';
 
 class CatalogPage extends StatefulWidget {
   final String email;
@@ -21,6 +20,7 @@ class CatalogPage extends StatefulWidget {
 
 class _CatalogPageState extends State<CatalogPage> {
   final store = Modular.get<ProdutoStore>();
+  final cart = Modular.get<CartStore>();
 
   @override
   void initState() {
@@ -74,29 +74,29 @@ class _CatalogPageState extends State<CatalogPage> {
               itemCount: store.produtos.length,
               itemBuilder: (_, i) {
                 final p = store.produtos[i];
-                final nome = p['nome'] ?? 'Sem nome';
-                final preco = p['preco'] ?? 0;
-                final estoque = p['estoque'] ?? 0;
+                final nome = p['nome'] as String? ?? 'Sem nome';
+                final preco = (p['preco'] as num?)?.toDouble() ?? 0.0;
+                final estoque = p['estoque'] as int? ?? 0;
                 return ListTile(
                   title: Text(nome),
-                  subtitle: Text('R\$ $preco | Estoque: $estoque'),
+                  subtitle: Text('R\$ ${preco.toStringAsFixed(2)} | Estoque: $estoque'),
                   trailing: IconButton(
                     icon: const Icon(Icons.add_shopping_cart),
                     onPressed: () async {
-                      final clientes =
-                          await ClienteRepository().getAllClients();
-                      final result =
-                          await showDialog<ProductSelectionResult>(
+                      final result = await showDialog<Map<String, dynamic>>(
                         context: context,
                         builder: (_) => ProductSelectionDialog(
                           productName: nome,
-                          clientes: clientes,
+                          unitPrice: preco,
                         ),
                       );
                       if (result != null) {
-                        final cart = Modular.get<CartStore>();
-                        p['quantidade'] = result.quantidade;
-                        cart.addItem(p, result.quantidade);
+                        // Adiciona ao carrinho: produto + quantidade
+                        cart.addItem(
+                          p,
+                          result['quantity'] as int,
+                        );
+                        // Navega para o carrinho
                         Modular.to.pushReplacementNamed(
                           '/cart',
                           arguments: {
