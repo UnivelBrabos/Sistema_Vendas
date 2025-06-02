@@ -19,17 +19,17 @@ namespace Sistema_Vendas.Controller
         {
             try
             {
-                string strJson = await SendGetRequest(pEndPoint);
+                string strJson = await SendGetRequest($"{pEndPoint}");
 
                 if (strJson.StartsWith("Retorno"))
                 {
                     throw new Exception(strJson);
                 }
 
-                if (!TrataJson(ref strJson, pSubElemento))
+                /*if (!TrataJson(ref strJson, pSubElemento))
                 {
                     throw new Exception(strJson);
-                }
+                }*/
 
                 List<T> lstModel = JsonConvert.DeserializeObject<List<T>>(strJson);
 
@@ -44,7 +44,7 @@ namespace Sistema_Vendas.Controller
 
         private static async Task<string> SendGetRequest(string pEndPoint)
         {
-            string strUrl = $"{localHost}/{pEndPoint}/get";
+            string strUrl = $"{localHost}/{pEndPoint}/get_all";
 
             using (HttpClient client = new HttpClient())
             {
