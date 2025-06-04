@@ -22,17 +22,17 @@ namespace Sistema_Vendas.View
 
         private void txtVendedor_GotFocus(object sender, RoutedEventArgs e)
         {
-            CarregaAuxiliar?.Invoke(sender, EventArgs.Empty);
+            CarregaAuxiliar?.Invoke(txtVendedor.Tag, EventArgs.Empty);
         }
 
         private void txtCliente_GotFocus(object sender, RoutedEventArgs e)
         {
-            CarregaAuxiliar?.Invoke(sender, EventArgs.Empty);
+            CarregaAuxiliar?.Invoke(txtCliente.Tag, EventArgs.Empty);
         }
 
         private void txtIdVenda_GotFocus(object sender, System.Windows.RoutedEventArgs e)
         {
-            CarregaAuxiliar?.Invoke(sender, EventArgs.Empty);
+            CarregaAuxiliar?.Invoke(txtIdVenda.Tag, EventArgs.Empty);
 
             if(txtIdVenda.Text == "Id. Venda")
             {
@@ -42,7 +42,7 @@ namespace Sistema_Vendas.View
 
         private void btnBuscarItensVenda_Click(object sender, RoutedEventArgs e)
         {
-            CarregaAuxiliar?.Invoke(sender, EventArgs.Empty);
+            CarregaAuxiliar?.Invoke(btnBuscarItensVenda.Tag, EventArgs.Empty);
         }
 
         private void LimparCampos()
@@ -85,7 +85,7 @@ namespace Sistema_Vendas.View
                     return;
                 }
 
-                SetVenda?.Invoke(sender, EventArgs.Empty);
+                SetVenda?.Invoke(txtIdVenda.Text, EventArgs.Empty);
             }
         }
 

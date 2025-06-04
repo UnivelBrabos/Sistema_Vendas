@@ -28,6 +28,9 @@ namespace Sistema_Vendas
             ViewService.Instance.Splash.Close();
 
             View.Login.Show();
+
+            await PersistDataService.Instance.InitAsync(false);
+
             Filtro = new();
         }
 

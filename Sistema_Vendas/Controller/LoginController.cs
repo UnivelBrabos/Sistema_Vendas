@@ -28,6 +28,9 @@ namespace Sistema_Vendas.Controller
 
                 if (objUsuario != null)
                 {
+                    MessageBox.Show("Calma ae paezão!", "Ok?", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                    Thread.Sleep(3000);
+
                     App.SetUsuario(objUsuario);
                     App.View.Principal.Show();
 

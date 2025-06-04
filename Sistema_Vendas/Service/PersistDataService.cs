@@ -28,14 +28,20 @@ namespace Sistema_Vendas.Service
 
         private PersistDataService() { }
 
-        public async Task InitAsync()
+        public async Task InitAsync(bool Startup = true)
         {
-            lstUsuarios = await Usuarios.GetModel();
-            lstProdutos = await Produto.GetModel();
-            lstClientes = await Cliente.GetModel();
-            lstVendas = await Vendas.GetModel();
-            lstVendedores = await Vendedor.GetModel();
-            lstItensVenda = await ItensVenda.GetModel();
+            if (Startup)
+            {
+                lstUsuarios = await Usuarios.GetModel();
+            }
+            else
+            {
+                lstVendas = await Vendas.GetModel();
+                lstProdutos = await Produto.GetModel();
+                lstClientes = await Cliente.GetModel();
+                lstVendedores = await Vendedor.GetModel();
+                lstItensVenda = await ItensVenda.GetModel();
+            }
         }
     }
 
