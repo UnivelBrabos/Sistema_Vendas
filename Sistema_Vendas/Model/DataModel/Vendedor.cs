@@ -49,7 +49,7 @@ namespace Sistema_Vendas.Model.DataModel
             throw new NotImplementedException();
         }
 
-        public static Task<List<Vendedor>> UpdateModel()
+        public static async Task<bool> UpdateModel(int Id)
         {
             throw new NotImplementedException();
         }

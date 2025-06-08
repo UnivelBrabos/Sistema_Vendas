@@ -103,7 +103,7 @@
                 </Button.Style>
             </Button>
             <Grid x:Name="grdAuxiliar" Margin="481,0,13,0">
-                <DataGrid x:Name="dgvAuxiliar" Margin="10,10,0,10" Background="White" FontFamily="Rockwell" CanUserDeleteRows="False" GridLinesVisibility="Horizontal" HeadersVisibility="Column"/>
+                <DataGrid x:Name="dgvAuxiliar" Margin="10,10,0,10" Background="White" FontFamily="Rockwell" CanUserDeleteRows="False" GridLinesVisibility="Horizontal" HeadersVisibility="Column" IsReadOnly="True"/>
             </Grid>
         </Grid>
     </Grid>

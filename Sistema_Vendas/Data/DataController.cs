@@ -2,6 +2,7 @@
 using Sistema_Vendas.Model.DataModel;
 using Sistema_Vendas.Service;
 using System.Net.Http;
+using System.Text;
 using System.Text.Json;
 using System.Windows;
 
@@ -25,11 +26,6 @@ namespace Sistema_Vendas.Controller
                 {
                     throw new Exception(strJson);
                 }
-
-                /*if (!TrataJson(ref strJson, pSubElemento))
-                {
-                    throw new Exception(strJson);
-                }*/
 
                 List<T> lstModel = JsonConvert.DeserializeObject<List<T>>(strJson);
 
@@ -59,28 +55,17 @@ namespace Sistema_Vendas.Controller
             }
         }
 
-        private static bool TrataJson(ref string pJson, string pPropriedade)
+        public async Task<bool> UpdateItem(string pItemClass, string pId, string pJson)
         {
-            try
-            {
-                using (JsonDocument doc = JsonDocument.Parse(pJson))
-                {
-                    JsonElement root = doc.RootElement;
+            string strUrl = $"{localHost}/{pItemClass}/put/{pId}";
 
-                    if (root.TryGetProperty(pPropriedade, out JsonElement clientesElement) &&
-                        clientesElement.TryGetProperty("data", out JsonElement dataElement))
-                    {
-                        pJson = dataElement.GetRawText();
-                        return true;
-                    }
-
-                    throw new Exception("SubElemento não encontrado");
-                }
-            }
-            catch (Exception ex)
+            using (HttpClient client = new HttpClient())
             {
-                pJson = ex.Message;
-                return false;
+                var content = new StringContent(pJson, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await client.PutAsync(strUrl, content);
+
+                return response.IsSuccessStatusCode;
             }
         }
     }

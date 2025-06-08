@@ -11,6 +11,6 @@ namespace Sistema_Vendas.Interfaces
         abstract static Task<List<T>> GetModel();
         abstract static Task<List<T>> PostModel();
         abstract static Task<List<T>> DeleteModel();
-        abstract static Task<List<T>> UpdateModel();
+        abstract static Task<bool> UpdateModel(int Id);
     }
 }
