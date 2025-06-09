@@ -23,6 +23,9 @@ namespace Sistema_Vendas.Model.DataModel
 
         [JsonProperty("lote")]
         public int Lote { get; set; }
+
+        [JsonProperty("categoria_produto")]
+        public int Categoria { get; set; }
         #endregion :: Atributos ::
 
         #region :: Construtor ::

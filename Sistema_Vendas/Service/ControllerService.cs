@@ -11,6 +11,7 @@ namespace Sistema_Vendas.Service
         public DataController Data { get; set; }
         public LoginController Login { get; set; }
         public FiltrarController Filtrar {  get; set; }
+        public EstoqueController Estoque { get; set; }
 
         #endregion :: Controllers ::    
 
@@ -36,6 +37,7 @@ namespace Sistema_Vendas.Service
             Principal = new(App.View.Principal);
             Login = new(App.View.Login);
             Filtrar = new(App.View.Filtrar);
+            Estoque = new(App.View.Estoque);
         }
     }
 }

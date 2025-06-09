@@ -26,7 +26,6 @@ namespace Sistema_Vendas.View
         public EstoqueView()
         {
             InitializeComponent();
-            SetProdutos?.Invoke(null, EventArgs.Empty);
         }
 
         private void txtIdProduto_PreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -72,7 +71,7 @@ namespace Sistema_Vendas.View
             {
                 if (pIdSelecionado == item.IdProduto.ToString())
                 {
-                    txtIdProduto.Text = item.Estoque.ToString();
+                    txtValorEstoque.Text = item.Estoque.ToString();
 
                     return true;
                 }
@@ -117,17 +116,23 @@ namespace Sistema_Vendas.View
                 return;
             }
 
-            if (!ItemAtualizado())
+            /*if (!ItemAtualizado())
             {
                 MessageBox.Show("Item não sofreu alteração!", "", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
-            }
+            }*/
 
             UpdateProduto?.Invoke($"{txtIdProduto.Text};{txtValorEstoque.Text}", EventArgs.Empty);
         }
 
         private void txtIdProduto_GotFocus(object sender, RoutedEventArgs e)
         {
+            if (txtIdProduto.Text == "Id. Produto")
+            {
+                txtIdProduto.Text = "";
+                SetProdutos?.Invoke(null, EventArgs.Empty);
+            }
+
 
         }
     }

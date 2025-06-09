@@ -28,7 +28,7 @@ namespace Sistema_Vendas.Controller
 
                 if (objUsuario != null)
                 {
-                    MessageBox.Show("Calma ae paezão!", "Ok?", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                    MessageBox.Show("Logado com sucesso!", "Logado", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                     Thread.Sleep(3000);
 
                     App.SetUsuario(objUsuario);

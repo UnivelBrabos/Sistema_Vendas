@@ -9,8 +9,8 @@
     <Grid x:Name="grdPrincipal" Background="#FFF0F0F0">
         <DataGrid x:Name="dgvAuxiliar" Margin="400,12,10,8" Background="White" FontFamily="Rockwell" CanUserDeleteRows="False" GridLinesVisibility="Horizontal" HeadersVisibility="Column" IsReadOnly="True"/>
         <Rectangle x:Name="retIdVenda" HorizontalAlignment="Left" Height="61" Margin="10,12,0,0" VerticalAlignment="Top" Width="353" Fill="White" RadiusX="10" RadiusY="10"/>
-        <TextBox x:Name="txtIdProduto" HorizontalAlignment="Left" Margin="22,29,0,0" TextWrapping="Wrap" Text="Id. Produto" VerticalAlignment="Top" Width="328" FontSize="18" FontFamily="Rockwell" Background="{x:Null}" BorderBrush="{x:Null}" Height="27" VerticalContentAlignment="Center" PreviewTextInput="txtIdProduto_PreviewTextInput" Tag="IdVenda" KeyDown="txtIdProduto_KeyDown"/>
-        <Button x:Name="btnAtualizarEstoque" Content="Atualizar Estoque" HorizontalAlignment="Left" Margin="10,0,0,10" Width="164" FontFamily="Rockwell" FontSize="18" Background="#FF73DA84" Height="44" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" IsEnabled="False" Click="btnAtualizarEstoque_Click">
+        <TextBox x:Name="txtIdProduto" HorizontalAlignment="Left" Margin="22,29,0,0" TextWrapping="Wrap" Text="Id. Produto" VerticalAlignment="Top" Width="328" FontSize="18" FontFamily="Rockwell" Background="{x:Null}" BorderBrush="{x:Null}" Height="27" VerticalContentAlignment="Center" PreviewTextInput="txtIdProduto_PreviewTextInput" Tag="IdVenda" KeyDown="txtIdProduto_KeyDown" GotFocus="txtIdProduto_GotFocus"/>
+        <Button x:Name="btnAtualizarEstoque" Content="Atualizar Estoque" HorizontalAlignment="Left" Margin="10,0,0,10" Width="164" FontFamily="Rockwell" FontSize="18" Background="#FF73DA84" Height="44" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" IsEnabled="True" Click="btnAtualizarEstoque_Click">
             <Button.Style>
                 <Style TargetType="{x:Type Button}">
                     <Setter Property="Background" Value="Transparent"/>

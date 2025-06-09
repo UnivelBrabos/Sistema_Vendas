@@ -12,6 +12,7 @@ namespace Sistema_Vendas.Controller
         {
             _Estoque = IEstoque;
             _Estoque.SetProdutos += CarregaTabela;
+            _Estoque.UpdateProduto += AtualizarEstoque;
         }
 
         private void CarregaTabela(object Sender, EventArgs e)
@@ -24,7 +25,6 @@ namespace Sistema_Vendas.Controller
 
         private void AtualizarEstoque(object Sender, EventArgs e)
         {
-
             string[] Valores = Sender.ToString().Split(';');
 
             int IdProduto = Convert.ToInt32(Valores[0]);
