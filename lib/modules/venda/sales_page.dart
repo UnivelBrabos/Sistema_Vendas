@@ -21,18 +21,133 @@ class _SalesPageState extends State<SalesPage> {
   final supabase = Supabase.instance.client;
   late Future<List<Map<String, dynamic>>> _futureVendas;
 
+  double? _minValor;
+  int? _clienteSelecionado;
+  bool _ultimos5Dias = false;
+
+  List<Map<String, dynamic>> _clientes = [];
+
   @override
   void initState() {
     super.initState();
-    _futureVendas = _fetchAllVendas();
+    _loadClientes().then((_) => _loadVendas());
   }
 
-  Future<List<Map<String, dynamic>>> _fetchAllVendas() async {
+  Future<void> _loadClientes() async {
     final resp = await supabase
+        .from('clientes')
+        .select('id_cliente, nome');
+    _clientes = (resp as List).cast<Map<String, dynamic>>();
+  }
+
+  void _loadVendas() {
+    setState(() {
+      _futureVendas = _fetchAllVendas(
+        minValor: _minValor,
+        clienteId: _clienteSelecionado,
+        ultimosDias: _ultimos5Dias ? 5 : null,
+      );
+    });
+  }
+
+  Future<List<Map<String, dynamic>>> _fetchAllVendas({
+    double? minValor,
+    int? clienteId,
+    int? ultimosDias, 
+  }) async {
+    var builder = supabase
         .from('vendas')
-        .select()
-        .order('data_venda', ascending: false);
+        .select();
+
+    if (minValor != null) {
+      builder = builder.gte('total', minValor);
+    }
+    if (clienteId != null) {
+      builder = builder.eq('id_cliente', clienteId);
+    }
+    if (ultimosDias != null) {
+      final cutoff = DateTime.now()
+          .subtract(Duration(days: ultimosDias))
+          .toIso8601String();
+      builder = builder.gte('data_venda', cutoff);
+    }
+
+    final resp = await builder.order('data_venda', ascending: false);
     return (resp as List).cast<Map<String, dynamic>>();
+  }
+
+  void _openFilterSheet() {
+    final valorCtrl = TextEditingController(
+      text: _minValor?.toStringAsFixed(2) ?? '',
+    );
+
+    showModalBottomSheet(
+      context: context,
+      builder: (_) => Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          Text('Filtrar Vendas', style: Theme.of(context).textTheme.titleLarge),
+          const SizedBox(height: 12),
+
+          TextField(
+            controller: valorCtrl,
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            decoration: const InputDecoration(
+              labelText: 'Valor mínimo (R\$)',
+              prefixText: '≥ ',
+            ),
+          ),
+          const SizedBox(height: 12),
+
+          DropdownButtonFormField<int?>(
+            value: _clienteSelecionado,
+            decoration: const InputDecoration(labelText: 'Cliente'),
+            items: [
+              const DropdownMenuItem(value: null, child: Text('Todos')),
+              ..._clientes.map((c) => DropdownMenuItem<int?>(
+                    value: c['id_cliente'] as int,
+                    child: Text(c['nome'] as String),
+                  )),
+            ],
+            onChanged: (v) => setState(() => _clienteSelecionado = v),
+          ),
+          const SizedBox(height: 12),
+
+          SwitchListTile(
+            title: const Text('Últimos 5 dias'),
+            value: _ultimos5Dias,
+            onChanged: (v) => setState(() => _ultimos5Dias = v),
+          ),
+          const SizedBox(height: 12),
+
+          Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  _minValor = null;
+                  _clienteSelecionado = null;
+                  _ultimos5Dias = false;
+                });
+                Navigator.pop(context);
+                _loadVendas();
+              },
+              child: const Text('Limpar'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  final parsed = double.tryParse(valorCtrl.text.replaceAll(',', '.'));
+                  _minValor = parsed;
+                });
+                Navigator.pop(context);
+                _loadVendas();
+              },
+              child: const Text('Aplicar'),
+            ),
+          ]),
+        ]),
+      ),
+    );
   }
 
   @override
@@ -43,6 +158,7 @@ class _SalesPageState extends State<SalesPage> {
         backgroundColor: AppColors.primaryColor,
         centerTitle: true,
         actions: [
+          IconButton(icon: const Icon(Icons.filter_list), onPressed: _openFilterSheet),
           Padding(
             padding: const EdgeInsets.only(right: 16),
             child: GestureDetector(
@@ -58,10 +174,8 @@ class _SalesPageState extends State<SalesPage> {
                 backgroundImage:
                     widget.fotoUrl != null ? AssetImage(widget.fotoUrl!) : null,
                 child: widget.fotoUrl == null
-                    ? Text(
-                        widget.email[0].toUpperCase(),
-                        style: const TextStyle(color: Colors.white),
-                      )
+                    ? Text(widget.email[0].toUpperCase(),
+                        style: const TextStyle(color: Colors.white))
                     : null,
               ),
             ),
@@ -91,16 +205,15 @@ class _SalesPageState extends State<SalesPage> {
               final raw = v['data_venda'];
               final dt = raw is String
                   ? DateTime.parse(raw)
-                  : (raw is DateTime ? raw : DateTime.tryParse(raw.toString())!);
-              final formattedDate =
-                  DateFormat('dd/MM/yyyy – HH:mm').format(dt);
+                  : (raw is DateTime
+                      ? raw
+                      : DateTime.tryParse(raw.toString())!);
+              final formattedDate = DateFormat('dd/MM/yyyy – HH:mm').format(dt);
               final total = (v['total'] as num).toDouble();
 
               return Card(
                 elevation: 2,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 child: ListTile(
                   contentPadding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -109,12 +222,8 @@ class _SalesPageState extends State<SalesPage> {
                     style: const TextStyle(fontWeight: FontWeight.w600),
                   ),
                   subtitle: Text('Total: R\$ ${total.toStringAsFixed(2)}'),
-                  trailing: Icon(
-                    Icons.chevron_right,
-                    color: AppColors.primaryColor,
-                  ),
-                  onTap: () {
-                  },
+                  trailing: Icon(Icons.chevron_right, color: AppColors.primaryColor),
+                  onTap: () {/* detalhes */},
                 ),
               );
             },
