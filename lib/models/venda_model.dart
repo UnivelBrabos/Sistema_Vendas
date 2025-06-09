@@ -14,10 +14,10 @@ class VendaModel {
   });
 
   Map<String, dynamic> toJson() => {
-        "id_vendedor": idVendedor,
-        "id_cliente" : idCliente,
-        "data_venda" : dataVenda.toIso8601String(),
-        "total"      : total,
-        "desconto"   : desconto,
+        'id_vendedor': idVendedor,
+        'id_cliente' : idCliente,
+        'data_venda' : dataVenda.toIso8601String(),
+        'total'      : total,
+        'desconto'   : desconto,
       };
 }

@@ -1,5 +1,4 @@
 import '../../models/venda_model.dart';
-import '../../models/itens_venda_model.dart';
 import '../../repository/venda_repository.dart';
 import '../../repository/itens_venda_repository.dart';
 
@@ -27,14 +26,14 @@ class VendaController {
     final saleId = await _vendaRepo.createVenda(venda);
 
     for (final item in items) {
-      final iv = ItensVendaModel(
-        idVenda: saleId,
-        idProduto: item['id_produto'] as int,
-        quantidade: item['quantidade'] as int,
-        quantidadeLote: item['quantidade'] as int,
-        subtotal: (item['subtotal'] as num).toDouble(),
-      );
-      await _itemRepo.insertItem(iv);
+      final itemJson = {
+        'id_venda'       : saleId,
+        'id_produto'     : item['id_produto'] as int,
+        'quantidade'     : item['quantidade'] as int,
+        'quantidade_lote': item['quantidade'] as int,
+        'subtotal'       : (item['subtotal'] as num).toDouble(),
+      };
+      await _itemRepo.insertItem(itemJson);
     }
   }
 }

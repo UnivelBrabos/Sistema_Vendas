@@ -19,13 +19,13 @@ class CatalogPage extends StatefulWidget {
 }
 
 class _CatalogPageState extends State<CatalogPage> {
-  final store = Modular.get<ProdutoStore>();
+  final produtoStore = Modular.get<ProdutoStore>();
   final cart = Modular.get<CartStore>();
 
   @override
   void initState() {
     super.initState();
-    store.fetchProdutos();
+    produtoStore.fetchProdutos();
   }
 
   @override
@@ -61,25 +61,29 @@ class _CatalogPageState extends State<CatalogPage> {
         ],
       ),
       body: RefreshIndicator(
-        onRefresh: () => store.fetchProdutos(),
+        onRefresh: () => produtoStore.fetchProdutos(),
         child: Observer(
           builder: (_) {
-            if (store.isLoading) {
+            if (produtoStore.isLoading) {
               return const Center(child: CircularProgressIndicator());
             }
-            if (store.produtos.isEmpty) {
+            if (produtoStore.produtos.isEmpty) {
               return const Center(child: Text('Nenhum produto encontrado.'));
             }
             return ListView.builder(
-              itemCount: store.produtos.length,
-              itemBuilder: (_, i) {
-                final p = store.produtos[i];
-                final nome = p['nome'] as String? ?? 'Sem nome';
-                final preco = (p['preco'] as num?)?.toDouble() ?? 0.0;
-                final estoque = p['estoque'] as int? ?? 0;
+              itemCount: produtoStore.produtos.length,
+              itemBuilder: (_, index) {
+                final p = produtoStore.produtos[index];
+                final idProduto = p['id_produto'] as int? ?? 0;
+                final nome      = p['nome']        as String? ?? 'Sem nome';
+                final preco     = (p['preco'] as num?)?.toDouble() ?? 0.0;
+                final estoque   = p['estoque']     as int? ?? 0;
+
                 return ListTile(
                   title: Text(nome),
-                  subtitle: Text('R\$ ${preco.toStringAsFixed(2)} | Estoque: $estoque'),
+                  subtitle: Text(
+                    'R\$ ${preco.toStringAsFixed(2)}  •  Estoque: $estoque',
+                  ),
                   trailing: IconButton(
                     icon: const Icon(Icons.add_shopping_cart),
                     onPressed: () async {
@@ -91,12 +95,18 @@ class _CatalogPageState extends State<CatalogPage> {
                         ),
                       );
                       if (result != null) {
-                        // Adiciona ao carrinho: produto + quantidade
+                        final qty = result['quantity'] as int;
+                        debugPrint('Adicionando ao carrinho: id_produto=$idProduto, qty=$qty');
+
                         cart.addItem(
-                          p,
-                          result['quantity'] as int,
+                          {
+                            'id_produto': idProduto,
+                            'nome'      : nome,
+                            'preco'     : preco,
+                          },
+                          qty,
                         );
-                        // Navega para o carrinho
+
                         Modular.to.pushReplacementNamed(
                           '/cart',
                           arguments: {

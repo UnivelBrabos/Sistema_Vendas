@@ -21,7 +21,7 @@ abstract class _ProdutoStoreBase with Store {
     try {
       final resp = await supabase
           .from('produtos')
-          .select()
+          .select('id_produto, nome, preco, estoque')
           .order('nome', ascending: true);
       final list = (resp as List).cast<Map<String, dynamic>>();
       produtos = ObservableList.of(list);

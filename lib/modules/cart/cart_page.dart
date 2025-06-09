@@ -11,7 +11,7 @@ import 'package:trabalho_vendas_univel/core/app_colors.dart';
 
 class CartPage extends StatefulWidget {
   final String email;
-  const CartPage({ Key? key, required this.email }) : super(key: key);
+  const CartPage({Key? key, required this.email}) : super(key: key);
 
   @override
   State<CartPage> createState() => _CartPageState();
@@ -46,14 +46,15 @@ class _CartPageState extends State<CartPage> {
           .select('id_vendedor')
           .eq('email', normalized)
           .maybeSingle();
+
       if (res != null && res['id_vendedor'] != null) {
         _vendedorId = res['id_vendedor'] as int;
       } else {
-        throw Exception('Vendedor não encontrado.');
+        throw Exception('Vendedor não encontrado na tabela "vendedores".');
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Erro ao obter vendedor: $e')),
+        SnackBar(content: Text('Erro ao obter id_vendedor: $e')),
       );
     } finally {
       setState(() => _loadingVendedor = false);
@@ -92,36 +93,34 @@ class _CartPageState extends State<CartPage> {
 
     setState(() => _isSubmitting = true);
 
-    final items = cart.cartItems.map((e) {
-      final p = e['product'];
+    final itemsComSubtotal = cart.cartItems.map((e) {
+      final p = e['product'] as Map<String, dynamic>;
+      final precoUnit = (p['preco'] as num?)?.toDouble() ?? 0.0;
       final qty = e['quantity'] as int;
+      final sub = precoUnit * qty;
       return {
-        'id_produto': p['id_produto'],
+        'id_produto': p['id_produto'] as int,
         'quantidade': qty,
+        'subtotal'  : sub,
       };
     }).toList();
 
-    final total = cart.cartItems.fold<double>(
+    final totalDaVenda = itemsComSubtotal.fold<double>(
       0,
-      (sum, e) {
-        final p = e['product'];
-        final precoUnit = (p['preco'] as num?)?.toDouble() ?? 0.0;
-        final qty = e['quantity'] as int;
-        return sum + (precoUnit * qty);
-      },
+      (sum, item) => sum + (item['subtotal'] as double),
     );
 
     try {
       await vendaController.salvarVenda(
         idVendedor: _vendedorId!,
         idCliente: int.parse(_selectedClienteId!),
-        total: total,
+        total: totalDaVenda,
         desconto: 0,
-        items: items,
+        items: itemsComSubtotal,
       );
 
-      for (var e in List.from(cart.cartItems)) {
-        final p = e['product'];
+      for (final e in List.from(cart.cartItems)) {
+        final p = e['product'] as Map<String, dynamic>;
         final qty = e['quantity'] as int;
         await produtoStore.decrementStock(p['id_produto'] as int, qty);
       }
@@ -132,18 +131,14 @@ class _CartPageState extends State<CartPage> {
       );
       await Future.delayed(const Duration(milliseconds: 300));
       Modular.to.pushReplacementNamed(
-        '/catalog/',
+        '/minhas_vendas',
         arguments: {'email': widget.email},
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(
-            'Não foi possível emitir a venda:\n$e',
-            style: const TextStyle(color: Colors.white),
-          ),
+          content: Text('Não foi possível emitir a venda:\n$e'),
           backgroundColor: Colors.redAccent,
-          duration: const Duration(seconds: 4),
         ),
       );
     } finally {
@@ -159,10 +154,10 @@ class _CartPageState extends State<CartPage> {
       );
     }
 
-    final total = cart.cartItems.fold<double>(
+    final totalGeral = cart.cartItems.fold<double>(
       0,
       (sum, e) {
-        final p = e['product'];
+        final p = e['product'] as Map<String, dynamic>;
         final precoUnit = (p['preco'] as num?)?.toDouble() ?? 0.0;
         final qty = e['quantity'] as int;
         return sum + (precoUnit * qty);
@@ -190,7 +185,6 @@ class _CartPageState extends State<CartPage> {
               value: _selectedClienteId,
             ),
           ),
-
           Expanded(
             child: Observer(builder: (_) {
               if (cart.cartItems.isEmpty) {
@@ -200,16 +194,13 @@ class _CartPageState extends State<CartPage> {
                 itemCount: cart.cartItems.length,
                 itemBuilder: (_, i) {
                   final e = cart.cartItems[i];
-                  final p = e['product'];
-                  final nome = p['nome'] as String? ?? 'Sem nome';
-                  final precoUnit = (p['preco'] as num?)?.toDouble() ?? 0.0;
+                  final p = e['product'] as Map<String, dynamic>;
+                  final nome = p['nome'] as String? ?? '';
                   final qty = e['quantity'] as int;
-                  final sub = precoUnit * qty;
+                  final sub = (p['preco'] as num).toDouble() * qty;
                   return ListTile(
                     title: Text(nome),
-                    subtitle: Text(
-                      'Qtd: $qty  •  Subtotal: R\$ ${sub.toStringAsFixed(2)}',
-                    ),
+                    subtitle: Text('Qtd: $qty  •  Subtotal: R\$ ${sub.toStringAsFixed(2)}'),
                     trailing: IconButton(
                       icon: const Icon(Icons.delete),
                       onPressed: () => cart.removeItem(p),
@@ -219,20 +210,13 @@ class _CartPageState extends State<CartPage> {
               );
             }),
           ),
-
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  'Total:',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  'R\$ ${total.toStringAsFixed(2)}',
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
+                const Text('Total:', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                Text('R\$ ${totalGeral.toStringAsFixed(2)}', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               ],
             ),
           ),

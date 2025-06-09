@@ -1,6 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import '../../repository/venda_repository.dart';
 import '../../repository/itens_venda_repository.dart';
+import '../../store/venda_store.dart';
 import 'venda_controller.dart';
 import 'venda_page.dart';
 import 'sales_page.dart';
@@ -8,15 +9,15 @@ import 'sales_page.dart';
 class VendaModule extends Module {
   @override
   List<Bind> get binds => [
-        Bind.singleton((i) => VendaRepository()),
-        Bind.singleton((i) => ItensVendaRepository()),
+        Bind.lazySingleton((i) => VendaRepository()),
+        Bind.lazySingleton((i) => ItensVendaRepository()),
 
-        Bind.singleton(
-          (i) => VendaController(
-            i<VendaRepository>(),
-            i<ItensVendaRepository>(),
-          ),
-        ),
+        Bind.factory((i) => VendaController(
+              i.get<VendaRepository>(),
+              i.get<ItensVendaRepository>(),
+            )),
+
+        Bind.singleton((i) => VendaStore()),
       ];
 
   @override

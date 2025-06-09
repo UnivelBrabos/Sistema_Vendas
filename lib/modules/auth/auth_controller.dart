@@ -47,7 +47,7 @@ class AuthController {
         return;
       }
 
-      final data = response as Map<String, dynamic>;
+      final data = response;
       final storedHash = data['senha_hash'] as String?;
 
       if (storedHash == null || password != storedHash) {
