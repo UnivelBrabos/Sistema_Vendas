@@ -1,9 +1,4 @@
-﻿using Sistema_Vendas.Controller;
-using Sistema_Vendas.Data;
-using Sistema_Vendas.Interfaces;
-using Sistema_Vendas.Model;
-using Sistema_Vendas.Model.FilteredModel;
-using System.Data.Common;
+﻿using Sistema_Vendas.Interfaces;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Shapes;

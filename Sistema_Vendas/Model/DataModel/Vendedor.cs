@@ -1,6 +1,4 @@
-﻿using Sistema_Vendas.Data;
-using System.Windows;
-using Sistema_Vendas.Interfaces;
+﻿using Sistema_Vendas.Interfaces;
 using Newtonsoft.Json;
 
 namespace Sistema_Vendas.Model.DataModel
@@ -49,7 +47,7 @@ namespace Sistema_Vendas.Model.DataModel
             throw new NotImplementedException();
         }
 
-        public static async Task<bool> UpdateModel(int Id)
+        public async Task<bool> UpdateModel()
         {
             throw new NotImplementedException();
         }

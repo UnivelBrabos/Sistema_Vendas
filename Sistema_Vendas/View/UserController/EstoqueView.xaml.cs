@@ -21,7 +21,7 @@ namespace Sistema_Vendas.View
     {
         public event EventHandler SetProdutos;
         public event EventHandler UpdateProduto;
-
+        public event EventHandler LoadGrid;
 
         public EstoqueView()
         {
@@ -124,6 +124,11 @@ namespace Sistema_Vendas.View
             }
 
             UpdateProduto?.Invoke($"{txtIdProduto.Text};{txtValorEstoque.Text}", EventArgs.Empty);
+        }
+
+        private void txtIdProduto_GotFocus(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

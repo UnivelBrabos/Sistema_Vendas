@@ -1,7 +1,5 @@
 ﻿using Newtonsoft.Json;
-using Sistema_Vendas.Data;
 using Sistema_Vendas.Interfaces;
-using System.Windows;
 
 namespace Sistema_Vendas.Model.DataModel
 {
@@ -48,12 +46,9 @@ namespace Sistema_Vendas.Model.DataModel
             throw new NotImplementedException();
         }
 
-        public static async Task<bool> UpdateModel(int Id)
+        public async Task<bool> UpdateModel()
         {
-            return App.Controller.
+            return await App.Controller.Data.UpdateItem("products", this.IdProduto.ToString(), JsonConvert.SerializeObject(this));
         }
-
-
-
     }
 }

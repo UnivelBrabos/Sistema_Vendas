@@ -12,7 +12,6 @@ namespace Sistema_Vendas
     {
         public static Usuarios? Usuario {  get; set; }
         public static Filtros? Filtro { get; set; }
-        public static ConnectionService Connection {  get; set; }
         public static ViewService View {  get; set; }
         public static ControllerService Controller { get; set; }
 
@@ -36,7 +35,6 @@ namespace Sistema_Vendas
 
         private void InitServices()
         {
-            Connection = ConnectionService.Instance;
             View = ViewService.Instance;
             Controller = ControllerService.Instance;
         }

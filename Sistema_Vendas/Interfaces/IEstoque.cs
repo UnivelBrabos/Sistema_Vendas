@@ -11,6 +11,7 @@ namespace Sistema_Vendas.Interfaces
     {
         event EventHandler SetProdutos;
         event EventHandler UpdateProduto;
+        event EventHandler LoadGrid;
 
         void CarregaTabela(DataGrid dttVendas);
     }

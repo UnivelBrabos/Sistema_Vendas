@@ -1,9 +1,7 @@
 ﻿using Sistema_Vendas.Interfaces;
+using Sistema_Vendas.Model.DataModel;
 using Sistema_Vendas.Service;
 using System.Windows.Controls;
-using Sistema_Vendas.Model;
-using Sistema_Vendas.Model.DataModel;
-
 namespace Sistema_Vendas.Controller
 {
     public class EstoqueController
@@ -26,11 +24,16 @@ namespace Sistema_Vendas.Controller
 
         private void AtualizarEstoque(object Sender, EventArgs e)
         {
-            int[] Valores = Convert.ToInt32(Sender.ToString().Split(';'));
 
-            PersistDataService.Instance.lstProdutos.Where(p => p.IdProduto == Valores[0]).FirstOrDefault().Estoque = Valores[1];
+            string[] Valores = Sender.ToString().Split(';');
 
+            int IdProduto = Convert.ToInt32(Valores[0]);
+            int NovoEstoque = Convert.ToInt32(Valores[1]);
 
+            Produto Produto = PersistDataService.Instance.lstProdutos.Where(p => p.IdProduto == IdProduto).FirstOrDefault();
+            Produto.Estoque = NovoEstoque;
+
+            Produto.UpdateModel();
         }
     }
 }
