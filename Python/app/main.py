@@ -1,35 +1,36 @@
 from fastapi import FastAPI, Request
-
-from routes import (
-    clients, customer_segments, 
-    payments, product_category,
-    products, sales_items,
-    sales, sellers, users
-    
-)
-
 from connection_db.database import lifespan, get_client
 from services.log_service import log_request
 import httpx
 
+from routes import (
+    clients, customer_segments, payments,
+    product_category, products, sales_items,
+    sales, sellers, users, log
+)
+
 app = FastAPI(lifespan=lifespan)
+
 """
---------- Log em desenvolvimento ----------
 @app.middleware("http")
 async def log_middleware(request: Request, call_next):
     client: httpx.AsyncClient = get_client()
 
     response = await call_next(request)
 
-    if not request.url.path.startswith(("/docs", "/redoc", "/openapi.json", "/favicon.ico")):
-        await log_request(
-            client=client,
-            metodo=request.method,
-            rota=request.url.path
-        )
+    if not request.url.path.startswith(("/favicon.ico", "/redoc", "/openapi.json" "/docs")):
+        try:
+            await log_request(
+                client=client,
+                evento=request.method,
+                rota=request.url.path
+            )
+        except Exception as e:
+            print(f"[LOG ERRO] Falha ao logar requisição: {e}")
 
     return response
 """
+# app.include_router(log.router, tags=["Logs"])
 
 app.include_router(clients.router, tags=["Clientes"])
 app.include_router(customer_segments.router, tags=["Segmento do Cliente"])

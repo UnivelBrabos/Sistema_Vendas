@@ -21,6 +21,7 @@ async def update(client: httpx.AsyncClient, table: str, id_name: str, id_value, 
     return response
 
 async def delete(client: httpx.AsyncClient, table: str, id_name: str, id_value):
-    response = await client.delete(f"/{table}?{id_name}=eq.{id_value}")
+    headers = {"Prefer": "return=representation"}
+    response = await client.delete(f"/{table}?{id_name}=eq.{id_value}", headers=headers)
     response.raise_for_status()
     return response
