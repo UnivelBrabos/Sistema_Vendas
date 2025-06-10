@@ -56,12 +56,13 @@ namespace Sistema_Vendas.View
 
         private bool IdProdutoValido(string pIdSelecionado)
         {
-            foreach (Produto item in dgvAuxiliar.Items)
+            for (int i = 0; i < dgvAuxiliar.Items.Count; i++)
             {
-                if (pIdSelecionado == item.IdProduto.ToString())
-                {
-                    txtValorEstoque.Text = item.Estoque.ToString();
+                var item = dgvAuxiliar.Items[i];
+                var valor = item.GetType().GetProperty("IdProduto").GetValue(item);
 
+                if (valor.ToString() == pIdSelecionado)
+                {
                     return true;
                 }
             }

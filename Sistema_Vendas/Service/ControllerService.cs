@@ -12,6 +12,7 @@ namespace Sistema_Vendas.Service
         public LoginController Login { get; set; }
         public FiltrarController Filtrar {  get; set; }
         public EstoqueController Estoque { get; set; }
+        public FuncionarioController Funcionario { get; set; }
 
         #endregion :: Controllers ::    
 
@@ -38,6 +39,7 @@ namespace Sistema_Vendas.Service
             Login = new(App.View.Login);
             Filtrar = new(App.View.Filtrar);
             Estoque = new(App.View.Estoque);
+            Funcionario = new(App.View.Funcionario);
         }
     }
 }

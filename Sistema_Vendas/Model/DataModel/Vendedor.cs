@@ -22,6 +22,9 @@ namespace Sistema_Vendas.Model.DataModel
         [JsonProperty("data_contratacao")]
         public string DataContratacao { get; set; }
 
+        [JsonProperty("salario")]
+        public double Salario { get; set; }
+
         #endregion :: Atributos ::
 
         #region :: Construtor ::
