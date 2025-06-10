@@ -23,7 +23,7 @@ namespace Sistema_Vendas.Controller
             _Estoque.CarregaTabela(Dados);
         }
 
-        private void AtualizarEstoque(object Sender, EventArgs e)
+        private async void AtualizarEstoque(object Sender, EventArgs e)
         {
             string[] Valores = Sender.ToString().Split(';');
 
@@ -33,7 +33,7 @@ namespace Sistema_Vendas.Controller
             Produto Produto = PersistDataService.Instance.lstProdutos.Where(p => p.IdProduto == IdProduto).FirstOrDefault();
             Produto.Estoque = NovoEstoque;
 
-            Produto.UpdateModel();
+            _Estoque.EstoqueAtualizado(await Produto.UpdateModel());
         }
     }
 }

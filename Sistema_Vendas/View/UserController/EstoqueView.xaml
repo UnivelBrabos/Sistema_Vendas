@@ -8,7 +8,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid x:Name="grdPrincipal" Background="#FFF0F0F0">
         <DataGrid x:Name="dgvAuxiliar" Margin="400,12,10,8" Background="White" FontFamily="Rockwell" CanUserDeleteRows="False" GridLinesVisibility="Horizontal" HeadersVisibility="Column" IsReadOnly="True"/>
-        <Rectangle x:Name="retIdVenda" HorizontalAlignment="Left" Height="61" Margin="10,12,0,0" VerticalAlignment="Top" Width="353" Fill="White" RadiusX="10" RadiusY="10"/>
+        <Rectangle x:Name="retIdProduto" HorizontalAlignment="Left" Height="61" Margin="10,12,0,0" VerticalAlignment="Top" Width="353" Fill="White" RadiusX="10" RadiusY="10"/>
         <TextBox x:Name="txtIdProduto" HorizontalAlignment="Left" Margin="22,29,0,0" TextWrapping="Wrap" Text="Id. Produto" VerticalAlignment="Top" Width="328" FontSize="18" FontFamily="Rockwell" Background="{x:Null}" BorderBrush="{x:Null}" Height="27" VerticalContentAlignment="Center" PreviewTextInput="txtIdProduto_PreviewTextInput" Tag="IdVenda" KeyDown="txtIdProduto_KeyDown" GotFocus="txtIdProduto_GotFocus"/>
         <Button x:Name="btnAtualizarEstoque" Content="Atualizar Estoque" HorizontalAlignment="Left" Margin="10,0,0,10" Width="164" FontFamily="Rockwell" FontSize="18" Background="#FF73DA84" Height="44" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" IsEnabled="True" Click="btnAtualizarEstoque_Click">
             <Button.Style>
@@ -38,7 +38,7 @@
                 </Style>
             </Button.Style>
         </Button>
-        <Rectangle x:Name="retIdVenda_Copiar" HorizontalAlignment="Left" Height="61" Margin="10,96,0,0" VerticalAlignment="Top" Width="164" Fill="White" RadiusX="10" RadiusY="10"/>
+        <Rectangle x:Name="retVlrEstoque" HorizontalAlignment="Left" Height="61" Margin="10,96,0,0" VerticalAlignment="Top" Width="164" Fill="White" RadiusX="10" RadiusY="10"/>
         <TextBox x:Name="txtValorEstoque" HorizontalAlignment="Left" Margin="22,113,0,0" TextWrapping="Wrap" Text="Estoque" VerticalAlignment="Top" Width="139" FontSize="18" FontFamily="Rockwell" Background="{x:Null}" BorderBrush="{x:Null}" Height="27" VerticalContentAlignment="Center" PreviewTextInput="txtValorEstoque_PreviewTextInput" Tag="IdVenda" GotFocus="txtValorEstoque_GotFocus"/>
     </Grid>
 </UserControl>

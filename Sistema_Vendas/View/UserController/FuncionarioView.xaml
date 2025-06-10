@@ -6,7 +6,70 @@
              xmlns:local="clr-namespace:Sistema_Vendas.View"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
+    <Grid x:Name="grdFuncionarios" Background="#FFF0F0F0">
+        <Rectangle x:Name="retIdFuncionario" HorizontalAlignment="Left" Height="61" Margin="10,12,0,0" VerticalAlignment="Top" Width="403" Fill="White" RadiusX="10" RadiusY="10"/>
+        <TextBox x:Name="txtIdFuncionario" HorizontalAlignment="Left" Margin="24,29,0,0" TextWrapping="Wrap" Text="Id. Funcionário" VerticalAlignment="Top" Width="374" FontSize="18" FontFamily="Rockwell" Background="{x:Null}" BorderBrush="{x:Null}" Height="27" VerticalContentAlignment="Center" PreviewTextInput="txtIdProduto_PreviewTextInput" Tag="IdVenda" KeyDown="txtIdProduto_KeyDown" GotFocus="txtIdProduto_GotFocus" SelectionOpacity="0.1" TextChanged="txtIdFuncionario_TextChanged"/>
+        <Rectangle x:Name="retSalario" HorizontalAlignment="Left" Height="61" Margin="10,84,0,0" VerticalAlignment="Top" Width="189" Fill="White" RadiusX="10" RadiusY="10"/>
+        <TextBox x:Name="txtSalario" HorizontalAlignment="Left" Margin="16,101,0,0" TextWrapping="Wrap" Text="Salário" VerticalAlignment="Top" Width="176" FontSize="18" FontFamily="Rockwell" Background="{x:Null}" BorderBrush="{x:Null}" Height="27" VerticalContentAlignment="Center" PreviewTextInput="txtIdProduto_PreviewTextInput" Tag="IdVenda" KeyDown="txtIdProduto_KeyDown" GotFocus="txtIdProduto_GotFocus" IsEnabled="False"/>
+        <Rectangle x:Name="retEmail" HorizontalAlignment="Left" Height="61" Margin="224,84,0,0" VerticalAlignment="Top" Width="189" Fill="White" RadiusX="10" RadiusY="10"/>
+        <TextBox x:Name="txtEmail" HorizontalAlignment="Left" Margin="230,101,0,0" TextWrapping="Wrap" Text="Email" VerticalAlignment="Top" Width="176" FontSize="18" FontFamily="Rockwell" Background="{x:Null}" BorderBrush="{x:Null}" Height="27" VerticalContentAlignment="Center" PreviewTextInput="txtIdProduto_PreviewTextInput" Tag="IdVenda" KeyDown="txtIdProduto_KeyDown" GotFocus="txtIdProduto_GotFocus" IsEnabled="False"/>
+        <DataGrid x:Name="dgvAuxiliar" Margin="431,10,10,10" Background="White" FontFamily="Rockwell" CanUserDeleteRows="False" GridLinesVisibility="Horizontal" HeadersVisibility="Column" IsReadOnly="True"/>
+        <Button x:Name="btnAtualizarFuncionario" Content="Atualizar Funcionário" HorizontalAlignment="Left" Margin="10,0,0,10" Width="189" FontFamily="Rockwell" FontSize="18" Background="#FF73DA84" Height="44" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" IsEnabled="True">
+            <Button.Style>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border Background="{TemplateBinding Background}" CornerRadius="2" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="RenderTransform">
+                                <Setter.Value>
+                                    <ScaleTransform ScaleX="0.95" ScaleY="0.95"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+        <Button x:Name="btnAtualizarFuncionario_Copiar" Content="Deletar Funcionário" HorizontalAlignment="Left" Margin="224,0,0,10" Width="189" FontFamily="Rockwell" FontSize="18" Background="#FFDA7373" Height="44" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" IsEnabled="True">
+            <Button.Style>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border Background="{TemplateBinding Background}" CornerRadius="2" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="RenderTransform">
+                                <Setter.Value>
+                                    <ScaleTransform ScaleX="0.95" ScaleY="0.95"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+
     </Grid>
 </UserControl>

@@ -1,19 +1,8 @@
 ﻿using Sistema_Vendas.Interfaces;
 using Sistema_Vendas.Model.DataModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Sistema_Vendas.View
 {
@@ -95,19 +84,6 @@ namespace Sistema_Vendas.View
             return true;
         }
 
-        private bool ItemAtualizado()
-        {
-            foreach (Produto item in dgvAuxiliar.Items)
-            {
-                if (txtIdProduto.Text == item.IdProduto.ToString())
-                {
-                    return txtValorEstoque.Text == item.Estoque.ToString();
-                }
-            }
-
-            return false;
-        }
-
         private void btnAtualizarEstoque_Click(object sender, RoutedEventArgs e)
         {
             if (!ValoresValidos())
@@ -116,13 +92,8 @@ namespace Sistema_Vendas.View
                 return;
             }
 
-            /*if (!ItemAtualizado())
-            {
-                MessageBox.Show("Item não sofreu alteração!", "", MessageBoxButton.OK, MessageBoxImage.Information);
-                return;
-            }*/
-
             UpdateProduto?.Invoke($"{txtIdProduto.Text};{txtValorEstoque.Text}", EventArgs.Empty);
+            SetProdutos?.Invoke(null, EventArgs.Empty);
         }
 
         private void txtIdProduto_GotFocus(object sender, RoutedEventArgs e)
@@ -132,8 +103,17 @@ namespace Sistema_Vendas.View
                 txtIdProduto.Text = "";
                 SetProdutos?.Invoke(null, EventArgs.Empty);
             }
+        }
 
+        public void EstoqueAtualizado(bool Atualizado)
+        {
+            if (Atualizado)
+            {
+                MessageBox.Show("Estoque atualizado com sucesso", "", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
 
+            MessageBox.Show("Erro ao atualizar estoque!", "", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 }

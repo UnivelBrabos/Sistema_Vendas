@@ -24,5 +24,23 @@ namespace Sistema_Vendas.View
         {
             InitializeComponent();
         }
+
+        private void btnAtualizarEstoque_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void txtIdFuncionario_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if(txtIdFuncionario.Text == "Id. Funcionário")
+            {
+                txtIdFuncionario.Text = "";
+            }
+        }
+
+        private void txtIdProduto_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !int.TryParse(e.Text, out _);
+        }
     }
 }

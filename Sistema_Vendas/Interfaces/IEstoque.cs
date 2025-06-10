@@ -14,5 +14,7 @@ namespace Sistema_Vendas.Interfaces
         event EventHandler LoadGrid;
 
         void CarregaTabela(DataGrid dttVendas);
+
+        void EstoqueAtualizado(bool Atualizado);
     }
 }
