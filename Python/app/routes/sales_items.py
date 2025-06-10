@@ -19,7 +19,10 @@ async def get_sales_items_by_id(
     client: httpx.AsyncClient = Depends(get_client)    
 ):
     response = await get_by_id(client, "itens_venda", "id_itens", id_itens)
-    return response.json()
+    data = response.json()
+    if not data:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Venda de Items não encontrado")
+    return data[0]
 
 @router.post('/sales_items/post')
 async def insert_sales_items(

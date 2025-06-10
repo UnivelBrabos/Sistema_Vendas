@@ -11,7 +11,6 @@ from routes import (
 
 app = FastAPI(lifespan=lifespan)
 
-"""
 @app.middleware("http")
 async def log_middleware(request: Request, call_next):
     client: httpx.AsyncClient = get_client()
@@ -29,9 +28,8 @@ async def log_middleware(request: Request, call_next):
             print(f"[LOG ERRO] Falha ao logar requisição: {e}")
 
     return response
-"""
-# app.include_router(log.router, tags=["Logs"])
 
+app.include_router(log.router, tags=["Logs"])
 app.include_router(clients.router, tags=["Clientes"])
 app.include_router(customer_segments.router, tags=["Segmento do Cliente"])
 app.include_router(payments.router, tags=["Pagamentos"])
