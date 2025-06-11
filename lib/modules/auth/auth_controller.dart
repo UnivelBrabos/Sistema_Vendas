@@ -4,10 +4,10 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthController {
   final Map<String, String> _staticUsers = {
-    'carlos@gmail.com': '123',
-    'saymon@gmail.com': '123',
-    'diogo@gmail.com': '123',
-    'eder@gmail.com': '123',
+    'carlos@email.com': '123',
+    'saymon@email.com': '123',
+    'diogo@email.com': '123',
+    'eder@email.com': '123',
   };
 
   Future<void> login(
