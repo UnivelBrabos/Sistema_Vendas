@@ -93,8 +93,10 @@ class _WelcomePageState extends State<WelcomePage>
             title: const Text('Desenvolvimento'),
             onTap: () {
               Navigator.of(context).pop();
-              ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Em construção')));
+              Modular.to.pushNamed(
+                '/dashboard',
+                arguments: {'email': widget.email},
+              );
             },
           ),
           ListTile(
@@ -227,7 +229,3 @@ class _WelcomePageState extends State<WelcomePage>
     );
   }
 }
-
-
-// Ver para aplicarmos, ou mesmo diminuirmos o tempo da animaccao do Drawe ao lado.
-// para deixar mais agradavel de se ver 

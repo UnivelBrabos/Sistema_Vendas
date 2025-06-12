@@ -28,11 +28,11 @@ class ProfilePage extends StatelessWidget {
     final normalized = email.trim().toLowerCase();
 
     if (_staticUsers.contains(normalized)) {
-      final name = normalized.split('@').first;
+      final namePart = normalized.split('@').first;
       return {
-        'nome': name,
+        'nome': _capitalize(namePart),
         'email': normalized,
-        'foto_url': 'lib/assets/macaco/$name.png',
+        'foto_url': 'lib/assets/macaco/$namePart.png',
       };
     }
 
@@ -41,7 +41,7 @@ class ProfilePage extends StatelessWidget {
           .from('vendedores')
           .select('nome, email, foto_url')
           .eq('email', normalized)
-          .maybeSingle();
+          .maybeSingle() as Map<String, dynamic>?;
     } catch (_) {
       return null;
     }
@@ -79,9 +79,11 @@ class ProfilePage extends StatelessWidget {
 
           ImageProvider? avatarImage;
           if (rawPhoto != null && rawPhoto.isNotEmpty) {
-            avatarImage = rawPhoto.startsWith('http')
-                ? NetworkImage(rawPhoto)
-                : AssetImage(rawPhoto);
+            if (rawPhoto.startsWith('http')) {
+              avatarImage = NetworkImage(rawPhoto);
+            } else {
+              avatarImage = AssetImage(rawPhoto);
+            }
           }
 
           return Center(
@@ -126,13 +128,16 @@ class ProfilePage extends StatelessWidget {
                       leading: const Icon(Icons.settings, size: 28),
                       title: const Text('Configurações',
                           style: TextStyle(fontSize: 16)),
-                      onTap: () => ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Em construção'))),
+                      onTap: () => ScaffoldMessenger.of(context)
+                          .showSnackBar(const SnackBar(
+                              content: Text('Em construção'))),
                     ),
                     ListTile(
                       leading: const Icon(Icons.logout, size: 28),
-                      title: const Text('Sair', style: TextStyle(fontSize: 16)),
-                      onTap: () => Modular.to.pushReplacementNamed('/auth'),
+                      title: const Text('Sair',
+                          style: TextStyle(fontSize: 16)),
+                      onTap: () =>
+                          Modular.to.pushReplacementNamed('/auth'),
                     ),
                   ],
                 ),

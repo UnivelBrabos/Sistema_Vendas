@@ -1,5 +1,3 @@
-// lib/repository/venda_repository.dart
-
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -28,29 +26,24 @@ class VendaRepository {
 
     final decoded = jsonDecode(resp.body);
     if (decoded is String) {
-      // resposta inútil, vamos tentar fallback
       return _fallbackLastInsertedId();
     }
 
     if (decoded is List) {
-      // resposta em lista, extrai primeiro mapa
       final first = decoded.isNotEmpty ? decoded.first : null;
       if (first is Map<String, dynamic>) {
         final id = _tryExtractId(first);
         if (id != null) return id;
       }
-      // sem id, fallback
       return _fallbackLastInsertedId();
     }
 
     if (decoded is Map<String, dynamic>) {
       final id = _tryExtractId(decoded);
       if (id != null) return id;
-      // sem id, fallback
       return _fallbackLastInsertedId();
     }
 
-    // qualquer outro tipo: fallback
     return _fallbackLastInsertedId();
   }
 
@@ -80,13 +73,11 @@ class VendaRepository {
     return null;
   }
 
-  /// Fallback: busca todas as vendas e retorna o maior id_venda
   Future<int> _fallbackLastInsertedId() async {
     final all = await fetchAllVendas();
     if (all.isEmpty) {
       throw Exception('Não foi possível recuperar id da venda (nenhuma venda existente)');
     }
-    // pega o maior id_venda
     final maxId = all.map((v) => (v['id_venda'] as num).toInt()).reduce(max);
     return maxId;
   }

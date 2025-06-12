@@ -1,3 +1,5 @@
+// lib/app_module.dart
+
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:trabalho_vendas_univel/modules/splash/splash_page.dart';
 import 'package:trabalho_vendas_univel/modules/auth/auth_module.dart';
@@ -7,6 +9,7 @@ import 'package:trabalho_vendas_univel/catalog/catalog_module.dart';
 import 'package:trabalho_vendas_univel/modules/cart/cart_module.dart';
 import 'package:trabalho_vendas_univel/modules/profile/profile_module.dart';
 import 'package:trabalho_vendas_univel/modules/venda/venda_module.dart';
+import 'package:trabalho_vendas_univel/modules/dashboard/dashboard_page.dart';
 import 'package:trabalho_vendas_univel/store/cart_store.dart';
 import 'package:trabalho_vendas_univel/store/produto_store.dart';
 
@@ -36,5 +39,16 @@ class AppModule extends Module {
         ModuleRoute('/cart', module: CartModule()),
         ModuleRoute('/profile', module: ProfileModule()),
         ModuleRoute('/venda', module: VendaModule()),
+
+        // Dashboard (Desenvolvimento)
+        ChildRoute(
+          '/dashboard',
+          child: (_, args) {
+            final data = args.data as Map<String, dynamic>;
+            return DashboardPage(
+              email: data['email'] as String,
+            );
+          },
+        ),
       ];
 }
