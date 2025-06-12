@@ -40,7 +40,7 @@ namespace Sistema_Vendas.Model.DataModel
             throw new NotImplementedException();
         }
 
-        public static Task<List<ItensVenda>> DeleteModel()
+        public async Task<bool> DeleteModel()
         {
             throw new NotImplementedException();
         }

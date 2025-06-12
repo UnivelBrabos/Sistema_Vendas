@@ -45,14 +45,14 @@ namespace Sistema_Vendas.Model.DataModel
             throw new NotImplementedException();
         }
 
-        public static Task<List<Vendedor>> DeleteModel()
+        public async Task<bool> DeleteModel()
         {
-            throw new NotImplementedException();
+            return await App.Controller.Data.DeleteItem("sellers", this.IdVendedor.ToString());
         }
 
         public async Task<bool> UpdateModel()
         {
-            throw new NotImplementedException();
+            return await App.Controller.Data.UpdateItem("sellers", this.IdVendedor.ToString(), JsonConvert.SerializeObject(this));
         }
 
         #endregion :: Métodos ::

@@ -68,5 +68,17 @@ namespace Sistema_Vendas.Controller
                 return response.IsSuccessStatusCode;
             }
         }
+
+        public async Task<bool> DeleteItem(string pItemClass, string pId)
+        {
+            string strUrl = $"{localHost}/{pItemClass}/delete/{pId}";
+
+            using (HttpClient client = new HttpClient())
+            {
+                HttpResponseMessage objResponse = await client.DeleteAsync(strUrl);
+
+                return objResponse.IsSuccessStatusCode;
+            }
+        }
     }
 }

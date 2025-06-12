@@ -3,6 +3,7 @@ using Sistema_Vendas.Service;
 using System.Windows.Controls;
 using Sistema_Vendas.Model;
 using Sistema_Vendas.Model.DataModel;
+using System.Windows;
 
 namespace Sistema_Vendas.Controller
 {
@@ -16,7 +17,7 @@ namespace Sistema_Vendas.Controller
 
             _Funcionario.CarregarFuncionario += CarregarFuncionarios;
             _Funcionario.AtualizarFuncionario += AtualizarFuncionario;
-            _Funcionario.ApagarFuncionario += 
+            _Funcionario.ApagarFuncionario += DeletarFuncionario;
         }
 
         private void CarregarFuncionarios(object sender, EventArgs e)
@@ -27,23 +28,24 @@ namespace Sistema_Vendas.Controller
             _Funcionario.CarregarTabelaAuxiliar(Dados);
         }
 
-        private void AtualizarFuncionario(object sender, EventArgs e)
+        private async void AtualizarFuncionario(object sender, EventArgs e)
         {
             string[] Dados = sender.ToString().Split(';');
 
             Vendedor Vendedor = PersistDataService.Instance.lstVendedores.Where(p => p.IdVendedor.ToString() == Dados[0]).FirstOrDefault();
 
-            Vendedor.Salario = Convert.ToDouble(Dados[1]);
+            Vendedor.Email = Dados[1];
             Vendedor.Salario = Convert.ToDouble(Dados[2]);
 
-            Vendedor.UpdateModel();
+            _Funcionario.VendedorAtualizado(await Vendedor.UpdateModel(), "atualizado");
         }
 
-        private void DeletarFuncionario(object sender, EventArgs e)
+        private async void DeletarFuncionario(object sender, EventArgs e)
         {
             string IdFuncionario = sender.ToString();
 
-
+            Vendedor Vendedor = PersistDataService.Instance.lstVendedores.Where(p => p.IdVendedor.ToString() == IdFuncionario).FirstOrDefault();
+            _Funcionario.VendedorAtualizado(await Vendedor.DeleteModel(), "deletado");
         }
     }
 }
