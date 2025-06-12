@@ -14,11 +14,15 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
   final supabase = Supabase.instance.client;
 
+  Map<String, String> _vendorNames = {};
+
   double _totalVendas = 0;
   String _melhorClienteNome = '—';
   double _melhorClienteGasto = 0;
 
   List<_VendedorTotal> _ranking = [];
+
+  String? _selectedVendorId;
 
   bool _isLoading = true;
   String? _error;
@@ -26,42 +30,58 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   void initState() {
     super.initState();
-    _loadStats();
+    _loadAllData();
   }
 
-  Future<void> _loadStats() async {
+  Future<void> _loadAllData() async {
     try {
-      final userEmail = widget.email.trim().toLowerCase();
+      final vResp = await supabase
+          .from('vendedores')
+          .select('id_vendedor, nome');
+      for (final row in (vResp as List).cast<Map<String, dynamic>>()) {
+        final id = (row['id_vendedor'] as num).toInt().toString();
+        final nome = row['nome'] as String;
+        _vendorNames[id] = nome;
+      }
 
-      final vend = await supabase
+      final vendLog = await supabase
           .from('vendedores')
           .select('id_vendedor')
-          .eq('email', userEmail)
+          .eq('email', widget.email.trim().toLowerCase())
           .maybeSingle();
-      if (vend == null || vend['id_vendedor'] == null) {
+      if (vendLog == null || vendLog['id_vendedor'] == null) {
         throw 'Vendedor não encontrado';
       }
-      final idVend = (vend['id_vendedor'] as num).toInt();
+      final myId = (vendLog['id_vendedor'] as num).toInt().toString();
 
-      final minhasVendas = await supabase
+      final allVendas = await supabase
           .from('vendas')
-          .select('total')
-          .eq('id_vendedor', idVend);
-      _totalVendas = (minhasVendas as List)
-          .cast<Map<String, dynamic>>()
-          .map((row) => (row['total'] as num).toDouble())
-          .fold<double>(0.0, (sum, t) => sum + t);
+          .select('id_vendedor, id_cliente, total');
 
-      final vendasList = minhasVendas.cast<Map<String, dynamic>>();
-      final gastosPorCliente = <int, double>{};
-      for (var v in vendasList) {
-        final cid = (v['id_cliente'] as num?)?.toInt() ?? 0;
-        final tot = (v['total'] as num).toDouble();
-        gastosPorCliente[cid] = (gastosPorCliente[cid] ?? 0) + tot;
+      _totalVendas = 0;
+      final gastosPorCliente = <int,double>{};
+      final tmpRanking = <String,double>{};
+
+      for (final rec in (allVendas as List).cast<Map<String, dynamic>>()) {
+        final vid = (rec['id_vendedor'] as num).toInt().toString();
+        final tot = (rec['total'] as num).toDouble();
+
+        tmpRanking[vid] = (tmpRanking[vid] ?? 0) + tot;
+
+        if (vid == myId) {
+          _totalVendas += tot;
+          final cid = (rec['id_cliente'] as num).toInt();
+          gastosPorCliente[cid] = (gastosPorCliente[cid] ?? 0) + tot;
+        }
       }
+
+      _ranking = tmpRanking.entries
+          .map((e) => _VendedorTotal(e.key, e.value))
+          .toList();
+
       if (gastosPorCliente.isNotEmpty) {
-        final best = gastosPorCliente.entries.reduce(
-            (a, b) => a.value >= b.value ? a : b);
+        final best = gastosPorCliente.entries
+            .reduce((a,b) => a.value>=b.value ? a : b);
         _melhorClienteGasto = best.value;
         final cli = await supabase
             .from('clientes')
@@ -71,19 +91,6 @@ class _DashboardPageState extends State<DashboardPage> {
         _melhorClienteNome = (cli?['nome'] as String?) ?? '—';
       }
 
-      final allVendas = await supabase
-          .from('vendas')
-          .select('id_vendedor,total');
-      final tmp = <String, double>{};
-      for (var v in (allVendas as List).cast<Map<String, dynamic>>()) {
-        final vid = (v['id_vendedor'] as num).toInt().toString();
-        final tot = (v['total'] as num).toDouble();
-        tmp[vid] = (tmp[vid] ?? 0) + tot;
-      }
-      _ranking = tmp.entries
-          .map((e) => _VendedorTotal(e.key, e.value))
-          .toList();
-
       setState(() => _isLoading = false);
     } catch (e) {
       setState(() {
@@ -91,6 +98,11 @@ class _DashboardPageState extends State<DashboardPage> {
         _isLoading = false;
       });
     }
+  }
+
+  List<_VendedorTotal> get _filteredRanking {
+    if (_selectedVendorId == null) return _ranking;
+    return _ranking.where((e) => e.vendedor == _selectedVendorId).toList();
   }
 
   @override
@@ -106,21 +118,21 @@ class _DashboardPageState extends State<DashboardPage> {
       );
     }
 
+    final data = _filteredRanking;
     final sections = <PieChartSectionData>[];
-    for (var entry in _ranking) {
-      final percent = _totalVendas > 0
+    for (final entry in data) {
+      final pct = _totalVendas > 0
           ? entry.total / _totalVendas * 100
           : 0.0;
-      sections.add(PieChartSectionData(
-        value: entry.total,
-        title: '${percent.toStringAsFixed(0)}%',
-        radius: 60,
-        titleStyle: const TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
+      sections.add(
+        PieChartSectionData(
+          value: entry.total,
+          title: '${pct.toStringAsFixed(0)}%',
+          radius: 50,
+          titleStyle: const TextStyle(
+              fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold),
         ),
-      ));
+      );
     }
 
     return Scaffold(
@@ -130,87 +142,93 @@ class _DashboardPageState extends State<DashboardPage> {
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Card(
-              elevation: 2,
-              margin: const EdgeInsets.only(bottom: 16),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    const Text('Total de Vendas', style: TextStyle(fontSize: 16)),
-                    const SizedBox(height: 8),
-                    Text(
-                      'R\$ ${_totalVendas.toStringAsFixed(2)}',
-                      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                    ),
-                  ],
+        child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+
+          DropdownButtonFormField<String?>(
+            decoration: const InputDecoration(labelText: 'Filtrar Vendedor'),
+            value: _selectedVendorId,
+            items: [
+              const DropdownMenuItem(value: null, child: Text('Todos')),
+              ..._vendorNames.entries.map((e) => DropdownMenuItem(
+                    value: e.key,
+                    child: Text(e.value),
+                  )),
+            ],
+            onChanged: (v) => setState(() => _selectedVendorId = v),
+          ),
+          const SizedBox(height: 16),
+
+          Card(
+            margin: const EdgeInsets.only(bottom: 16),
+            elevation: 2,
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(children: [
+                const Text('Total de Vendas', style: TextStyle(fontSize: 16)),
+                const SizedBox(height: 8),
+                Text(
+                  'R\$ ${_totalVendas.toStringAsFixed(2)}',
+                  style: const TextStyle(
+                      fontSize: 24, fontWeight: FontWeight.bold),
                 ),
+              ]),
+            ),
+          ),
+
+          const Text('Participação por Vendedor', style: TextStyle(fontSize: 16)),
+          const SizedBox(height: 8),
+          SizedBox(
+            height: 200,
+            child: PieChart(
+              PieChartData(
+                sections: sections,
+                sectionsSpace: 4,
+                centerSpaceRadius: 0,
               ),
             ),
+          ),
 
-            const Text('Participação por Vendedor', style: TextStyle(fontSize: 16)),
-            const SizedBox(height: 8),
-            SizedBox(
-              height: 250,
-              child: PieChart(
-                PieChartData(
-                  sections: sections,
-                  sectionsSpace: 4,
-                  centerSpaceRadius: 0,
+          const SizedBox(height: 16),
+          ...data.map((e) {
+            final pct = _totalVendas > 0
+                ? e.total / _totalVendas * 100
+                : 0.0;
+            final name = _vendorNames[e.vendedor] ?? e.vendedor;
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: Row(children: [
+                Container(
+                  width: 16,
+                  height: 16,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColors.primaryColor,
+                  ),
                 ),
-              ),
+                const SizedBox(width: 8),
+                Expanded(child: Text(name)),
+                Text('${pct.toStringAsFixed(1)}%'),
+              ]),
+            );
+          }).toList(),
+
+          const Divider(height: 32),
+
+          Card(
+            elevation: 2,
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(children: [
+                const Text('Melhor Cliente', style: TextStyle(fontSize: 16)),
+                const SizedBox(height: 8),
+                Text(_melhorClienteNome,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.w600)),
+                Text('R\$ ${_melhorClienteGasto.toStringAsFixed(2)}'),
+              ]),
             ),
-
-            const SizedBox(height: 16),
-            ..._ranking.map((e) {
-              final percent = _totalVendas > 0
-                  ? e.total / _totalVendas * 100
-                  : 0.0;
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 16,
-                      height: 16,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColors.primaryColor,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(child: Text('Vendedor ${e.vendedor}')),
-                    Text('${percent.toStringAsFixed(1)}%'),
-                  ],
-                ),
-              );
-            }).toList(),
-
-            const Divider(height: 32),
-
-            Card(
-              elevation: 2,
-              margin: const EdgeInsets.only(bottom: 16),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    const Text('Melhor Cliente', style: TextStyle(fontSize: 16)),
-                    const SizedBox(height: 8),
-                    Text(
-                      _melhorClienteNome,
-                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-                    ),
-                    Text('R\$ ${_melhorClienteGasto.toStringAsFixed(2)}'),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ]),
       ),
     );
   }
