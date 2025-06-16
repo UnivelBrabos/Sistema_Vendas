@@ -11,10 +11,10 @@ async def test_post():
     async with LifespanManager(app):
         async with AsyncClient(app=app, base_url="http://test") as ac:
             payload = {
-                "nome": "string",
-                "email": "user@example.com",
-                "senha_hash": "string",
-                "cargo": "string",
+                "nome": "Teste",
+                "email": "teste@gmail.com",
+                "senha_hash": "teste",
+                "cargo": "Vendedor",
                 "criado_em": "2025-06-16T14:13:13.933Z"
             }
             response = await ac.post("/users/post", json=payload)
@@ -33,7 +33,7 @@ async def test_get_all():
 @pytest.mark.asyncio
 async def test_get_by_id():
     global usuario_id_criado
-    id_usuario = 1  
+    id_usuario = 2  
     async with LifespanManager(app):
         async with AsyncClient(app=app, base_url="http://test") as ac:
             response = await ac.get(f"/users/get/{id_usuario}")
@@ -43,12 +43,12 @@ async def test_get_by_id():
 
 @pytest.mark.asyncio
 async def test_put():
-    id_usuario = 8 
+    id_usuario = 11 
     payload = {
-        "nome": "string",
-        "email": "user@example.com",
-        "senha_hash": "string",
-        "cargo": "string",
+        "nome": "teste",
+        "email": "teste@gmail.com",
+        "senha_hash": "teste",
+        "cargo": "teste",
         "criado_em": "2025-06-16T14:13:13.933Z"
     }
     async with LifespanManager(app):
@@ -59,7 +59,7 @@ async def test_put():
 
 @pytest.mark.asyncio
 async def test_delete():
-    id_usuario = 9
+    id_usuario = 1
     async with LifespanManager(app):
         async with AsyncClient(app=app, base_url="http://test") as ac:
             response = await ac.delete(f"/users/delete/{id_usuario}")
