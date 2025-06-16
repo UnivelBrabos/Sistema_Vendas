@@ -1,0 +1,42 @@
+Resumo =>
+
+	Documento criado com a intenção de documentar a estrutura e lógica do projeto.
+	O Padrão de projeto escolhi foi o MVC, por ser simples, e me permitir estrutu_
+	rar o código de maneira limpa. Não optei pelo MVVM, por ser um estrutura rela_
+	tivamente mais complexa que a MVC, e após estudar achei ela muito bagunçada,
+	em comparação com a MVC.
+
+Controller =>
+
+	A Controller armazena classes que podem alterar, e acessar regras de negócio da Model.
+	Todas as ações realizadas pelo usuário passam pela Controller, levando em conta que a
+	View pode única, e exclusivamente alterar "objetos" em tela, sem pode utilizar lógicas
+	de tratamento, por exemplo.
+
+Data => 
+	É uma controller exlusiva para o tratamento de dados advindos da API.
+
+Interfaces =>
+	Definem o comportamento obrigatório entre Models com regras de negócio semelhantes.
+	Além disso, facilita (E muito) na hora de generalizar métodos na Controller, já que
+	por essas models serem do mesmo contrato, me permite colocar a interface como parâ_
+	metro.
+
+Model =>
+	São todas as classes utilizadas no programa, ou seja, possui métodos e atributos.
+	Possui também as regras de negócio exclusivas para a própria Model.
+
+Service =>
+	Service (Na teoria, e na prática) faz parte da Controller, com o diferêncial que ela
+	é utilizada em todo o programa, é utilizada (Principalmente) para persistência de dados.
+
+View => 
+	View são as telas do sistema, onde pode ocorrer única, e exclusivamente a existência de
+	métodos que manipulam a tela, a View não podem manipular, nem criar regras de negócio.
+	Resumo de seus métodos => Eventos, e alterações visuais.
+
+App => 
+	É o App, onde é instânciado as Controllers, e services.
+
+								
+
