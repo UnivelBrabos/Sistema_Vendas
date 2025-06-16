@@ -11,11 +11,11 @@ async def test_post():
     async with LifespanManager(app):
         async with AsyncClient(app=app, base_url="http://test") as ac:
             payload = {
-            "nome": "Teste",
-            "email": "teste@teste.com",
-            "telefone": "99999999999",
-            "data_contratacao": "2025-06-15",
-            "salario": 1800.00
+                "nome": "Teste",
+                "email": "teste@teste.com",
+                "telefone": "99999999999",
+                "data_contratacao": "2025-06-15",
+                "salario": 1800.00
             }
             response = await ac.post("/sellers/post", json=payload)
             assert response.status_code == 200
@@ -45,12 +45,12 @@ async def test_get_by_id():
 async def test_put():
     id_vendedor = 5
     payload = {
-        "nome": "teste_update",
-        "email": "teste@update.com",
-        "telefone": "99999999999",
-        "data_contratacao": "2025-06-15",
-        "salario": 1000.20
-        }
+            "nome": "teste_update",
+            "email": "teste@update.com",
+            "telefone": "99999999999",
+            "data_contratacao": "2025-06-15",
+            "salario": 1000.20
+            }
     async with LifespanManager(app):
         async with AsyncClient(app=app, base_url="http://test") as ac:
             response = await ac.put(f"/sellers/put/{id_vendedor}", json=payload)

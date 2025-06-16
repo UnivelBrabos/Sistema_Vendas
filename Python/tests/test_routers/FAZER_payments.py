@@ -11,7 +11,11 @@ async def test_post():
     async with LifespanManager(app):
         async with AsyncClient(app=app, base_url="http://test") as ac:
             payload = {
-                "nome_segmento": "Teste",
+                "id_venda": 0,
+                "forma_pagamento": "string",
+                "status": "string",
+                "valor_pago": 0,
+                "data_pagamento": "2025-06-16T14:10:09.806Z"
             }
             response = await ac.post("/payments/post", json=payload)
             assert response.status_code == 200
@@ -41,7 +45,11 @@ async def test_get_by_id():
 async def test_put():
     id_pagamento = 8 
     payload = {
-        "nome_segmento": "Teste_update",
+        "id_venda": 0,
+        "forma_pagamento": "string",
+        "status": "string",
+        "valor_pago": 0,
+        "data_pagamento": "2025-06-16T14:10:09.806Z"
     }
     async with LifespanManager(app):
         async with AsyncClient(app=app, base_url="http://test") as ac:
