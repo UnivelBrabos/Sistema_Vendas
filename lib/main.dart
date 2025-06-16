@@ -11,7 +11,6 @@ Future<void> main() async {
 
   await dotenv.load(fileName: '.env');
 
-  // Debug: exibe valores carregados (.env)
   print('→ Variáveis de ambiente carregadas (.env)');
   print('SUPABASE_URL: ${dotenv.get('SUPABASE_URL')}');
   print('SUPABASE_KEY: ${dotenv.get('SUPABASE_KEY')}');

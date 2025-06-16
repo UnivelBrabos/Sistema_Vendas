@@ -13,7 +13,6 @@ class TestRoutePage extends StatelessWidget {
       body: Center(
         child: ElevatedButton(
           onPressed: () {
-            // Navega para a tela de seleção de cliente
             Modular.to.pushNamed('/client/select');
           },
           child: const Text("Ir para Seleção de Cliente"),

@@ -8,9 +8,8 @@ class ClienteRepository {
     final response = await supabase
         .from('clientes')
         .select()
-        .order('nome'); // Ordena por nome, se desejar
+        .order('nome'); 
 
-    // Supondo que a resposta é uma List de Maps
     final List data = response;
     return data.map((json) => ClienteModel.fromJson(json)).toList();
   }

@@ -1,5 +1,3 @@
-// lib/app_module.dart
-
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:trabalho_vendas_univel/modules/splash/splash_page.dart';
 import 'package:trabalho_vendas_univel/modules/auth/auth_module.dart';
@@ -40,7 +38,6 @@ class AppModule extends Module {
         ModuleRoute('/profile', module: ProfileModule()),
         ModuleRoute('/venda', module: VendaModule()),
 
-        // Dashboard (Desenvolvimento)
         ChildRoute(
           '/dashboard',
           child: (_, args) {
