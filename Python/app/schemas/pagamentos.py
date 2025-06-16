@@ -10,7 +10,7 @@ class Pagamento(BaseModel):
     valor_pago:float
     data_pagamento: datetime
     
-class PagamentoCreate(BaseModel):
+class PagamentosCreate(BaseModel):
     id_venda: int
     forma_pagamento: str
     status: str

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from schemas.vendedores import VendedoresCreate, VendedoresUpdate
-from connection_db.database import get_client
-from services.supabase_service import insert, get_all, get_by_id, update, delete
+from app.schemas.vendedores import VendedoresCreate, VendedoresUpdate
+from app.connection_db.database import get_client
+from app.services.supabase_service import insert, get_all, get_by_id, update, delete
 import httpx
 
 router = APIRouter()
@@ -49,5 +49,5 @@ async def delete_seller(
     id_vendedor: int,
     client: httpx.AsyncClient = Depends(get_client)
 ):
-    response = await update(client, "vendedores", "id_vendedor", id_vendedor)
+    response = await delete(client, "vendedores", "id_vendedor", id_vendedor)
     return {"Mensagem": f"id_vendedor {id_vendedor} foi deletado"}

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from schemas.vendas import VendasCreate, VendasUpdate
-from connection_db.database import get_client
-from services.supabase_service import insert, get_all, get_by_id, update, delete
+from app.schemas.vendas import VendasCreate, VendasUpdate
+from app.connection_db.database import get_client
+from app.services.supabase_service import insert, get_all, get_by_id, update, delete
 import httpx
 
 router = APIRouter()

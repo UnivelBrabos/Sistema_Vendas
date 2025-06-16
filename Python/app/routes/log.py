@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
-from schemas.logs import LogsCreate
-from connection_db.database import get_client
-from services.supabase_service import insert
+from app.schemas.logs import LogsCreate
+from app.connection_db.database import get_client
+from app.services.supabase_service import insert
 import httpx
 
 router = APIRouter()

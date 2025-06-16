@@ -1,19 +1,19 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from schemas.segmentos_clientes import SegmentosClienteCreate
-from connection_db.database import get_client
-from services.supabase_service import insert, get_all, get_by_id, update, delete
+from app.schemas.segmentos_clientes import SegmentosClienteCreate
+from app.connection_db.database import get_client
+from app.services.supabase_service import insert, get_all, get_by_id, update, delete
 import httpx
 
 router = APIRouter()
 
-@router.get('/costumer_segments/get_all')
+@router.get('/customer_segments/get_all')
 async def get_customer_segments(
     client: httpx.AsyncClient = Depends(get_client)
 ):
     response = await get_all(client, "segmentos_cliente")
     return response.json()
 
-@router.get('/costumer_segments/get/{id_segmento}')
+@router.get('/customer_segments/get/{id_segmento}')
 async def get_segments_by_id(
     id_segmento: int,
     client: httpx.AsyncClient = Depends(get_client)

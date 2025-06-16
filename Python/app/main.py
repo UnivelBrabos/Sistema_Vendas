@@ -1,9 +1,9 @@
 from fastapi import FastAPI, Request
-from connection_db.database import lifespan, get_client
-from services.log_service import log_request
+from app.connection_db.database import lifespan, get_client
+from app.services.log_service import log_request 
 import httpx
 
-from routes import (
+from app.routes import (
     clients, customer_segments, payments,
     product_category, products, sales_items,
     sales, sellers, users, log
