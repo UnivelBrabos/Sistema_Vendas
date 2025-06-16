@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from schemas.pagamentos import PagamentosCreate
+from schemas.pagamentos import PagamentoCreate
 from connection_db.database import get_client
 from services.supabase_service import insert, get_all, get_by_id, update, delete
 import httpx
@@ -26,7 +26,7 @@ async def get_by_payments_id(
 
 @router.post('/payments/post')
 async def insert_payments(
-    payments: PagamentosCreate,
+    payments: PagamentoCreate,
     client: httpx.AsyncClient = Depends(get_client)
 ):
     data = payments.model_dump(exclude_none=True)
@@ -37,7 +37,7 @@ async def insert_payments(
 @router.put('/payments/put/{id_pagamento}')
 async def put_payments(
     id_pagamento: int,
-    payments_update: PagamentosCreate,
+    payments_update: PagamentoCreate,
     client: httpx.AsyncClient = Depends(get_client)
 ):
     data = payments_update.model_dump(exclude_none=True)
