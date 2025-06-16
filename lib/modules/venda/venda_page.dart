@@ -32,7 +32,6 @@ class CreateSalePage extends StatelessWidget {
                 idCliente: 2,
                 total: 123.45,
                 desconto: 0, items: [],
-                //Ver como que isso vai ficar ajustado
               );
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Venda criada com sucesso!')),

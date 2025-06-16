@@ -5,6 +5,7 @@ import '../../store/venda_store.dart';
 import 'venda_controller.dart';
 import 'venda_page.dart';
 import 'sales_page.dart';
+import 'sale_detail_page.dart'; 
 
 class VendaModule extends Module {
   @override
@@ -34,6 +35,17 @@ class VendaModule extends Module {
             return SalesPage(
               email: data['email'] as String,
               fotoUrl: data['fotoUrl'] as String?,
+            );
+          },
+        ),
+
+        ChildRoute(
+          '/sale_detail',
+          child: (_, args) {
+            final data = args.data as Map<String, dynamic>;
+            return SaleDetailPage(
+              idVenda: data['idVenda'] as int,
+              email: data['email'] as String,
             );
           },
         ),

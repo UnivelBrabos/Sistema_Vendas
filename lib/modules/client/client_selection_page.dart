@@ -41,7 +41,6 @@ class _ClientSelectionPageState extends State<ClientSelectionPage> {
             Autocomplete<ClienteModel>(
               optionsBuilder: (TextEditingValue textEditingValue) {
                 if (textEditingValue.text.isEmpty) {
-                  // Se não há filtro, retorna todos os clientes
                   return _clients;
                 }
                 return _clients.where((ClienteModel client) => client.nome

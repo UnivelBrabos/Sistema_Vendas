@@ -19,6 +19,7 @@ class SalesPage extends StatefulWidget {
 
 class _SalesPageState extends State<SalesPage> {
   final supabase = Supabase.instance.client;
+
   late Future<List<Map<String, dynamic>>> _futureVendas;
 
   double? _minValor;
@@ -30,13 +31,12 @@ class _SalesPageState extends State<SalesPage> {
   @override
   void initState() {
     super.initState();
+    _futureVendas = _fetchAllVendas();
     _loadClientes().then((_) => _loadVendas());
   }
 
   Future<void> _loadClientes() async {
-    final resp = await supabase
-        .from('clientes')
-        .select('id_cliente, nome');
+    final resp = await supabase.from('clientes').select('id_cliente, nome');
     _clientes = (resp as List).cast<Map<String, dynamic>>();
   }
 
@@ -53,11 +53,10 @@ class _SalesPageState extends State<SalesPage> {
   Future<List<Map<String, dynamic>>> _fetchAllVendas({
     double? minValor,
     int? clienteId,
-    int? ultimosDias, 
+    int? ultimosDias,
   }) async {
-    var builder = supabase
-        .from('vendas')
-        .select();
+    var builder =
+        supabase.from('vendas').select(); 
 
     if (minValor != null) {
       builder = builder.gte('total', minValor);
@@ -136,7 +135,8 @@ class _SalesPageState extends State<SalesPage> {
             ElevatedButton(
               onPressed: () {
                 setState(() {
-                  final parsed = double.tryParse(valorCtrl.text.replaceAll(',', '.'));
+                  final parsed =
+                      double.tryParse(valorCtrl.text.replaceAll(',', '.'));
                   _minValor = parsed;
                 });
                 Navigator.pop(context);
@@ -158,7 +158,8 @@ class _SalesPageState extends State<SalesPage> {
         backgroundColor: AppColors.primaryColor,
         centerTitle: true,
         actions: [
-          IconButton(icon: const Icon(Icons.filter_list), onPressed: _openFilterSheet),
+          IconButton(
+              icon: const Icon(Icons.filter_list), onPressed: _openFilterSheet),
           Padding(
             padding: const EdgeInsets.only(right: 16),
             child: GestureDetector(
@@ -189,7 +190,8 @@ class _SalesPageState extends State<SalesPage> {
             return const Center(child: CircularProgressIndicator());
           }
           if (snap.hasError) {
-            return Center(child: Text('Erro ao carregar vendas:\n${snap.error}'));
+            return Center(
+                child: Text('Erro ao carregar vendas:\n${snap.error}'));
           }
           final vendas = snap.data ?? [];
           if (vendas.isEmpty) {
@@ -213,7 +215,8 @@ class _SalesPageState extends State<SalesPage> {
 
               return Card(
                 elevation: 2,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)),
                 child: ListTile(
                   contentPadding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -222,8 +225,18 @@ class _SalesPageState extends State<SalesPage> {
                     style: const TextStyle(fontWeight: FontWeight.w600),
                   ),
                   subtitle: Text('Total: R\$ ${total.toStringAsFixed(2)}'),
-                  trailing: Icon(Icons.chevron_right, color: AppColors.primaryColor),
-                  onTap: () {/* detalhes */},
+                  trailing:
+                      Icon(Icons.chevron_right, color: AppColors.primaryColor),
+                  onTap: () {
+                    final idVenda = (v['id_venda'] as num).toInt();
+                    Modular.to.pushNamed(
+                      '/venda/sale_detail',
+                      arguments: {
+                        'idVenda': idVenda,
+                        'email': widget.email,
+                      },
+                    );
+                  },
                 ),
               );
             },
