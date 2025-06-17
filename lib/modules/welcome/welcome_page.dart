@@ -158,7 +158,7 @@ class _WelcomePageState extends State<WelcomePage>
         drawerEdgeDragWidth: 50,
         drawer: _buildDrawer(),
         appBar: AppBar(
-          title: const Text('Bem‐vindo'),
+          title: const Text('Bem‐vindo!'),
           centerTitle: true,
           leading: IconButton(
             icon: const Icon(Icons.menu),

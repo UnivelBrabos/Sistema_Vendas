@@ -128,7 +128,7 @@ class _LoginFormState extends State<LoginForm> {
             const SizedBox(height: 16),
 
             const Text(
-              'Password',
+              'Senha',
               style: TextStyle(
                 color: Color(0xFF151717),
                 fontWeight: FontWeight.w600,
@@ -170,7 +170,7 @@ class _LoginFormState extends State<LoginForm> {
                           setState(() => rememberMe = v ?? false),
                     ),
                     const Text(
-                      'Remember me',
+                      'Lembre de mim',
                       style: TextStyle(fontSize: 14),
                     ),
                   ],
@@ -180,7 +180,7 @@ class _LoginFormState extends State<LoginForm> {
                     // implementar recuperação de senha
                   },
                   child: Text(
-                    'Forgot password?',
+                    'Esqueceu a senha?',
                     style: TextStyle(
                       fontSize: 14,
                       color: AppColors.primaryColor,
@@ -204,7 +204,7 @@ class _LoginFormState extends State<LoginForm> {
                   ),
                 ),
                 child: const Text(
-                  'Sign In',
+                  'Entrar',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
@@ -218,14 +218,14 @@ class _LoginFormState extends State<LoginForm> {
             Center(
               child: Column(
                 children: [
-                  const Text("Don't have an account?"),
+                  const Text("Nao tem uma conta?"),
                   const SizedBox(height: 8),
                   GestureDetector(
                     onTap: () {
                       // implementar sign up
                     },
                     child: Text(
-                      'Sign Up',
+                      'Cadastrar',
                       style: TextStyle(
                         fontSize: 14,
                         color: AppColors.primaryColor,
@@ -238,7 +238,7 @@ class _LoginFormState extends State<LoginForm> {
             ),
             const SizedBox(height: 24),
 
-            const Center(child: Text("Or With")),
+            const Center(child: Text("Ou com")),
             const SizedBox(height: 16),
 
             Row(

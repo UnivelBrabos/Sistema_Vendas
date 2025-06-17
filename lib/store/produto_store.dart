@@ -1,13 +1,21 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:mobx/mobx.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 part 'produto_store.g.dart';
 
 class ProdutoStore = _ProdutoStoreBase with _$ProdutoStore;
 
 abstract class _ProdutoStoreBase with Store {
-  final supabase = Supabase.instance.client;
+  late final String baseUrl;
+
+  _ProdutoStoreBase() {
+    baseUrl = dotenv.env['MIDDLEWARE_URL'] ?? '';
+    if (baseUrl.isEmpty) {
+      print('⚠️ MIDDLEWARE_URL não configurado no .env');
+    }
+  }
 
   @observable
   ObservableList<Map<String, dynamic>> produtos = ObservableList.of([]);
@@ -18,38 +26,26 @@ abstract class _ProdutoStoreBase with Store {
   @action
   Future<void> fetchProdutos() async {
     isLoading = true;
+    final endpoint = '$baseUrl/products/get_all';
+    print('→ Buscando produtos em: $endpoint');
+
     try {
-      final resp = await supabase
-          .from('produtos')
-          .select('id_produto, nome, preco, estoque')
-          .order('nome', ascending: true);
-      final list = (resp as List).cast<Map<String, dynamic>>();
-      produtos = ObservableList.of(list);
+      final response = await http.get(Uri.parse(endpoint));
+      print('→ Response [${response.statusCode}]: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final list = jsonDecode(response.body) as List<dynamic>;
+        produtos = ObservableList.of(
+          list.map((item) => item as Map<String, dynamic>).toList(),
+        );
+        print('→ Total de produtos carregados: ${produtos.length}');
+      } else {
+        print('🔴 Erro ao buscar produtos: ${response.statusCode}');
+      }
     } catch (e) {
-      debugPrint('Erro ao buscar produtos: $e');
+      print('🔴 Erro de conexão ao buscar produtos: $e');
     } finally {
       isLoading = false;
-    }
-  }
-
-  @action
-  Future<void> decrementStock(int idProduto, int quantidade) async {
-    final idx = produtos.indexWhere((p) => p['id_produto'] == idProduto);
-    if (idx == -1) return;
-
-    final atual = produtos[idx]['estoque'] as int? ?? 0;
-    final novoEstoque = (atual - quantidade).clamp(0, atual);
-
-    produtos[idx]['estoque'] = novoEstoque;
-
-    try {
-      await supabase
-          .from('produtos')
-          .update({'estoque': novoEstoque})
-          .eq('id_produto', idProduto);
-    } catch (e) {
-      debugPrint('Erro ao atualizar estoque no backend: $e');
-      produtos[idx]['estoque'] = atual;
     }
   }
 }

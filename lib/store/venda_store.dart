@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:mobx/mobx.dart';
 import '../repository/venda_repository.dart';
 
@@ -10,7 +10,8 @@ abstract class _VendaStoreBase with Store {
   final VendaRepository _repo = VendaRepository();
 
   @observable
-  ObservableList<Map<String, dynamic>> vendas = ObservableList<Map<String, dynamic>>();
+  ObservableList<Map<String, dynamic>> vendas =
+      ObservableList.of([]);
 
   @observable
   bool isLoading = false;
@@ -19,8 +20,10 @@ abstract class _VendaStoreBase with Store {
   Future<void> fetchVendasPorVendedor(int idVendedor) async {
     isLoading = true;
     try {
-      final all = await _repo.fetchAllVendas();
-      final filtradas = all.where((v) => (v['id_vendedor'] as num).toInt() == idVendedor).toList();
+      final all = await _repo.getAll();
+      final filtradas = all
+          .where((v) => (v['id_vendedor'] as num).toInt() == idVendedor)
+          .toList();
       vendas = ObservableList.of(filtradas);
     } catch (e) {
       debugPrint('Erro ao buscar vendas: $e');

@@ -26,13 +26,18 @@ class VendaController {
     final saleId = await _vendaRepo.createVenda(venda);
 
     for (final item in items) {
+      final idProd = item['id_produto'] as int;
+      final qtd    = item['quantidade'] as int;
+      final sub    = (item['subtotal'] as num).toDouble();
+
       final itemJson = {
         'id_venda'       : saleId,
-        'id_produto'     : item['id_produto'] as int,
-        'quantidade'     : item['quantidade'] as int,
-        'quantidade_lote': item['quantidade'] as int,
-        'subtotal'       : (item['subtotal'] as num).toDouble(),
+        'id_produto'     : idProd,
+        'quantidade'     : qtd,
+        'quantidade_lote': qtd,
+        'subtotal'       : sub,     
       };
+
       await _itemRepo.insertItem(itemJson);
     }
   }

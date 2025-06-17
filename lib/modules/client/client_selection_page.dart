@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+
 import '../../models/cliente_model.dart';
 import '../../repository/cliente_repository.dart';
 
@@ -22,10 +24,17 @@ class _ClientSelectionPageState extends State<ClientSelectionPage> {
   }
 
   Future<void> _loadClients() async {
-    final clients = await _repository.getAllClients();
-    setState(() {
-      _clients = clients;
-    });
+    try {
+      final raw = await _repository.getAll();
+      final list = raw.map((m) => ClienteModel.fromJson(m)).toList();
+      setState(() {
+        _clients = list;
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro ao carregar clientes: $e')),
+      );
+    }
   }
 
   @override
@@ -40,44 +49,37 @@ class _ClientSelectionPageState extends State<ClientSelectionPage> {
           children: [
             Autocomplete<ClienteModel>(
               optionsBuilder: (TextEditingValue textEditingValue) {
-                if (textEditingValue.text.isEmpty) {
-                  return _clients;
-                }
-                return _clients.where((ClienteModel client) => client.nome
+                if (_clients.isEmpty) return const [];
+                if (textEditingValue.text.isEmpty) return _clients;
+                return _clients.where((c) => c.nome
                     .toLowerCase()
                     .contains(textEditingValue.text.toLowerCase()));
               },
-              displayStringForOption: (ClienteModel client) => client.nome,
-              onSelected: (ClienteModel selection) {
-                setState(() {
-                  _selectedClient = selection;
-                });
-              },
-              fieldViewBuilder: (context, controller, focusNode, onEditingComplete) {
-                return TextField(
-                  controller: controller,
-                  focusNode: focusNode,
-                  decoration: const InputDecoration(
-                    labelText: "Digite o nome do cliente",
-                    border: OutlineInputBorder(),
-                  ),
-                  onEditingComplete: onEditingComplete,
-                );
-              },
+              displayStringForOption: (c) => c.nome,
+              onSelected: (c) => setState(() => _selectedClient = c),
+              fieldViewBuilder:
+                  (ctx, ctrl, focus, onEditComplete) => TextField(
+                controller: ctrl,
+                focusNode: focus,
+                decoration: const InputDecoration(
+                  labelText: "Digite o nome do cliente",
+                  border: OutlineInputBorder(),
+                ),
+                onEditingComplete: onEditComplete,
+              ),
             ),
             const SizedBox(height: 16),
-            _selectedClient != null
-                ? Text("Cliente selecionado: ${_selectedClient!.nome}")
-                : const Text("Nenhum cliente selecionado"),
+            if (_selectedClient != null)
+              Text("Cliente selecionado: ${_selectedClient!.nome}"),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
                 if (_selectedClient != null) {
-                  // Volta para a tela anterior, retornando o cliente selecionado
                   Modular.to.pop(_selectedClient);
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Selecione um cliente!")));
+                    const SnackBar(content: Text("Selecione um cliente!")),
+                  );
                 }
               },
               child: const Text("Confirmar Seleção"),

@@ -12,15 +12,14 @@ abstract class _CatalogStoreBase with Store {
   bool isLoading = false;
 
   @observable
-  ObservableList<Map<String, dynamic>> products = ObservableList<Map<String, dynamic>>();
+  ObservableList<Map<String, dynamic>> products = ObservableList.of([]);
 
   @action
   Future<void> fetchProducts() async {
     isLoading = true;
     try {
-      final data = await repository.getAllProdutos();
-      products.clear();
-      products.addAll(data);
+      final data = await repository.getAll(); 
+      products = ObservableList.of(data);
     } catch (e) {
       print("Erro ao buscar produtos: $e");
     } finally {

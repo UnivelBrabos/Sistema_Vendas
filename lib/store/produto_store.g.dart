@@ -49,15 +49,6 @@ mixin _$ProdutoStore on _ProdutoStoreBase, Store {
     return _$fetchProdutosAsyncAction.run(() => super.fetchProdutos());
   }
 
-  late final _$decrementStockAsyncAction =
-      AsyncAction('_ProdutoStoreBase.decrementStock', context: context);
-
-  @override
-  Future<void> decrementStock(int idProduto, int quantidade) {
-    return _$decrementStockAsyncAction
-        .run(() => super.decrementStock(idProduto, quantidade));
-  }
-
   @override
   String toString() {
     return '''

@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:trabalho_vendas_univel/core/app_colors.dart';
 
@@ -19,8 +21,7 @@ class SaleDetailPage extends StatefulWidget {
 }
 
 class _SaleDetailPageState extends State<SaleDetailPage> {
-  final supabase = Supabase.instance.client;
-
+  final String baseUrl = dotenv.env['MIDDLEWARE_URL']!;
   bool _loading = true;
   String? _error;
 
@@ -29,7 +30,6 @@ class _SaleDetailPageState extends State<SaleDetailPage> {
   int? _desconto;
   String _nomeVendedor = '—';
   String _nomeCliente = '—';
-
   List<_ItemVenda> _itens = [];
 
   @override
@@ -40,74 +40,74 @@ class _SaleDetailPageState extends State<SaleDetailPage> {
 
   Future<void> _loadDetail() async {
     try {
-      final vendaRow = await supabase
-        .from('vendas')
-        .select('id_vendedor, id_cliente, data_venda, total, desconto')
-        .eq('id_venda', widget.idVenda)
-        .maybeSingle();
+      final saleResp = await http.get(
+        Uri.parse('$baseUrl/sales/get/${widget.idVenda}'),
+      );
+      if (saleResp.statusCode != 200) {
+        throw Exception('Erro ao buscar venda: ${saleResp.statusCode}');
+      }
+      final venda = jsonDecode(saleResp.body) as Map<String, dynamic>;
+      final idVendedor = (venda['id_vendedor'] as num).toInt();
+      final idCliente  = (venda['id_cliente'] as num).toInt();
+      _dataVenda = DateTime.parse(venda['data_venda'] as String);
+      _total     = (venda['total'] as num).toDouble();
+      _desconto  = (venda['desconto'] as num).toInt();
 
-      if (vendaRow == null) throw 'Venda não encontrada';
-
-      final idVendedor = (vendaRow['id_vendedor'] as num).toInt();
-      final idCliente = (vendaRow['id_cliente'] as num).toInt();
-      _dataVenda = DateTime.parse(vendaRow['data_venda'] as String);
-      _total     = (vendaRow['total'] as num).toDouble();
-      _desconto  = (vendaRow['desconto'] as num).toInt();
-
-      final vendRow = await supabase
-        .from('vendedores')
-        .select('nome')
-        .eq('id_vendedor', idVendedor)
-        .maybeSingle();
-      _nomeVendedor = vendRow?['nome'] as String? ?? '—';
-
-      final cliRow = await supabase
-        .from('clientes')
-        .select('nome')
-        .eq('id_cliente', idCliente)
-        .maybeSingle();
-      _nomeCliente = cliRow?['nome'] as String? ?? '—';
-
-      var itensResp = await supabase
-        .from('itens_venda')
-        .select('id_produto, quantidade_lote, subtotal')
-        .eq('id_venda', widget.idVenda);
-
-      final rawItens = (itensResp as List).cast<Map<String, dynamic>>();
-
-      final produtoIds = rawItens
-          .map((e) => (e['id_produto'] as num).toInt())
-          .toSet()
-          .toList();
-
-      List<Map<String, dynamic>> prodsList = [];
-      if (produtoIds.isNotEmpty) {
-        final idsCsv = produtoIds.join(',');
-        var prodsResp = await supabase
-          .from('produtos')
-          .select('id_produto, nome')
-          .filter('id_produto', 'in', '($idsCsv)');
-
-        prodsList = (prodsResp as List).cast<Map<String, dynamic>>();
+      final vendResp = await http.get(
+        Uri.parse('$baseUrl/sellers/get/$idVendedor'),
+      );
+      if (vendResp.statusCode == 200) {
+        final vendJson = jsonDecode(vendResp.body) as Map<String, dynamic>;
+        _nomeVendedor = vendJson['nome'] as String? ?? '—';
       }
 
+      final cliResp = await http.get(
+        Uri.parse('$baseUrl/clients/get/$idCliente'),
+      );
+      if (cliResp.statusCode == 200) {
+        final cliJson = jsonDecode(cliResp.body) as Map<String, dynamic>;
+        _nomeCliente = cliJson['nome'] as String? ?? '—';
+      }
+
+      final itensResp = await http.get(
+        Uri.parse('$baseUrl/sales_items/get_all'),
+      );
+      if (itensResp.statusCode != 200) {
+        throw Exception('Erro ao buscar itens: ${itensResp.statusCode}');
+      }
+      final rawList = (jsonDecode(itensResp.body) as List)
+          .cast<Map<String, dynamic>>();
+      final rawItens = rawList
+          .where((e) => (e['id_venda'] as num).toInt() == widget.idVenda)
+          .toList();
+
+      final prodsResp = await http.get(
+        Uri.parse('$baseUrl/products/get_all'),
+      );
+      if (prodsResp.statusCode != 200) {
+        throw Exception('Erro ao buscar produtos: ${prodsResp.statusCode}');
+      }
+      final prodsList = (jsonDecode(prodsResp.body) as List)
+          .cast<Map<String, dynamic>>();
       final prodsMap = {
         for (var p in prodsList) (p['id_produto'] as int): p['nome'] as String
       };
 
       _itens = rawItens.map((e) {
-        final pid = (e['id_produto'] as num).toInt();
+        final pid   = (e['id_produto'] as num).toInt();
+        final qty   = (e['quantidade_lote'] as num).toInt();
+        final sub   = (e['subtotal'] as num).toDouble();
         return _ItemVenda(
           nomeProduto: prodsMap[pid] ?? 'Produto #$pid',
-          quantidade: (e['quantidade_lote'] as num).toInt(),
-          subtotal: (e['subtotal'] as num).toDouble(),
+          quantidade: qty,
+          subtotal: sub,
         );
       }).toList();
 
       setState(() => _loading = false);
     } catch (e) {
       setState(() {
-        _error = e.toString();
+        _error   = e.toString();
         _loading = false;
       });
     }
@@ -117,7 +117,7 @@ class _SaleDetailPageState extends State<SaleDetailPage> {
   Widget build(BuildContext context) {
     if (_loading) {
       return Scaffold(
-        appBar: AppBar(title: Text('Detalhe da Venda')),
+        appBar: AppBar(title: const Text('Detalhe da Venda')),
         body: const Center(child: CircularProgressIndicator()),
       );
     }
@@ -146,18 +146,19 @@ class _SaleDetailPageState extends State<SaleDetailPage> {
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Venda #${widget.idVenda}',
-                        style: const TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold)),
-                    const SizedBox(height: 8),
-                    Text('Data: $dateStr'),
-                    Text('Vendedor: $_nomeVendedor'),
-                    Text('Cliente: $_nomeCliente'),
-                    Text('Total: R\$ ${_total!.toStringAsFixed(2)}'),
-                    Text('Desconto: ${_desconto!}%'),
-                  ]),
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Venda #${widget.idVenda}',
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 8),
+                  Text('Data: $dateStr'),
+                  Text('Vendedor: $_nomeVendedor'),
+                  Text('Cliente: $_nomeCliente'),
+                  Text('Total: R\$ ${_total!.toStringAsFixed(2)}'),
+                  Text('Desconto: ${_desconto!}%'),
+                ],
+              ),
             ),
           ),
 
@@ -188,6 +189,7 @@ class _ItemVenda {
   final String nomeProduto;
   final int quantidade;
   final double subtotal;
+
   _ItemVenda({
     required this.nomeProduto,
     required this.quantidade,

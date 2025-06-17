@@ -9,22 +9,24 @@ import 'core/app_colors.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await dotenv.load(fileName: '.env');
+  await dotenv.load();
 
   print('→ Variáveis de ambiente carregadas (.env)');
-  print('SUPABASE_URL: ${dotenv.get('SUPABASE_URL')}');
-  print('SUPABASE_KEY: ${dotenv.get('SUPABASE_KEY')}');
-  print('MIDDLEWARE_URL: ${dotenv.get('MIDDLEWARE_URL')}');
+  print('SUPABASE_URL: ${dotenv.env['SUPABASE_URL']}');
+  print('SUPABASE_KEY: ${dotenv.env['SUPABASE_KEY']}');
+  print('MIDDLEWARE_URL: ${dotenv.env['MIDDLEWARE_URL']}');
 
   await Supabase.initialize(
-    url: dotenv.get('SUPABASE_URL'),
-    anonKey: dotenv.get('SUPABASE_KEY'),
+    url: dotenv.env['SUPABASE_URL']!,
+    anonKey: dotenv.env['SUPABASE_KEY']!,
   );
 
-  runApp(ModularApp(
-    module: AppModule(),
-    child: const MyApp(),
-  ));
+  runApp(
+    ModularApp(
+      module: AppModule(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -33,9 +35,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Trabalho Vendas Univel - Spark',
+      title: 'Trabalho Vendas Univel – Spark',
       debugShowCheckedModeBanner: false,
-
       theme: ThemeData(
         primaryColor: AppColors.primaryColor,
         scaffoldBackgroundColor: AppColors.background,
@@ -65,7 +66,6 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-
       routeInformationParser: Modular.routeInformationParser,
       routerDelegate: Modular.routerDelegate,
     );
