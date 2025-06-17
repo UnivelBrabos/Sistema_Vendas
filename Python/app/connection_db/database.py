@@ -7,8 +7,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-SUPABASE_URL = os.getenv("SUPABASE_URL_TEST")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY_TEST")
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 
 async_client: httpx.AsyncClient | None = None
 
