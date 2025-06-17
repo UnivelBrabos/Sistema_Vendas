@@ -1,5 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'profile_page.dart';
+import 'settings_page.dart';
 
 class ProfileModule extends Module {
   @override
@@ -13,6 +14,11 @@ class ProfileModule extends Module {
               fotoUrl: data['fotoUrl'] as String?,
             );
           },
+        ),
+
+        ChildRoute(
+          '/settings',
+          child: (_, __) => const SettingsPage(),
         ),
       ];
 }

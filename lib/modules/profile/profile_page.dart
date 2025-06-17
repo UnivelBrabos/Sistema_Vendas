@@ -70,7 +70,6 @@ class ProfilePage extends StatelessWidget {
           final user = snap.data;
           final rawName = (user?['nome'] as String?) ?? firstNameRaw;
           final name = _capitalize(rawName);
-
           final mail = (user?['email'] as String?) ?? email;
 
           final supabasePhoto = user?['foto_url'] as String?;
@@ -79,11 +78,8 @@ class ProfilePage extends StatelessWidget {
 
           ImageProvider? avatarImage;
           if (rawPhoto != null && rawPhoto.isNotEmpty) {
-            if (rawPhoto.startsWith('http')) {
-              avatarImage = NetworkImage(rawPhoto);
-            } else {
-              avatarImage = AssetImage(rawPhoto);
-            }
+            avatarImage =
+                rawPhoto.startsWith('http') ? NetworkImage(rawPhoto) : AssetImage(rawPhoto) as ImageProvider;
           }
 
           return Center(
@@ -124,14 +120,15 @@ class ProfilePage extends StatelessWidget {
                           const TextStyle(fontSize: 16, color: Colors.black54),
                     ),
                     const Divider(height: 32, thickness: 1),
+
                     ListTile(
                       leading: const Icon(Icons.settings, size: 28),
                       title: const Text('Configurações',
                           style: TextStyle(fontSize: 16)),
-                      onTap: () => ScaffoldMessenger.of(context)
-                          .showSnackBar(const SnackBar(
-                              content: Text('Em construção'))),
+                      onTap: () =>
+                          Modular.to.pushNamed('/profile/settings'),
                     ),
+
                     ListTile(
                       leading: const Icon(Icons.logout, size: 28),
                       title: const Text('Sair',
