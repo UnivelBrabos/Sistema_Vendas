@@ -40,10 +40,9 @@ class MyApp extends StatelessWidget {
 
     return Observer(builder: (_) {
       return MaterialApp.router(
-        title: 'Trabalho Vendas Univel – Spark',
+        title: 'Spark',
         debugShowCheckedModeBanner: false,
 
-        // escolhe tema claro ou escuro conforme a store
         themeMode: settings.isDarkMode ? ThemeMode.dark : ThemeMode.light,
 
         // Tema claro
