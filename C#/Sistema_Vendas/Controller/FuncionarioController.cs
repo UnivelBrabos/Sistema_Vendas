@@ -38,6 +38,8 @@ namespace Sistema_Vendas.Controller
             Vendedor.Salario = Convert.ToDouble(Dados[2]);
 
             _Funcionario.VendedorAtualizado(await Vendedor.UpdateModel(), "atualizado");
+            PersistDataService.Instance.UpdateFuncionario();
+            CarregarFuncionarios(null, EventArgs.Empty);
         }
 
         private async void DeletarFuncionario(object sender, EventArgs e)

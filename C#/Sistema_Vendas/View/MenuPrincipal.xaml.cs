@@ -15,6 +15,7 @@ namespace Sistema_Vendas.View
         public event EventHandler eventFuncionarios;
         public event EventHandler eventEstoque;
         public event EventHandler eventFiltrar;
+        public event EventHandler eventConstrucao;
 
         public MenuPrincipal()
         {
@@ -29,6 +30,8 @@ namespace Sistema_Vendas.View
             btnFuncionarios.Click += (s, e) => eventFuncionarios?.Invoke(this, EventArgs.Empty);
             btnEstoque.Click += (s, e) => eventEstoque?.Invoke(this, EventArgs.Empty);
             btnFiltrar.Click += (s, e) => eventFiltrar?.Invoke(this, EventArgs.Empty);
+            btnConfiguracoes.Click += (s, e) => eventConstrucao?.Invoke(4, EventArgs.Empty);
+            btnUsuario.Click += (s, e) => eventConstrucao?.Invoke(5, EventArgs.Empty);
         }
 
         public void DestacarBotao(int pIndex)

@@ -23,6 +23,14 @@ namespace Sistema_Vendas.Controller
             _View.eventFuncionarios += SetContentFuncionarios;
             _View.eventEstoque += SetContentEstoque;
             _View.eventFiltrar += SetContentFiltrar;
+            _View.eventConstrucao += SetContentConstrucao;
+        }
+        private void SetContentConstrucao(object? sender, EventArgs e)
+        {
+            int botao = Convert.ToInt32(sender.ToString());
+
+            EmConstrucao Filtrar = App.View.Construcao;
+            _View.ShowContent(Filtrar, botao);
         }
 
         private void SetContentFiltrar(object? sender, EventArgs e)

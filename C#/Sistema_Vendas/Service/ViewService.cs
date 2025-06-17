@@ -15,6 +15,7 @@ namespace Sistema_Vendas.Service
         public Login Login { get; set; }
         public FiltrarView Filtrar { get; set; }
         public SplashScreen Splash {  get; set; }
+        public EmConstrucao Construcao { get; set; }
         #endregion :: Views ::
 
         private static ViewService _instance;
@@ -41,6 +42,7 @@ namespace Sistema_Vendas.Service
             Login = new();
             Filtrar = new();
             Splash = new();
+            Construcao = new();
         }
     }
 }

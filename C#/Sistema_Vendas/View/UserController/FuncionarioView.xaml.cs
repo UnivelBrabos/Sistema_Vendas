@@ -1,4 +1,5 @@
 ﻿using Sistema_Vendas.Interfaces;
+using Sistema_Vendas.Service;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -17,11 +18,6 @@ namespace Sistema_Vendas.View
         public FuncionarioView()
         {
             InitializeComponent();
-        }
-
-        private void btnAtualizarEstoque_Click(object sender, RoutedEventArgs e)
-        {
-
         }
 
         public void CarregarTabelaAuxiliar(DataGrid dttVendas)
@@ -61,9 +57,6 @@ namespace Sistema_Vendas.View
 
                 if (valor.ToString() == txtIdFuncionario.Text)
                 {
-                    txtEmail.Text = item.GetType().GetProperty("Email").GetValue(item).ToString();
-                    txtSalario.Text = item.GetType().GetProperty("Salario").GetValue(item).ToString();
-
                     return true;
                 }
             }

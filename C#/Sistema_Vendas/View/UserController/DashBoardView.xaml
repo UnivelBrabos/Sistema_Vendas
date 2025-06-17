@@ -21,7 +21,7 @@
                     <Rectangle Name="retTotalVendas" HorizontalAlignment="Left" Height="60" Margin="7,0,0,0" VerticalAlignment="Center" Width="101" Fill="White" RadiusX="10" RadiusY="10"/>
                     <Label Name="lblTotalVendas" Content="00000.00" Margin="54,30,24,0" VerticalAlignment="Top" FontSize="9" FontFamily="Rockwell" HorizontalContentAlignment="Center"/>
                     <Label Name="lblValorTotalVendas" Content="Total Vendas" HorizontalAlignment="Left" Margin="42,6,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" Width="71" FontSize="9" FontFamily="Rockwell"/>
-                    <Image Name="imgTotalVendas" Margin="12,0,0,0" Source="/Imagens/Venda_Icon.png" Stretch="Fill" HorizontalAlignment="Left" VerticalAlignment="Center" Width="30" Height="30"/>
+                    <Image Name="imgTotalVendas" Margin="12,0,0,0" Source="/Midia/Venda_Icon.png" Stretch="Fill" HorizontalAlignment="Left" VerticalAlignment="Center" Width="30" Height="30"/>
                 </Grid>
 
                 <!-- Elemento Central -->
@@ -29,7 +29,7 @@
                     <Rectangle Name="retTotalRecebido" HorizontalAlignment="Left" Height="60" Margin="7,0,0,0" VerticalAlignment="Center" Width="101" Fill="White" RadiusX="10" RadiusY="10"/>
                     <Label Name="lblTotalRecebido" Content="00000.00" HorizontalAlignment="Left" Margin="49,30,0,0" VerticalAlignment="Top" FontSize="9" FontFamily="Rockwell" HorizontalContentAlignment="Center"/>
                     <Label Name="lblValorTotalRecebido" Content="Total Vendido" HorizontalAlignment="Left" Margin="37,6,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" Width="71" FontSize="9" FontFamily="Rockwell"/>
-                    <Image Name="imgTotalRecebido" Margin="12,0,0,0" Source="/Imagens/Dinheiro_Icon.png" Stretch="Fill" HorizontalAlignment="Left" VerticalAlignment="Center" Width="30" Height="30"/>
+                    <Image Name="imgTotalRecebido" Margin="10,15,0,0" Source="/Midia/Dinheiro_Icon.png" Stretch="Fill" HorizontalAlignment="Left" VerticalAlignment="Top" Width="30" Height="30"/>
                 </Grid>
 
                 <!-- Elemento da Direita -->
@@ -37,7 +37,7 @@
                     <Rectangle Name="retMelhorCliente" Height="60" Margin="12,0,10,0" VerticalAlignment="Center" Fill="White" RadiusX="10" RadiusY="10"/>
                     <Label Name="lblMelhorCliente" Content="Mercado X" Margin="42,30,11,21" FontSize="9" FontFamily="Rockwell" HorizontalContentAlignment="Center"/>
                     <Label Name="lblValorMelhorCliente" Content="Melhor Cliente" HorizontalAlignment="Left" Margin="41,6,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" Width="74" FontSize="9" FontFamily="Rockwell"/>
-                    <Image Name="imgMelhorCliente" Margin="12,0,0,0" Source="/Imagens/Cliente_Icon.png" Stretch="Fill" HorizontalAlignment="Left" VerticalAlignment="Center" Width="30" Height="30"/>
+                    <Image Name="imgMelhorCliente" Margin="12,0,0,0" Source="/Midia/Cliente_Icon.png" Stretch="Fill" HorizontalAlignment="Left" VerticalAlignment="Center" Width="30" Height="30"/>
                 </Grid>
 
             </Grid>

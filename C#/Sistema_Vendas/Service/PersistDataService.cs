@@ -43,6 +43,11 @@ namespace Sistema_Vendas.Service
                 lstItensVenda = await ItensVenda.GetModel();
             }
         }
+
+        public async Task UpdateFuncionario()
+        {
+                lstVendedores = await Vendedor.GetModel();
+        }
     }
 
 }
