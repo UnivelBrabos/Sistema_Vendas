@@ -1,3 +1,5 @@
+// lib/modules/cart/cart_page.dart
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -24,7 +26,7 @@ class _CartPageState extends State<CartPage> {
   final cart = Modular.get<CartStore>();
   final vendaController = Modular.get<VendaController>();
   final produtoStore = Modular.get<ProdutoStore>();
-  final String baseUrl = dotenv.env['MIDDLEWARE_URL']!;
+  final baseUrl = dotenv.env['MIDDLEWARE_URL']!;
 
   bool _isSubmitting = false;
   bool _loadingClientes = false;
@@ -44,21 +46,21 @@ class _CartPageState extends State<CartPage> {
   Future<void> _fetchVendedorId() async {
     setState(() => _loadingVendedor = true);
     try {
-      final normalized = widget.email.trim().toLowerCase();
-      final response = await http.get(Uri.parse('$baseUrl/sellers/get_all'));
-      if (response.statusCode == 200) {
-        final list = jsonDecode(response.body) as List;
-        final match = list.cast<Map<String, dynamic>>().firstWhere(
-          (v) => (v['email'] as String).trim().toLowerCase() == normalized,
+      final emailNorm = widget.email.trim().toLowerCase();
+      final resp = await http.get(Uri.parse('$baseUrl/sellers/get_all'));
+      if (resp.statusCode == 200) {
+        final list = (jsonDecode(resp.body) as List).cast<Map<String, dynamic>>();
+        final match = list.firstWhere(
+          (v) => (v['email'] as String).trim().toLowerCase() == emailNorm,
           orElse: () => <String, dynamic>{},
         );
         if (match.isNotEmpty && match['id_vendedor'] != null) {
-          _vendedorId = match['id_vendedor'] as int;
+          _vendedorId = (match['id_vendedor'] as num).toInt();
         } else {
           throw Exception('Vendedor não encontrado no middleware.');
         }
       } else {
-        throw Exception('Erro ao buscar vendedores: ${response.statusCode}');
+        throw Exception('Erro GET sellers: ${resp.statusCode}');
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -72,8 +74,8 @@ class _CartPageState extends State<CartPage> {
   Future<void> _loadClientes() async {
     setState(() => _loadingClientes = true);
     try {
-      final rawList = await ClienteRepository().getAll();
-      _clientes = rawList.map((json) => ClienteModel.fromJson(json)).toList();
+      final raw = await ClienteRepository().getAll();
+      _clientes = raw.map((j) => ClienteModel.fromJson(j)).toList();
       if (_clientes.isNotEmpty) {
         _selectedClienteId = _clientes.first.idCliente.toString();
       }
@@ -89,13 +91,13 @@ class _CartPageState extends State<CartPage> {
   Future<void> _finalizarVenda() async {
     if (_vendedorId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Aguardando autenticação do vendedor...')),
+        const SnackBar(content: Text('Aguardando autenticação...')),
       );
       return;
     }
     if (_selectedClienteId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Selecione um cliente antes de continuar.')),
+        const SnackBar(content: Text('Selecione um cliente.')),
       );
       return;
     }
@@ -105,40 +107,43 @@ class _CartPageState extends State<CartPage> {
     final items = cart.cartItems.map((e) {
       final p     = e['product'] as Map<String, dynamic>;
       final qty   = e['quantity'] as int;
-      final price = (p['preco'] as num?)?.toDouble() ?? 0.0;
-      final sub   = price * qty;
-
+      final price = (p['preco'] as num).toDouble();
       return {
         'id_produto': p['id_produto'] as int,
         'quantidade': qty,
-        'subtotal'  : sub,           
+        'subtotal'  : price * qty,
       };
     }).toList();
 
-    final total = cart.cartItems.fold<double>(
+    final total = items.fold<double>(
       0,
-      (sum, e) {
-        final p     = e['product'] as Map<String, dynamic>;
-        final qty   = e['quantity'] as int;
-        final price = (p['preco'] as num?)?.toDouble() ?? 0.0;
-        return sum + price * qty;
-      },
+      (sum, it) => sum + (it['subtotal'] as double),
     );
 
     try {
       await vendaController.salvarVenda(
         idVendedor: _vendedorId!,
-        idCliente: int.parse(_selectedClienteId!),
-        total: total,
-        desconto: 0,
-        items: items,
+        idCliente : int.parse(_selectedClienteId!),
+        total     : total,
+        desconto  : 0,
+        items     : items,
       );
+
+      for (final it in items) {
+        await produtoStore.decrementStock(
+          it['id_produto'] as int,
+          it['quantidade'] as int,
+        );
+      }
 
       await produtoStore.fetchProdutos();
       cart.clearCart();
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Venda emitida com sucesso!')),
       );
+
+      await Future.delayed(const Duration(milliseconds: 300));
       Modular.to.pushReplacementNamed(
         '/minhas_vendas',
         arguments: {'email': widget.email},
@@ -146,7 +151,7 @@ class _CartPageState extends State<CartPage> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Não foi possível emitir a venda: $e'),
+          content: Text('Erro ao emitir venda: $e'),
           backgroundColor: Colors.redAccent,
         ),
       );
@@ -168,7 +173,7 @@ class _CartPageState extends State<CartPage> {
       (sum, e) {
         final p     = e['product'] as Map<String, dynamic>;
         final qty   = e['quantity'] as int;
-        final price = (p['preco'] as num?)?.toDouble() ?? 0.0;
+        final price = (p['preco'] as num).toDouble();
         return sum + price * qty;
       },
     );
@@ -183,7 +188,7 @@ class _CartPageState extends State<CartPage> {
           Padding(
             padding: const EdgeInsets.all(16),
             child: DropdownButtonFormField<String>(
-              decoration: const InputDecoration(labelText: 'Cliente *'),
+              decoration: const InputDecoration(labelText: 'Cliente'),
               items: _clientes
                   .map((c) => DropdownMenuItem(
                         value: c.idCliente.toString(),
@@ -202,14 +207,16 @@ class _CartPageState extends State<CartPage> {
               return ListView.builder(
                 itemCount: cart.cartItems.length,
                 itemBuilder: (_, i) {
-                  final e   = cart.cartItems[i];
-                  final p   = e['product'] as Map<String, dynamic>;
-                  final nome= p['nome'] as String? ?? '';
-                  final qty = e['quantity'] as int;
-                  final sub = (p['preco'] as num).toDouble() * qty;
+                  final e    = cart.cartItems[i];
+                  final p    = e['product'] as Map<String, dynamic>;
+                  final nome = p['nome'] as String;
+                  final qty  = e['quantity'] as int;
+                  final sub  = (p['preco'] as num).toDouble() * qty;
                   return ListTile(
                     title: Text(nome),
-                    subtitle: Text('Qtd: $qty  •  Subtotal: R\$ ${sub.toStringAsFixed(2)}'),
+                    subtitle: Text(
+                      'Qtd: $qty  •  Subtotal: R\$ ${sub.toStringAsFixed(2)}',
+                    ),
                     trailing: IconButton(
                       icon: const Icon(Icons.delete),
                       onPressed: () => cart.removeItem(p),
@@ -225,11 +232,9 @@ class _CartPageState extends State<CartPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text('Total:',
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 Text('R\$ ${total.toStringAsFixed(2)}',
-                    style:
-                        const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               ],
             ),
           ),
@@ -247,8 +252,7 @@ class _CartPageState extends State<CartPage> {
               ? const SizedBox(
                   height: 24,
                   width: 24,
-                  child: CircularProgressIndicator(
-                      strokeWidth: 2, color: Colors.white),
+                  child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
                 )
               : const Text('Finalizar Venda'),
         ),
