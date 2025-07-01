@@ -14,6 +14,8 @@ namespace Sistema_Vendas.View
         public event EventHandler CarregaAuxiliar;
 
         public event EventHandler SetVenda;
+        public event EventHandler UpdateVendas;
+        public event EventHandler DeleteVendas;
 
         public AuditoriaView()
         {
@@ -34,7 +36,7 @@ namespace Sistema_Vendas.View
         {
             CarregaAuxiliar?.Invoke(txtIdVenda.Tag, EventArgs.Empty);
 
-            if(txtIdVenda.Text == "Id. Venda")
+            if (txtIdVenda.Text == "Id. Venda")
             {
                 txtIdVenda.Text = "";
             }
@@ -117,5 +119,52 @@ namespace Sistema_Vendas.View
             }
         }
 
+        private bool ValidarCampos(bool pSomenteId = false)
+        {
+            if (!IdVendaValido(txtIdVenda.Text))
+            {
+                MessageBox.Show("Selecione uma venda válida!", "Aviso");
+                return false;
+            }
+
+            if (!pSomenteId)
+            {
+                if (!string.IsNullOrEmpty(txtCliente.Text) || !string.IsNullOrEmpty(txtVendedor.Text))
+                {
+                    MessageBox.Show("Preencha todos os campos!", "Aviso");
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private void btnSalvar_Click(object sender, RoutedEventArgs e)
+        {
+            if (!ValidarCampos())
+            {
+                return;
+            }
+
+            UpdateVendas?.Invoke($"{txtIdVenda.Text};{txtCliente.Text};{txtVendedor.Text}", EventArgs.Empty);
+        }
+
+        public void NotificarUsuario(string pMensagem)
+        {
+            MessageBox.Show(pMensagem);
+        }
+
+        private void btnExcluir_Click(object sender, RoutedEventArgs e)
+        {
+            if (!ValidarCampos(true))
+            {
+                return;
+            }
+
+            if(MessageBox.Show("Deseja deletar a venda selecionada?", "Aviso", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                DeleteVendas?.Invoke(txtIdVenda.Text, EventArgs.Empty);
+            }
+        }
     }
 }

@@ -46,7 +46,7 @@
                     </Style>
                 </Button.Style>
             </Button>
-            <Button x:Name="btnSalvar" Content="Salvar" HorizontalAlignment="Left" Margin="32,0,0,10" Width="131" FontFamily="Rockwell" FontSize="18" Background="#FF73DA84" Height="44" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" IsEnabled="False">
+            <Button x:Name="btnSalvar" Content="Salvar" HorizontalAlignment="Left" Margin="32,0,0,10" Width="131" FontFamily="Rockwell" FontSize="18" Background="#FF73DA84" Height="44" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" IsEnabled="False" Click="btnSalvar_Click">
                 <Button.Style>
                     <Style TargetType="{x:Type Button}">
                         <Setter Property="Background" Value="Transparent"/>
@@ -74,7 +74,7 @@
                     </Style>
                 </Button.Style>
             </Button>
-            <Button x:Name="btnExcluir" Content="Excluir" HorizontalAlignment="Left" Margin="318,0,0,10" Width="131" FontFamily="Rockwell" FontSize="18" Background="#FFDA7373" Height="44" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" IsEnabled="False">
+            <Button x:Name="btnExcluir" Content="Excluir" HorizontalAlignment="Left" Margin="318,0,0,10" Width="131" FontFamily="Rockwell" FontSize="18" Background="#FFDA7373" Height="44" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" IsEnabled="False" Click="btnExcluir_Click">
                 <Button.Style>
                     <Style TargetType="{x:Type Button}">
                         <Setter Property="Background" Value="Transparent"/>

@@ -8,7 +8,10 @@ namespace Sistema_Vendas.Interfaces
     {
         event EventHandler CarregaAuxiliar;
         event EventHandler SetVenda;
+        event EventHandler UpdateVendas;
+        event EventHandler DeleteVendas;
 
         void CarregaTabelaAuxiliar(DataGrid dttVendas);
+        void NotificarUsuario(string pMensagem);
     }
 }

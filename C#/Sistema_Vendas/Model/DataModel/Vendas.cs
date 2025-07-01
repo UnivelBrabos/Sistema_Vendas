@@ -46,12 +46,12 @@ namespace Sistema_Vendas.Model.DataModel
 
         public async Task<bool> DeleteModel()
         {
-            throw new NotImplementedException();
+            return await App.Controller.Data.DeleteItem("sales", this.IdVendedor.ToString());
         }
 
         public async Task<bool> UpdateModel()
         {
-            throw new NotImplementedException();
+            return await App.Controller.Data.UpdateItem("sales", this.IdVenda.ToString(), JsonConvert.SerializeObject(this));
         }
     }
 }
