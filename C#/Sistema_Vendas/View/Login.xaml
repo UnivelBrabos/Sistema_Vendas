@@ -6,9 +6,9 @@
         xmlns:local="clr-namespace:Sistema_Vendas.View"
         mc:Ignorable="d"
         Title="Login" MinHeight="550" MinWidth="950" MaxHeight="550" MaxWidth="950">
-    <Grid x:Name="grdPrincipal" Background="#FF73B8DA">
-        <Grid x:Name="grdLogin" HorizontalAlignment="Center" VerticalAlignment="Center" Width="434">
-            <Rectangle x:Name="retLogin"
+	<Grid x:Name="grdPrincipal" Background="#FF73B8DA">
+		<Grid x:Name="grdLogin" HorizontalAlignment="Center" VerticalAlignment="Center" Width="434">
+			<Rectangle x:Name="retLogin"
                HorizontalAlignment="Center"
                Height="414"
                VerticalAlignment="Center"
@@ -16,18 +16,18 @@
                Fill="#FFFDFDFD"
                RadiusX="10"
                RadiusY="10">
-                <Rectangle.Effect>
-                    <DropShadowEffect Color="Black"
+				<Rectangle.Effect>
+					<DropShadowEffect Color="Black"
                               BlurRadius="10"
                               Direction="270"
                               ShadowDepth="5"
                               Opacity="0.4"/>
-                </Rectangle.Effect>
-            </Rectangle>
+				</Rectangle.Effect>
+			</Rectangle>
 
-            <Image x:Name="imgLogo" Source="/Midia/Vendas_Icon.png" Stretch="Fill" HorizontalAlignment="Center" VerticalAlignment="Top" Width="166" Height="95"/>
+			<Image x:Name="imgLogo" Source="/Midia/Vendas_Icon.png" Stretch="Fill" HorizontalAlignment="Center" VerticalAlignment="Top" Width="166" Height="95"/>
 
-            <TextBox x:Name="txtUsuarioEmail"
+			<TextBox x:Name="txtUsuarioEmail"
                      HorizontalAlignment="Center"
                      Margin="0,160,0,0"
                      TextWrapping="Wrap"
@@ -39,7 +39,7 @@
                      BorderThickness="0,0,0,1"
                      BorderBrush="Gray"
                      Background="Transparent" GotFocus="txtUsuarioEmail_GotFocus"/>
-            <TextBox x:Name="txtSenha"
+			<TextBox x:Name="txtSenha"
                 HorizontalAlignment="Center"
                 Margin="0,277,0,0"
                 TextWrapping="Wrap"
@@ -51,35 +51,35 @@
                 BorderThickness="0,0,0,1"
                 BorderBrush="Gray"
                 Background="Transparent" GotFocus="txtSenha_GotFocus"/>
-            <Button x:Name="btnLogar" Content="Logar" HorizontalAlignment="Center" Margin="0,378,0,0" VerticalAlignment="Top" Width="74" Background="#FF95F097" BorderBrush="{x:Null}" Height="21" VerticalContentAlignment="Top" Padding="1,1,1,1" Click="btnLogar_Click">
-                <Button.Style>
-                    <Style TargetType="Button">
-                        <Setter Property="Background" Value="Transparent"/>
-                        <Setter Property="BorderThickness" Value="0"/>
-                        <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
-                        <Setter Property="Cursor" Value="Hand"/>
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="Button">
-                                    <Border Background="{TemplateBinding Background}" CornerRadius="2" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
-                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                    </Border>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                        <Style.Triggers>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="RenderTransform">
-                                    <Setter.Value>
-                                        <ScaleTransform ScaleX="0.95" ScaleY="0.95"/>
-                                    </Setter.Value>
-                                </Setter>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>
-            </Button>
+			<Button x:Name="btnLogar" Content="Logar" HorizontalAlignment="Center" Margin="0,378,0,0" VerticalAlignment="Top" Width="74" Background="#FF95F097" BorderBrush="{x:Null}" Height="21" VerticalContentAlignment="Top" Padding="1,1,1,1" Click="btnLogar_Click">
+				<Button.Style>
+					<Style TargetType="Button">
+						<Setter Property="Background" Value="Transparent"/>
+						<Setter Property="BorderThickness" Value="0"/>
+						<Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+						<Setter Property="Cursor" Value="Hand"/>
+						<Setter Property="Template">
+							<Setter.Value>
+								<ControlTemplate TargetType="Button">
+									<Border Background="{TemplateBinding Background}" CornerRadius="2" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+										<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+									</Border>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+						<Style.Triggers>
+							<Trigger Property="IsPressed" Value="True">
+								<Setter Property="RenderTransform">
+									<Setter.Value>
+										<ScaleTransform ScaleX="0.95" ScaleY="0.95"/>
+									</Setter.Value>
+								</Setter>
+							</Trigger>
+						</Style.Triggers>
+					</Style>
+				</Button.Style>
+			</Button>
 
-        </Grid>
-    </Grid>
+		</Grid>
+	</Grid>
 </Window>

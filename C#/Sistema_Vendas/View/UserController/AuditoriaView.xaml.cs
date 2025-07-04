@@ -13,6 +13,8 @@ namespace Sistema_Vendas.View
     {
         public event EventHandler CarregaAuxiliar;
         public event EventHandler SetVenda;
+        public event EventHandler UpdateVendas;
+        public event EventHandler DeleteVendas;
 
         public event EventHandler UpdateVenda;
         public event EventHandler DeleteVenda;
@@ -36,7 +38,7 @@ namespace Sistema_Vendas.View
         {
             CarregaAuxiliar?.Invoke(txtIdVenda.Tag, EventArgs.Empty);
 
-            if(txtIdVenda.Text == "Id. Venda")
+            if (txtIdVenda.Text == "Id. Venda")
             {
                 txtIdVenda.Text = "";
             }
@@ -66,7 +68,10 @@ namespace Sistema_Vendas.View
                 return;
             }
 
-            UpdateVenda?.Invoke($"{txtIdVenda.Text}", EventArgs.Empty);
+            if (MessageBox.Show("Confirmar exclusão da venda?", "Confirmação", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                UpdateVenda?.Invoke($"{txtIdVenda.Text}", EventArgs.Empty);
+            }
         }
 
         private void txtIdVenda_TextChanged(object sender, TextChangedEventArgs e)

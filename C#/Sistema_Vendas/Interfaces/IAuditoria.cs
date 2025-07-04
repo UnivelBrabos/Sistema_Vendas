@@ -8,6 +8,8 @@ namespace Sistema_Vendas.Interfaces
     {
         event EventHandler CarregaAuxiliar;
         event EventHandler SetVenda;
+        event EventHandler UpdateVendas;
+        event EventHandler DeleteVendas;
 
         event EventHandler UpdateVenda;
         event EventHandler DeleteVenda;
