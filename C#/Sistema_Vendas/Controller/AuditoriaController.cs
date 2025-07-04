@@ -16,11 +16,47 @@ namespace Sistema_Vendas.Controller
             _Auditoria = Auditoria;
             _Auditoria.CarregaAuxiliar += SetAuxiliar;
             _Auditoria.SetVenda += SetVenda;
+
+            _Auditoria.UpdateVenda += UpdateVenda;
+            _Auditoria.DeleteVenda += DeleteVenda;
         }
 
         private void SetVenda(object sender, EventArgs e)
         {
             vendas = PersistDataService.Instance.lstVendas.Where(p => p.IdVenda == Convert.ToInt32(sender.ToString())).FirstOrDefault();
+        }
+
+        private void DeleteVenda(object sender, EventArgs e)
+        {
+            try
+            {
+                vendas = PersistDataService.Instance.lstVendas.Where(p => p.IdVenda == Convert.ToInt32(sender.ToString())).FirstOrDefault();
+
+                vendas.DeleteModel();
+            }
+            catch (Exception ex)
+            {
+                _Auditoria.MessageToUser($"Erro ao deletar a venda:{ex.Message}");
+            }
+        }
+
+        private void UpdateVenda(object sender, EventArgs e)
+        {
+            try
+            {
+                string[] strDados = sender.ToString().Split(';');
+
+                vendas = PersistDataService.Instance.lstVendas.Where(p => p.IdVenda == Convert.ToInt32(strDados[0])).FirstOrDefault();
+
+                vendas.IdVendedor = Convert.ToInt32(strDados[1]);
+                vendas.IdCliente = Convert.ToInt32(strDados[2]);
+
+                vendas.UpdateModel();
+            }
+            catch (Exception ex)
+            {
+                _Auditoria.MessageToUser($"Erro ao atualizar venda: {ex.Message}");
+            }
         }
 
         private void SetAuxiliar(object Sender, EventArgs e)

@@ -12,8 +12,10 @@ namespace Sistema_Vendas.View
     public partial class AuditoriaView : UserControl, IAuditoria
     {
         public event EventHandler CarregaAuxiliar;
-
         public event EventHandler SetVenda;
+
+        public event EventHandler UpdateVenda;
+        public event EventHandler DeleteVenda;
 
         public AuditoriaView()
         {
@@ -45,6 +47,55 @@ namespace Sistema_Vendas.View
             CarregaAuxiliar?.Invoke(btnBuscarItensVenda.Tag, EventArgs.Empty);
         }
 
+        private void btnSalvar_Click(object sender, RoutedEventArgs e)
+        {
+            if (ValidaCampos())
+            {
+                MessageBox.Show("Preencha todos os campos!");
+                return;
+            }
+
+            UpdateVenda?.Invoke($"{txtIdVenda.Text};{txtCliente.Text};{txtVendedor.Text}", EventArgs.Empty);
+        }
+
+        private void btnExcluir_Click(object sender, RoutedEventArgs e)
+        {
+            if (ValidaCampos(true))
+            {
+                MessageBox.Show("Preencha o Id da venda!");
+                return;
+            }
+
+            UpdateVenda?.Invoke($"{txtIdVenda.Text}", EventArgs.Empty);
+        }
+
+        private void txtIdVenda_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (IsInitialized)
+            {
+                LimparCampos();
+            }
+        }
+
+        private void txtIdVenda_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !int.TryParse(e.Text, out _);
+        }
+
+        private void txtIdVenda_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                if (!IdVendaValido(txtIdVenda.Text))
+                {
+                    MessageBox.Show("Venda inválida!");
+                    return;
+                }
+
+                SetVenda?.Invoke(txtIdVenda.Text, EventArgs.Empty);
+            }
+        }
+
         private void LimparCampos()
         {
             TextBox[] lstText = { txtIdVenda, txtVendedor, txtCliente, txtDataVenda };
@@ -70,25 +121,6 @@ namespace Sistema_Vendas.View
             dgvAuxiliar.ItemsSource = dttVendas.ItemsSource;
         }
 
-        private void txtIdVenda_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            e.Handled = !int.TryParse(e.Text, out _);
-        }
-
-        private void txtIdVenda_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                if (!IdVendaValido(txtIdVenda.Text))
-                {
-                    MessageBox.Show("Venda inválida!");
-                    return;
-                }
-
-                SetVenda?.Invoke(txtIdVenda.Text, EventArgs.Empty);
-            }
-        }
-
         private bool IdVendaValido(string pIdSelecionado)
         {
             foreach (Vendas item in dgvAuxiliar.Items)
@@ -109,13 +141,27 @@ namespace Sistema_Vendas.View
             return false;
         }
 
-        private void txtIdVenda_TextChanged(object sender, TextChangedEventArgs e)
+        public void MessageToUser(string Message)
         {
-            if (IsInitialized)
-            {
-                LimparCampos();
-            }
+            MessageBox.Show(Message);
         }
 
+        private bool ValidaCampos(bool SomenteId = false)
+        {
+            if (string.IsNullOrEmpty(txtIdVenda.Text))
+            {
+                return false;
+            }
+
+            if (!SomenteId)
+            {
+                if (string.IsNullOrEmpty(txtCliente.Text) || string.IsNullOrEmpty(txtVendedor.Text))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 }
