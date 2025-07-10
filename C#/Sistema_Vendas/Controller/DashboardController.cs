@@ -1,14 +1,14 @@
 ﻿using LiveCharts;
 using LiveCharts.Wpf;
-using Sistema_Vendas.Interfaces;
-using Sistema_Vendas.Model.DashboardModel;
-using Sistema_Vendas.Model.DataModel;
-using Sistema_Vendas.Model.FilteredModel;
-using Sistema_Vendas.Service;
+using Spark.Interfaces;
+using Spark.Model.DashboardModel;
+using Spark.Model.DataModel;
+using Spark.Model.FilteredModel;
+using Spark.Service;
 using System.Globalization;
 using System.Windows;
 
-namespace Sistema_Vendas.Controller
+namespace Spark.Controller
 {
     public class DashboardController
     {

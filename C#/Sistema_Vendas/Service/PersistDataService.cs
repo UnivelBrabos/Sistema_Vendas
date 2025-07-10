@@ -1,5 +1,5 @@
-﻿using Sistema_Vendas.Model.DataModel;
-namespace Sistema_Vendas.Service
+﻿using Spark.Model.DataModel;
+namespace Spark.Service
 {
     public class PersistDataService
     {

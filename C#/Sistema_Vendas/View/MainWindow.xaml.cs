@@ -1,14 +1,14 @@
-﻿using Sistema_Vendas.Controller;
-using Sistema_Vendas.Model;
-using Sistema_Vendas.Model.DataModel;
-using Sistema_Vendas.Model.FilteredModel;
+﻿using Spark.Controller;
+using Spark.Model;
+using Spark.Model.DataModel;
+using Spark.Model.FilteredModel;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 
 
-namespace Sistema_Vendas
+namespace Spark
 {
     public partial class MainWindow : Window, INotifyPropertyChanged
     {

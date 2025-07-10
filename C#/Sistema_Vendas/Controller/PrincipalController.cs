@@ -1,10 +1,10 @@
-﻿using Sistema_Vendas.Interfaces;
-using Sistema_Vendas.View;
+﻿using Spark.Interfaces;
+using Spark.View;
 using System.Windows.Controls;
-using Sistema_Vendas.View.UserController;
+using Spark.View.UserController;
 
 
-namespace Sistema_Vendas.Controller
+namespace Spark.Controller
 {
     public class PrincipalController
     {

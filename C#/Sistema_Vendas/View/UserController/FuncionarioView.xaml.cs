@@ -1,10 +1,10 @@
-﻿using Sistema_Vendas.Interfaces;
-using Sistema_Vendas.Service;
+﻿using Spark.Interfaces;
+using Spark.Service;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Sistema_Vendas.View
+namespace Spark.View
 {
     /// <summary>
     /// Interação lógica para FuncionarioView.xam

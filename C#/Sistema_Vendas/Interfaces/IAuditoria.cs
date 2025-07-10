@@ -1,8 +1,8 @@
-﻿using Sistema_Vendas.Model.DataModel;
+﻿using Spark.Model.DataModel;
 using System.Data;
 using System.Windows.Controls;
 
-namespace Sistema_Vendas.Interfaces
+namespace Spark.Interfaces
 {
     public interface IAuditoria
     {

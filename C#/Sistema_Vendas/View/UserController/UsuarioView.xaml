@@ -1,0 +1,20 @@
+﻿<UserControl x:Class="Spark.View.UserController.UsuarioView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Sistema_Vendas.View.UserController"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" Initialized="UserControl_Initialized">
+    <Grid>
+        <Grid x:Name="grdContUsuario" Background="#FFF0F0F0"/>
+        <Rectangle x:Name="retNome" HorizontalAlignment="Left" Height="61" Margin="31,18,0,0" VerticalAlignment="Top" Width="418" Fill="White" RadiusX="10" RadiusY="10"/>
+        <TextBox x:Name="txtNome" HorizontalAlignment="Left" Margin="44,35,0,0" TextWrapping="Wrap" Text="Nome" VerticalAlignment="Top" Width="388" FontSize="18" FontFamily="Rockwell" Background="{x:Null}" BorderBrush="{x:Null}" Height="27" VerticalContentAlignment="Center" PreviewTextInput="txtIdVenda_PreviewTextInput" Tag="IdVenda" KeyDown="txtIdVenda_KeyDown" GotFocus="txtIdVenda_GotFocus" TextChanged="txtIdVenda_TextChanged" IsEnabled="False"/>
+        <Rectangle x:Name="retEmail" HorizontalAlignment="Left" Height="61" Margin="31,95,0,0" VerticalAlignment="Top" Width="418" Fill="White" RadiusX="10" RadiusY="10"/>
+        <TextBox x:Name="txtEmail" HorizontalAlignment="Left" Margin="44,112,0,0" TextWrapping="Wrap" Text="Email" VerticalAlignment="Top" Width="388" FontSize="18" FontFamily="Rockwell" Background="{x:Null}" BorderBrush="{x:Null}" Height="27" VerticalContentAlignment="Center" PreviewTextInput="txtIdVenda_PreviewTextInput" Tag="IdVenda" KeyDown="txtIdVenda_KeyDown" GotFocus="txtIdVenda_GotFocus" TextChanged="txtIdVenda_TextChanged" IsEnabled="False"/>
+        <Rectangle x:Name="retSalario" HorizontalAlignment="Left" Height="61" Margin="31,173,0,0" VerticalAlignment="Top" Width="129" Fill="White" RadiusX="10" RadiusY="10"/>
+        <TextBox x:Name="txtSalario" HorizontalAlignment="Left" Margin="44,190,0,0" TextWrapping="Wrap" Text="Salário" VerticalAlignment="Top" Width="102" FontSize="18" FontFamily="Rockwell" Background="{x:Null}" BorderBrush="{x:Null}" Height="27" VerticalContentAlignment="Center" PreviewTextInput="txtIdVenda_PreviewTextInput" Tag="IdVenda" KeyDown="txtIdVenda_KeyDown" GotFocus="txtIdVenda_GotFocus" TextChanged="txtIdVenda_TextChanged" IsEnabled="False"/>
+        <Rectangle x:Name="retCargo" HorizontalAlignment="Left" Height="61" Margin="185,173,0,0" VerticalAlignment="Top" Width="129" Fill="White" RadiusX="10" RadiusY="10"/>
+        <TextBox x:Name="txtCargo" HorizontalAlignment="Left" Margin="198,190,0,0" TextWrapping="Wrap" Text="Cargo:" VerticalAlignment="Top" Width="102" FontSize="18" FontFamily="Rockwell" Background="{x:Null}" BorderBrush="{x:Null}" Height="27" VerticalContentAlignment="Center" PreviewTextInput="txtIdVenda_PreviewTextInput" Tag="IdVenda" KeyDown="txtIdVenda_KeyDown" GotFocus="txtIdVenda_GotFocus" TextChanged="txtIdVenda_TextChanged" IsEnabled="False"/>
+    </Grid>
+</UserControl>

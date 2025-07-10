@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sistema_Vendas.Model.FilteredModel
+namespace Spark.Model.FilteredModel
 {
     public class VendasMensais
     {

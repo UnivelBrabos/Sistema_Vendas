@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace Spark.Interfaces
 {
-    public interface ISplash
+    public interface IUsuario
     {
+        event EventHandler CarregarDados;
+
+        void AtribuirDados(string pDados);
     }
 }

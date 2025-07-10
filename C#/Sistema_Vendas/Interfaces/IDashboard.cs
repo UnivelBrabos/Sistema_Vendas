@@ -1,7 +1,7 @@
-﻿using Sistema_Vendas.Model.DashboardModel;
+﻿using Spark.Model.DashboardModel;
 using System.Windows.Controls;
 
-namespace Sistema_Vendas.Interfaces
+namespace Spark.Interfaces
 {
     public interface IDashboard
     {

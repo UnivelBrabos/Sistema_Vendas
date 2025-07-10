@@ -1,9 +1,9 @@
 ﻿using System.Windows;
-using Sistema_Vendas.Model;
-using Sistema_Vendas.Controller;
-using Sistema_Vendas.Interfaces;
+using Spark.Model;
+using Spark.Controller;
+using Spark.Interfaces;
 
-namespace Sistema_Vendas.View
+namespace Spark.View
 {
     public partial class Login : Window, ILogin
     {

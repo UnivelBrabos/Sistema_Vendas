@@ -1,12 +1,12 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using LiveCharts.Wpf;
-using Sistema_Vendas.Controller;
-using Sistema_Vendas.Interfaces;
-using Sistema_Vendas.Model.DashboardModel;
-using Sistema_Vendas.Model.FilteredModel;
+using Spark.Controller;
+using Spark.Interfaces;
+using Spark.Model.DashboardModel;
+using Spark.Model.FilteredModel;
 
-namespace Sistema_Vendas.View
+namespace Spark.View
 {
     /// <summary>
     /// Interação lógica para DashBoardView.xam

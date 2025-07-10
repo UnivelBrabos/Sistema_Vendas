@@ -1,6 +1,6 @@
-﻿using Sistema_Vendas.Controller;
+﻿using Spark.Controller;
 
-namespace Sistema_Vendas.Service
+namespace Spark.Service
 {
     public class ControllerService
     {

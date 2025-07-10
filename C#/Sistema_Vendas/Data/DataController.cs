@@ -1,12 +1,12 @@
 ﻿using Newtonsoft.Json;
-using Sistema_Vendas.Model.DataModel;
-using Sistema_Vendas.Service;
+using Spark.Model.DataModel;
+using Spark.Service;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Windows;
 
-namespace Sistema_Vendas.Controller
+namespace Spark.Controller
 {
     public class DataController
     {

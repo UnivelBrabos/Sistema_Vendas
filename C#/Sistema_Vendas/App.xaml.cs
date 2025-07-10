@@ -1,9 +1,9 @@
-﻿using Sistema_Vendas.Service;
+﻿using Spark.Service;
 using System.Windows;
-using Sistema_Vendas.Model.DataModel;
-using Sistema_Vendas.Model.FilteredModel;
+using Spark.Model.DataModel;
+using Spark.Model.FilteredModel;
 
-namespace Sistema_Vendas
+namespace Spark
 {
     /// <summary>
     /// Interaction logic for App.xaml.

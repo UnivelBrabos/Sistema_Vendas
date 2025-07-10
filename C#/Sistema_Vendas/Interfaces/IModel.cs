@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sistema_Vendas.Interfaces
+namespace Spark.Interfaces
 {
     public interface IModel<T>
     {

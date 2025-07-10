@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Sistema_Vendas"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
-        x:Class="Sistema_Vendas.MainWindow"
+        x:Class="Spark.MainWindow"
         mc:Ignorable="d"
         Title="Spark" MinHeight="720" MinWidth="1080" Height="728">
     <Grid>

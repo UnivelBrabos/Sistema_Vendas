@@ -1,10 +1,10 @@
-﻿using Sistema_Vendas.Interfaces;
-using Sistema_Vendas.Model.DataModel;
+﻿using Spark.Interfaces;
+using Spark.Model.DataModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Sistema_Vendas.View
+namespace Spark.View
 {
     public partial class EstoqueView : UserControl, IEstoque
     {

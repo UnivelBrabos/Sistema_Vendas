@@ -1,7 +1,7 @@
 ﻿using LiveCharts;
 using LiveCharts.Wpf;
 
-namespace Sistema_Vendas.Model.DashboardModel
+namespace Spark.Model.DashboardModel
 {
     public class GraficosModel
     {

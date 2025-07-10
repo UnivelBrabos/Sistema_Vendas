@@ -1,4 +1,4 @@
-﻿<UserControl x:Name="uscFiltrar" x:Class="Sistema_Vendas.View.UserController.FiltrarView"
+﻿<UserControl x:Name="uscFiltrar" x:Class="Spark.View.UserController.FiltrarView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 

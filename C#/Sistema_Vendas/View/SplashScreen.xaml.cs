@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Sistema_Vendas.View
+namespace Spark.View
 {
     /// <summary>
     /// Lógica interna para SplashScreen.xaml

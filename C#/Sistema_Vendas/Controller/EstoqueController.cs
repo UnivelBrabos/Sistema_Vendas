@@ -1,8 +1,8 @@
-﻿using Sistema_Vendas.Interfaces;
-using Sistema_Vendas.Model.DataModel;
-using Sistema_Vendas.Service;
+﻿using Spark.Interfaces;
+using Spark.Model.DataModel;
+using Spark.Service;
 using System.Windows.Controls;
-namespace Sistema_Vendas.Controller
+namespace Spark.Controller
 {
     public class EstoqueController
     {

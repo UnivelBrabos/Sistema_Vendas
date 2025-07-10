@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
-using Sistema_Vendas.Interfaces;
+using Spark.Interfaces;
 
-namespace Sistema_Vendas.Model.DataModel
+namespace Spark.Model.DataModel
 {
     public class Produto : IModel<Produto>
     {

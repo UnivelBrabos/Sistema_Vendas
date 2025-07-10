@@ -1,11 +1,11 @@
-﻿using Sistema_Vendas.Interfaces;
-using Sistema_Vendas.Service;
+﻿using Spark.Interfaces;
+using Spark.Service;
 using System.Windows.Controls;
-using Sistema_Vendas.Model;
-using Sistema_Vendas.Model.DataModel;
+using Spark.Model;
+using Spark.Model.DataModel;
 using System.Windows;
 
-namespace Sistema_Vendas.Controller
+namespace Spark.Controller
 {
     public class FuncionarioController
     {

@@ -1,5 +1,5 @@
-﻿using Sistema_Vendas.Interfaces;
-using Sistema_Vendas.Service;
+﻿using Spark.Interfaces;
+using Spark.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Sistema_Vendas.Controller
+namespace Spark.Controller
 {
     public class FiltrarController
     {

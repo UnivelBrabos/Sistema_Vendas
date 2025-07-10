@@ -1,8 +1,8 @@
-﻿using Sistema_Vendas.View;
+﻿using Spark.View;
 
-using Sistema_Vendas.View.UserController;
+using Spark.View.UserController;
 
-namespace Sistema_Vendas.Service
+namespace Spark.Service
 {
     public class ViewService
     {

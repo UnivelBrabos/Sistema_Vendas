@@ -1,10 +1,10 @@
-﻿using Sistema_Vendas.Interfaces;
-using Sistema_Vendas.Model.DataModel;
-using Sistema_Vendas.Model.FilteredModel;
+﻿using Spark.Interfaces;
+using Spark.Model.DataModel;
+using Spark.Model.FilteredModel;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Sistema_Vendas.View.UserController
+namespace Spark.View.UserController
 {
     /// <summary>
     /// Interação lógica para FiltrarView.xam

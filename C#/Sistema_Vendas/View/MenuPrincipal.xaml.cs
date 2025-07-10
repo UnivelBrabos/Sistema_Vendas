@@ -1,9 +1,9 @@
-﻿using Sistema_Vendas.Interfaces;
+﻿using Spark.Interfaces;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Shapes;
 
-namespace Sistema_Vendas.View
+namespace Spark.View
 {
     /// <summary>
     /// Lógica interna para MenuPrincipal.xaml

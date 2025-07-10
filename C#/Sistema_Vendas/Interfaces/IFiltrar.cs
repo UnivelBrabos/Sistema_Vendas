@@ -1,7 +1,7 @@
-﻿using Sistema_Vendas.Model.DataModel;
-using Sistema_Vendas.Model.FilteredModel;
+﻿using Spark.Model.DataModel;
+using Spark.Model.FilteredModel;
 
-namespace Sistema_Vendas.Interfaces
+namespace Spark.Interfaces
 {
     public interface IFiltrar
     {

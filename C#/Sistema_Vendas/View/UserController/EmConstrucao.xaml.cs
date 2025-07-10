@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Sistema_Vendas.View.UserController
+namespace Spark.View.UserController
 {
     /// <summary>
     /// Interação lógica para EmConstrucao.xam
