@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="Sistema_Vendas.View.UserController.ConfiguracoesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Sistema_Vendas.View.UserController"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid x:Name="grdContUsuario" Background="#FFF0F0F0">
+            <Rectangle x:Name="retModoEscuro" HorizontalAlignment="Left" Height="61" Margin="31,18,0,0" VerticalAlignment="Top" Width="418" Fill="White" RadiusX="10" RadiusY="10"/>
+            <CheckBox x:Name="chbModoEscuro" Content="CheckBox" HorizontalAlignment="Left" Margin="46,32,0,0" VerticalAlignment="Top" Height="31" Width="248" FontSize="18"/>
+        </Grid>
+
+    </Grid>
+</UserControl>
